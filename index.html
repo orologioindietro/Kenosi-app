@@ -1,0 +1,1434 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1C5247">
+<title>Kenosis</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--ground:#F7F5F0;--ink:#17201D;--ink2:#5A615C;--line:#E2DDD3;--line2:#EFEAE1;--btnline:#C9BEB0;--green:#1C5247;--greenbg:#E4EFEA;--greenink:#17443B;--rust:#9E3A1C;--rustbg:#FDF1EC;--rustline:#F0D4C7;--rustink:#6B4231;--plumbg:#EFE7F3;--plum:#4A2F58;--amberbg:#FBF0DC;--amberline:#EBD9B4;--amber:#5C3B06}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+a{color:var(--green)}
+button{font:inherit}
+#app{max-width:560px;margin:0 auto;min-height:100vh;padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+.top{display:flex;align-items:flex-start;gap:10px;padding:20px 18px 12px}
+.top .tt{flex:1;min-width:0}
+.top h1{margin:0;font-size:25px;font-weight:700;letter-spacing:-.02em;line-height:1.15;overflow-wrap:anywhere}
+.top .sub{font-size:13px;color:var(--ink2);margin-top:4px}
+.kicker{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);margin-bottom:3px}
+.icon-btn{width:44px;height:44px;flex:none;border-radius:22px;border:1px solid var(--line);background:#fff;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;text-decoration:none;cursor:pointer;padding:0}
+.icon-btn.primary{background:var(--green);border-color:var(--green);color:#fff}
+.pad{padding:0 18px;display:flex;flex-direction:column;gap:8px}
+.sec{display:flex;align-items:center;gap:8px;margin:16px 0 2px}
+.sec h2{margin:0;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink)}
+.sec.rust h2{color:var(--rust)}
+.sec.amber h2{color:#7A4E09}
+.badge{font-size:11px;font-weight:700;border-radius:9px;padding:2px 7px;background:var(--ink);color:#fff}
+.badge.rust{background:var(--rust)}
+.badge.amber{background:#7A4E09}
+.row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border:1px solid var(--line);border-radius:12px;min-height:60px;text-decoration:none;color:inherit}
+.row-rust{background:var(--rustbg);border-color:var(--rustline)}
+.row-amber{background:var(--amberbg);border-color:var(--amberline)}
+.row-done{opacity:.75}
+.row-main{flex:1;min-width:0;text-decoration:none;color:inherit;display:block}
+.row-title{display:block;font-size:15px;font-weight:600;line-height:1.3;color:var(--ink);overflow-wrap:anywhere}
+.row-meta{display:block;font-size:12px;color:var(--ink2);margin-top:3px}
+.row-rust .row-meta{color:var(--rustink)}
+.row-amber .row-meta{color:var(--amber)}
+.row-when{font-size:12px;font-weight:600;color:var(--ink2);flex:none;text-align:right;max-width:40%}
+.t-rust{color:var(--rust)!important;font-weight:700!important}
+.check{width:44px;height:44px;flex:none;border-radius:22px;border:1px solid var(--btnline);background:#fff;color:var(--green);display:inline-flex;align-items:center;justify-content:center}
+.avatar{width:40px;height:40px;flex:none;border-radius:20px;background:var(--plumbg);color:var(--plum);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+.dicon{width:36px;height:36px;flex:none;border-radius:9px;background:var(--greenbg);color:var(--greenink);display:flex;align-items:center;justify-content:center}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.kv{display:flex;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line2);font-size:14px}
+.kv:last-child{border-bottom:0}
+.kv .k{width:118px;flex:none;color:var(--ink2);font-size:13px}
+.kv .v{flex:1;font-weight:600;overflow-wrap:anywhere}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 7px;border-radius:5px;background:var(--greenbg);color:var(--greenink)}
+.tag.plum{background:var(--plumbg);color:var(--plum)}
+.tag.rust{background:var(--rust);color:#fff}
+.tag.grey{background:#EFEAE1;color:var(--ink)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 18px 6px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 16px;border-radius:12px;font-weight:600;font-size:15px;text-decoration:none;cursor:pointer;border:1px solid var(--btnline);background:#fff;color:var(--ink);width:100%;text-align:center;line-height:1.2}
+.btn-primary{background:var(--green);border-color:var(--green);color:#fff}
+.btn-danger{color:var(--rust);border-color:var(--rustline);background:#fff}
+.btn-sm{min-height:46px;font-size:14px}
+.two{display:flex;gap:8px}
+.two>*{flex:1;width:auto}
+.two .sq{flex:none;width:52px;padding:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips label{position:relative;display:inline-flex}
+.chips input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;width:100%;height:100%}
+.chips span{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:14px;font-weight:600}
+.chips input:checked+span{background:var(--ink);border-color:var(--ink);color:#fff}
+.chips input:focus-visible+span{outline:2px solid var(--green);outline-offset:2px}
+.field{display:flex;flex-direction:column;gap:7px;margin-top:16px}
+.field>label,.field>.lab{font-size:14px;font-weight:700;color:var(--ink)}
+.hint{font-size:12px;color:var(--ink2);line-height:1.45}
+input[type=text],input[type=number],input[type=date],input[type=password],select,textarea{font:inherit;font-size:16px;padding:11px 12px;border:1px solid var(--btnline);border-radius:10px;background:#fff;color:var(--ink);width:100%;min-height:48px}
+textarea{min-height:84px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--green);outline-offset:1px}
+.inline{display:flex;gap:8px;align-items:center}
+.inline>*{flex:1}
+.inline .lbl{flex:none;font-size:14px;font-weight:600}
+.seg{display:flex;gap:6px}
+.seg a{flex:1;text-align:center;font-size:13px;font-weight:600;padding:11px 0;border-radius:9px;border:1px solid var(--line);background:#fff;color:var(--ink);text-decoration:none}
+.seg a.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{display:flex;flex-direction:column;gap:6px;padding:14px;background:#fff;border:1px solid var(--line);border-radius:14px;text-decoration:none;color:inherit;min-height:110px}
+.tile b{font-size:15px}
+.tile small{font-size:12px;color:var(--ink2);line-height:1.35}
+.tile.rust{background:var(--rustbg);border-color:var(--rustline)}
+.tile.rust small{color:var(--rustink);font-weight:700}
+.banner{display:flex;gap:9px;align-items:flex-start;padding:11px 13px;border-radius:11px;font-size:13px;line-height:1.45;border:1px solid}
+.banner svg{flex:none;margin-top:1px}
+.banner.amber{background:var(--amberbg);border-color:var(--amberline);color:var(--amber)}
+.banner.rust{background:var(--rustbg);border-color:var(--rustline);color:var(--rustink)}
+.banner.green{background:var(--greenbg);border-color:#C5DDD3;color:var(--greenink)}
+.banner a{color:inherit;font-weight:700}
+.mx{margin:0 18px 8px}
+.empty{font-size:14px;color:var(--ink2);margin:2px 2px 4px}
+.err{color:var(--rust);font-size:13px;font-weight:700;margin:0}
+.err:empty{display:none}
+.actions{display:flex;flex-direction:column;gap:9px;margin-top:20px}
+.docimg{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff;display:block}
+.filebtns{display:flex;gap:8px}
+.filebtns label{position:relative;overflow:hidden;flex:1}
+.filebtns input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.hidden{display:none!important}
+.box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
+.box h3{margin:0 0 4px;font-size:15px}
+.muted{color:var(--ink2)}
+nav.bottom{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 6px calc(10px + env(safe-area-inset-bottom));z-index:5}
+nav.bottom .in{display:flex;width:100%;max-width:560px}
+nav.bottom a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--ink2);text-decoration:none;font-size:11px;font-weight:600;min-height:48px}
+nav.bottom a.on{color:var(--green)}
+#toast{position:fixed;left:50%;bottom:calc(98px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 16px;border-radius:12px;font-size:14px;font-weight:600;width:max-content;max-width:90vw;opacity:0;pointer-events:none;transition:opacity .2s;z-index:10;text-align:center}
+#toast.show{opacity:1}
+.lockwrap{min-height:80vh;display:flex;flex-direction:column;justify-content:center}
+</style>
+</head>
+<body>
+<div id="app" aria-live="polite"></div>
+<div id="toast" role="status"></div>
+<script>
+'use strict';
+
+/* =========================================================== costanti */
+
+const VERSIONE = '0.1 (prova)';
+const UTENTI = ['Rita', 'Michele', 'Vincenzo'];
+const RESPONSABILI = ['Rita', 'Michele', 'Entrambi'];
+const CATEGORIE = ['Bollette e utenze', 'Servizi', 'Farmaci', 'Personale', 'Assicurazioni',
+  'Quote e adesioni', 'Autorizzazioni e certificati', 'Ospiti', 'Altro'];
+const SERVIZI = [
+  { k: 'Lavanderia', i: 'shirt' }, { k: 'Spesa', i: 'cart' },
+  { k: 'Pulizie', i: 'spark' }, { k: 'Rifiuti', i: 'trash' },
+  { k: 'Manutenzioni', i: 'tool' }, { k: 'Trasporti', i: 'car' },
+  { k: 'Bollette', i: 'bolt' }, { k: 'Farmacia', i: 'pill' }
+];
+const TIPI_DOC = ['Referto', 'Prescrizione', 'Bolletta', 'Ricevuta', 'Contratto',
+  "Documento d'identità", 'Esenzione o invalidità', 'Altro'];
+const UNITA_FARMACO = ['compresse', 'capsule', 'bustine', 'gocce', 'ml', 'fiale', 'cerotti', 'dosi'];
+const RICORRENZE = [
+  ['', 'Una volta sola'], ['1-settimane', 'Ogni settimana'], ['1-mesi', 'Ogni mese'],
+  ['2-mesi', 'Ogni 2 mesi'], ['3-mesi', 'Ogni 3 mesi'], ['6-mesi', 'Ogni 6 mesi'],
+  ['1-anni', 'Ogni anno'], ['altro', 'Altro…']
+];
+const AVVISI = [[0, 'Il giorno stesso'], [1, '1 giorno prima'], [3, '3 giorni prima'],
+  [7, '1 settimana prima'], [30, '1 mese prima']];
+
+/* ============================================================== icone */
+
+const ICONS = {
+  home: '<path d="M4 11l8-6.5 8 6.5v8a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 014 19z"/>',
+  grid: '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+  cal: '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8.5 3.5v3M15.5 3.5v3"/>',
+  user: '<circle cx="12" cy="8.5" r="3.6"/><path d="M5 20c0-3.3 3.1-5.5 7-5.5s7 2.2 7 5.5"/>',
+  folder: '<path d="M3.5 7.5A2 2 0 015.5 5.5h4l2 2.5h7a2 2 0 012 2v8a2 2 0 01-2 2h-13a2 2 0 01-2-2z"/>',
+  check: '<path d="M4 12.5l5 5L20 6.5"/>',
+  chev: '<path d="M9 5l7 7-7 7"/>',
+  back: '<path d="M15 5l-7 7 7 7"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  edit: '<path d="M16.5 4.5l3 3L9 18l-4 1 1-4z"/>',
+  camera: '<path d="M3 8.5A2.5 2.5 0 015.5 6h1.2l1.1-2h6.4l1.1 2h1.2A2.5 2.5 0 0120 8.5v8A2.5 2.5 0 0117.5 19h-11A2.5 2.5 0 014 16.5z"/><circle cx="12" cy="12.5" r="3.2"/>',
+  gear: '<path d="M10.3 4.3c.4-1.8 3-1.8 3.4 0a1.7 1.7 0 002.6 1.1c1.5-.9 3.3.8 2.4 2.4a1.7 1.7 0 001 2.5c1.8.5 1.8 3 0 3.5a1.7 1.7 0 00-1 2.5c.9 1.5-.9 3.3-2.4 2.4a1.7 1.7 0 00-2.6 1c-.4 1.8-3 1.8-3.4 0a1.7 1.7 0 00-2.5-1c-1.6.9-3.3-.9-2.5-2.4a1.7 1.7 0 00-1-2.5c-1.8-.5-1.8-3 0-3.5a1.7 1.7 0 001-2.5C4.9 6.2 6.7 4.5 8.3 5.4a1.7 1.7 0 002-1.1z"/><circle cx="12" cy="12" r="3"/>',
+  pill: '<rect x="4" y="8" width="16" height="12" rx="3"/><path d="M8 8V5.5h8V8M9 14h6"/>',
+  shirt: '<path d="M8 4L4 7l2 4 2-1v10h8V10l2 1 2-4-4-3c-.5 1.5-2 2.5-4 2.5S8.5 5.5 8 4z"/>',
+  cart: '<path d="M3 4h2l2.2 10.5h10.3L20 7H6.3"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/>',
+  spark: '<path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7-4.7-1.8 4.7-1.8z"/><path d="M18.5 15.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/>',
+  trash: '<path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13"/>',
+  tool: '<path d="M14.5 5.5a4 4 0 00-5 5L4 16l4 4 5.5-5.5a4 4 0 005-5l-2.5 2.5-2.5-.5-.5-2.5z"/>',
+  car: '<path d="M5 16v-5l2-5h10l2 5v5M3.5 16h17v2.5h-17zM7 11h10"/>',
+  bolt: '<path d="M13 3.5L5.5 13.5h5l-1 7 8-10.5h-5z"/>',
+  doc: '<path d="M7 3.5h7l4 4v13H7z"/><path d="M14 3.5v4h4"/>',
+  info: '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/>',
+  lock: '<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 017 0v2.5"/>'
+};
+function ic(name, size = 20, sw = 2) {
+  return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + sw +
+    '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[name] || '') + '</svg>';
+}
+
+/* ======================================================== utilità */
+
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+function adesso() { return new Date().toISOString(); }
+const pad = n => String(n).padStart(2, '0');
+function iso(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function aData(s) { const [y, m, d] = String(s).split('-').map(Number); return new Date(y, m - 1, d); }
+function dataValida(s) { return /^\d{4}-\d{2}-\d{2}$/.test(String(s || '')) && !isNaN(aData(s)); }
+function oggi() { return iso(new Date()); }
+function piuGiorni(s, n) { const d = aData(s); d.setDate(d.getDate() + n); return iso(d); }
+function piuMesi(s, n) {
+  const d = aData(s); const giorno = d.getDate(); d.setDate(1); d.setMonth(d.getMonth() + n);
+  const ultimo = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+  d.setDate(Math.min(giorno, ultimo)); return iso(d);
+}
+function giorniTra(a, b) { return Math.round((aData(b) - aData(a)) / 86400000); }
+const MESI = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
+const MESI_L = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
+const GIORNI_L = ['domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato'];
+function fmt(s) {
+  if (!s) return '—';
+  const n = giorniTra(oggi(), s);
+  if (n === 0) return 'oggi';
+  if (n === 1) return 'domani';
+  if (n === -1) return 'ieri';
+  const d = aData(s);
+  return d.getDate() + ' ' + MESI[d.getMonth()] + (d.getFullYear() !== new Date().getFullYear() ? ' ' + d.getFullYear() : '');
+}
+function fmtLungo(s) { const d = aData(s); return GIORNI_L[d.getDay()] + ' ' + d.getDate() + ' ' + MESI_L[d.getMonth()] + ' ' + d.getFullYear(); }
+function euro(n) { return n == null ? '' : n.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' }); }
+function iniziali(nome) { return String(nome || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(p => p[0].toUpperCase()).join(''); }
+function plur(n, uno, tanti) { return n + ' ' + (n === 1 ? uno : tanti); }
+
+function prossimaData(s, ric) {
+  if (!ric) return null;
+  const n = Math.max(1, parseInt(ric.ogni, 10) || 1);
+  switch (ric.unita) {
+    case 'giorni': return piuGiorni(s, n);
+    case 'settimane': return piuGiorni(s, 7 * n);
+    case 'mesi': return piuMesi(s, n);
+    case 'anni': return piuMesi(s, 12 * n);
+  }
+  return null;
+}
+function descRic(ric) {
+  if (!ric) return 'Una volta sola';
+  const nomi = { giorni: ['giorno', 'giorni'], settimane: ['settimana', 'settimane'], mesi: ['mese', 'mesi'], anni: ['anno', 'anni'] }[ric.unita] || ['volta', 'volte'];
+  return ric.ogni === 1 ? 'Ogni ' + nomi[0] : 'Ogni ' + ric.ogni + ' ' + nomi[1];
+}
+function descAvviso(n) {
+  const t = AVVISI.find(a => a[0] === n);
+  return t ? t[1] : n + ' giorni prima';
+}
+
+/* ================================================== archivio locale */
+
+const STORES = ['voci', 'eventi', 'ospiti', 'documenti', 'farmaci', 'kv'];
+let idb = null;
+const memoria = {};
+STORES.forEach(s => { memoria[s] = new Map(); });
+
+function apriDB() {
+  return new Promise(resolve => {
+    try {
+      if (!('indexedDB' in window)) return resolve(false);
+      const r = indexedDB.open('kenosis', 1);
+      r.onupgradeneeded = () => {
+        const d = r.result;
+        STORES.forEach(s => { if (!d.objectStoreNames.contains(s)) d.createObjectStore(s, { keyPath: 'id' }); });
+      };
+      r.onsuccess = () => { idb = r.result; resolve(true); };
+      r.onerror = () => resolve(false);
+      r.onblocked = () => resolve(false);
+    } catch (e) { resolve(false); }
+  });
+}
+function transazione(store, modo, fn) {
+  return new Promise((resolve, reject) => {
+    const t = idb.transaction(store, modo);
+    const req = fn(t.objectStore(store));
+    let out;
+    if (req) req.onsuccess = () => { out = req.result; };
+    t.oncomplete = () => resolve(out);
+    t.onerror = () => reject(t.error);
+    t.onabort = () => reject(t.error);
+  });
+}
+const DB = {
+  all(s) { return idb ? transazione(s, 'readonly', os => os.getAll()) : Promise.resolve([...memoria[s].values()]); },
+  put(s, o) { if (!idb) { memoria[s].set(o.id, o); return Promise.resolve(); } return transazione(s, 'readwrite', os => os.put(o)); },
+  del(s, id) { if (!idb) { memoria[s].delete(id); return Promise.resolve(); } return transazione(s, 'readwrite', os => os.delete(id)); },
+  clear(s) { if (!idb) { memoria[s].clear(); return Promise.resolve(); } return transazione(s, 'readwrite', os => os.clear()); }
+};
+
+const S = { voci: [], eventi: [], ospiti: [], documenti: [], farmaci: [], kv: {} };
+let persistente = false;
+let bloccato = false;
+
+async function carica() {
+  for (const s of ['voci', 'eventi', 'ospiti', 'documenti', 'farmaci']) S[s] = await DB.all(s);
+  S.kv = {};
+  (await DB.all('kv')).forEach(x => { S.kv[x.id] = x.v; });
+}
+async function salva(store, obj) {
+  obj.agg = adesso();
+  obj.da = obj.da || utente();
+  await DB.put(store, obj);
+  const i = S[store].findIndex(x => x.id === obj.id);
+  if (i >= 0) S[store][i] = obj; else S[store].push(obj);
+}
+async function togli(store, id) {
+  await DB.del(store, id);
+  S[store] = S[store].filter(x => x.id !== id);
+}
+async function setKV(k, v) { S.kv[k] = v; await DB.put('kv', { id: k, v }); }
+
+const utente = () => S.kv.utente || '';
+const voce = id => S.voci.find(v => v.id === id);
+const ospite = id => id ? S.ospiti.find(o => o.id === id) : null;
+const farmaco = id => S.farmaci.find(f => f.id === id);
+const documento = id => S.documenti.find(d => d.id === id);
+const perData = (a, b) => (a.prossima || '').localeCompare(b.prossima || '');
+const eventiRecenti = (a, b) => (b.data + (b.creato || '')).localeCompare(a.data + (a.creato || ''));
+
+/* ================================================= logica scadenze */
+
+function stato(v) {
+  const n = giorniTra(oggi(), v.prossima);
+  if (n < 0) return 'ritardo';
+  if (n === 0) return 'oggi';
+  if (n <= 7) return 'settimana';
+  if (n <= 31) return 'mese';
+  return 'avanti';
+}
+function attive() { return S.voci.filter(v => v.attiva !== false); }
+
+function stimaFarmaco(f) {
+  const passati = Math.max(0, giorniTra(f.contatoIl || oggi(), oggi()));
+  const alGiorno = Number(f.alGiorno) || 0;
+  const rimaste = Math.max(0, (Number(f.inCasa) || 0) - passati * alGiorno);
+  const giorni = alGiorno > 0 ? Math.floor(rimaste / alGiorno) : null;
+  let scad = null;
+  if (f.scadenza) {
+    const n = giorniTra(oggi(), f.scadenza);
+    scad = n < 0 ? 'scaduto' : n <= 30 ? '30' : n <= 60 ? '60' : null;
+  }
+  const soglia = f.soglia == null ? 10 : Number(f.soglia);
+  return { rimaste: Math.round(rimaste * 10) / 10, giorni, scad, daRiordinare: giorni !== null && giorni <= soglia };
+}
+
+function riepilogo() {
+  const t = oggi();
+  const att = attive().sort(perData);
+  const ritardo = att.filter(v => v.prossima < t);
+  const diOggi = att.filter(v => v.prossima === t);
+  const inArrivo = att.filter(v => { const n = giorniTra(t, v.prossima); return n > 0 && n <= Math.max(v.avviso || 0, 1); });
+  const settimana = att.filter(v => { const n = giorniTra(t, v.prossima); return n > 0 && n <= 7; });
+  const farmaci = S.farmaci.map(f => ({ f, s: stimaFarmaco(f) })).filter(x => x.s.daRiordinare || x.s.scad);
+  return { ritardo, diOggi, inArrivo, settimana, farmaci };
+}
+
+/* ============================================== pezzi di interfaccia */
+
+function testata(titolo, opz = {}) {
+  const indietro = opz.indietro ? '<button class="icon-btn" data-action="indietro" aria-label="Indietro">' + ic('back') + '</button>' : '';
+  return '<header class="top">' + indietro + '<div class="tt">' +
+    (opz.kicker ? '<div class="kicker">' + esc(opz.kicker) + '</div>' : '') +
+    '<h1>' + esc(titolo) + '</h1>' + (opz.sub ? '<div class="sub">' + esc(opz.sub) + '</div>' : '') +
+    '</div>' + (opz.destra || '') + '</header>';
+}
+function sezione(titolo, n, cls = '') {
+  return '<div class="sec ' + cls + '"><h2>' + esc(titolo) + '</h2>' + (n != null ? '<span class="badge ' + cls + '">' + n + '</span>' : '') + '</div>';
+}
+function barra(attiva) {
+  const voci = [['oggi', 'Oggi', 'home', '#/oggi'], ['servizi', 'Servizi', 'grid', '#/servizi'],
+    ['registro', 'Registro', 'cal', '#/registro'], ['ospiti', 'Ospiti', 'user', '#/ospiti'], ['archivio', 'Archivio', 'folder', '#/archivio']];
+  return '<nav class="bottom" aria-label="Sezioni principali"><div class="in">' + voci.map(v =>
+    '<a href="' + v[3] + '" class="' + (v[0] === attiva ? 'on' : '') + '"' + (v[0] === attiva ? ' aria-current="page"' : '') + '>' + ic(v[2], 22) + '<span>' + v[1] + '</span></a>'
+  ).join('') + '</div></nav>';
+}
+function bannerProva() {
+  return '<div class="banner amber mx">' + ic('info', 17) + '<div><b>Versione di prova.</b> Usa solo dati inventati: i dati veri degli ospiti si inseriscono quando l\'app sarà definitiva.</div></div>';
+}
+function bannerBackup() {
+  if (!S.voci.length && !S.documenti.length) return '';
+  const u = S.kv.ultimoBackup;
+  if (u && giorniTra(u, oggi()) <= 7) return '';
+  const testo = u ? 'L\'ultima copia di sicurezza è di ' + giorniTra(u, oggi()) + ' giorni fa.' : 'Non hai ancora fatto una copia di sicurezza.';
+  return '<div class="banner rust mx">' + ic('info', 17) + '<div>' + testo + ' <a href="#/impostazioni">Falla adesso</a></div></div>';
+}
+function bannerMemoria() {
+  return persistente ? '' : '<div class="banner rust mx">' + ic('info', 17) + '<div>Questo browser non permette di salvare i dati: quello che inserisci sparisce quando chiudi la pagina.</div></div>';
+}
+function rigaVoce(v, opz = {}) {
+  const st = stato(v);
+  const rit = st === 'ritardo' && v.attiva !== false;
+  const o = ospite(v.ospiteId);
+  const meta = [v.categoria, v.responsabile, o ? o.nome : null].filter(Boolean).join(' · ');
+  let quando = fmt(v.prossima);
+  if (v.attiva === false) quando = 'chiusa';
+  else if (rit) quando = plur(-giorniTra(oggi(), v.prossima), 'giorno', 'giorni') + ' fa';
+  const azione = v.chiusura === 'pagato' ? 'pagata' : 'fatta';
+  const check = opz.check !== false && v.attiva !== false
+    ? '<a class="check" href="#/segna?voce=' + v.id + '" aria-label="Segna come ' + azione + ': ' + esc(v.nome) + '">' + ic('check', 20, 2.4) + '</a>' : '';
+  return '<div class="row ' + (rit ? 'row-rust' : '') + (v.attiva === false ? ' row-done' : '') + '">' +
+    '<a class="row-main" href="#/voce/' + v.id + '"><span class="row-title">' + esc(v.nome) + '</span><span class="row-meta">' + esc(meta) + '</span></a>' +
+    '<span class="row-when ' + (rit ? 't-rust' : '') + '">' + esc(quando) + '</span>' + check + '</div>';
+}
+function rigaFarmaco(f) {
+  const s = stimaFarmaco(f);
+  const o = ospite(f.ospiteId);
+  const parti = [];
+  if (s.giorni !== null) parti.push(s.giorni <= 0 ? 'scorta finita' : 'circa ' + plur(s.giorni, 'giorno', 'giorni') + ' di scorta');
+  if (s.scad === 'scaduto') parti.push('confezione scaduta');
+  else if (f.scadenza) parti.push('scade ' + fmt(f.scadenza));
+  const urgente = s.scad === 'scaduto' || (s.daRiordinare && s.giorni !== null && s.giorni <= 3);
+  const attenzione = s.daRiordinare || s.scad;
+  return '<a class="row ' + (urgente ? 'row-rust' : attenzione ? 'row-amber' : '') + '" href="#/farmaco/' + f.id + '">' +
+    '<span class="row-main"><span class="row-title">' + esc(f.nome) + (o ? ' — ' + esc(o.nome) : '') + '</span>' +
+    '<span class="row-meta">' + esc(parti.join(' · ') || 'scorta non calcolata') + '</span></span>' + ic('chev', 18) + '</a>';
+}
+function rigaEvento(e) {
+  const v = e.voceId ? voce(e.voceId) : null;
+  const titolo = v ? v.nome : (e.nota && e.servizio === 'Farmacia' ? e.nota : e.servizio || 'Attività');
+  const meta = (e.tipo === 'pagato' ? 'Pagato ' : 'Fatto ') + fmt(e.data) + (e.chi ? ' da ' + e.chi : '') + (e.importo != null ? ' · ' + euro(e.importo) : '');
+  return '<div class="row"><span class="dicon">' + ic('check', 18, 2.4) + '</span><span class="row-main"><span class="row-title">' + esc(titolo) + '</span><span class="row-meta">' + esc(meta) + (e.nota && !(e.servizio === 'Farmacia' && !v) ? ' · ' + esc(e.nota) : '') + '</span></span></div>';
+}
+function rigaDoc(d) {
+  const o = ospite(d.ospiteId);
+  const meta = [d.tipo, o ? o.nome : (d.daSmistare ? 'da smistare' : null), fmt(d.data)].filter(Boolean).join(' · ');
+  return '<a class="row" href="#/doc/' + d.id + '"><span class="dicon">' + ic(d.mime && d.mime.startsWith('image/') ? 'camera' : 'doc', 18) + '</span>' +
+    '<span class="row-main"><span class="row-title">' + esc(d.nome) + '</span><span class="row-meta">' + esc(meta) + '</span></span>' + ic('chev', 18) + '</a>';
+}
+function opzioniOspiti(sel, vuota = '— nessuno —') {
+  return '<option value="">' + esc(vuota) + '</option>' + [...S.ospiti].sort((a, b) => a.nome.localeCompare(b.nome)).map(o =>
+    '<option value="' + o.id + '"' + (o.id === sel ? ' selected' : '') + '>' + esc(o.nome) + ' (' + esc(o.codice) + ')</option>').join('');
+}
+function chipsRadio(nome, opzioni, sel) {
+  return '<div class="chips">' + opzioni.map(o => {
+    const val = Array.isArray(o) ? o[0] : o; const lab = Array.isArray(o) ? o[1] : o;
+    return '<label><input type="radio" name="' + nome + '" value="' + esc(val) + '"' + (String(val) === String(sel) ? ' checked' : '') + '><span>' + esc(lab) + '</span></label>';
+  }).join('') + '</div>';
+}
+function selezione(nome, opzioni, sel) {
+  return '<select name="' + nome + '" id="f-' + nome + '">' + opzioni.map(o => {
+    const val = Array.isArray(o) ? o[0] : o; const lab = Array.isArray(o) ? o[1] : o;
+    return '<option value="' + esc(val) + '"' + (val === sel ? ' selected' : '') + '>' + esc(lab) + '</option>';
+  }).join('') + '</select>';
+}
+function nonTrovato() {
+  return testata('Non trovato', { indietro: true }) + '<main class="pad"><p class="empty">Questa voce non esiste più.</p><a class="btn" href="#/oggi">Torna a Oggi</a></main>' + barra('');
+}
+
+let urlAperti = [];
+function urlDi(blob) { const u = URL.createObjectURL(blob); urlAperti.push(u); return u; }
+
+/* ======================================================== schermate */
+
+function vBenvenuto() {
+  return testata('Benvenuto', { kicker: 'Comunità Alloggio Kenosis', sub: 'Prima di iniziare, due domande.' }) + bannerProva() +
+    '<main class="pad"><form data-form="benvenuto">' +
+    '<div class="field"><span class="lab">Chi usa questo telefono?</span>' + chipsRadio('utente', UTENTI, 'Rita') + '</div>' +
+    '<div class="field"><span class="lab">Come vuoi partire?</span>' + chipsRadio('dati', [['esempio', 'Con dati di esempio'], ['vuota', 'App vuota']], 'esempio') +
+    '<span class="hint">Con i dati di esempio vedi subito come funziona. Puoi cancellarli quando vuoi dalle Impostazioni.</span></div>' +
+    '<div class="actions"><button class="btn btn-primary" type="submit">Inizia</button></div></form></main>';
+}
+
+function vBlocco() {
+  return '<main class="pad lockwrap"><div style="text-align:center;margin-bottom:10px;color:var(--green)">' + ic('lock', 40, 1.8) + '</div>' +
+    '<h1 style="text-align:center;margin:0 0 4px;font-size:24px">Kenosis</h1><p class="empty" style="text-align:center">Inserisci il PIN per entrare.</p>' +
+    '<form data-form="sblocca"><div class="field"><label for="f-pin">PIN</label><input type="password" id="f-pin" name="pin" inputmode="numeric" autocomplete="off" autofocus></div>' +
+    '<p class="err" id="err-pin"></p><div class="actions"><button class="btn btn-primary" type="submit">Entra</button></div></form>' +
+    '<details style="margin-top:22px"><summary class="hint" style="cursor:pointer">Ho dimenticato il PIN</summary><p class="hint">I dati stanno solo su questo telefono e il PIN non si può recuperare. Puoi cancellare tutto e ripristinare l\'ultima copia di sicurezza dalle Impostazioni.</p>' +
+    '<button class="btn btn-danger btn-sm" data-action="cancella-tutto">Cancella tutto e ricomincia</button></details></main>';
+}
+
+function vOggi() {
+  const r = riepilogo();
+  const destra = '<a class="icon-btn" href="#/impostazioni" aria-label="Impostazioni">' + ic('gear') + '</a>';
+  let h = testata('Oggi', { kicker: fmtLungo(oggi()), destra }) + bannerMemoria() + bannerProva() + bannerBackup() + '<main class="pad">';
+  if (r.ritardo.length) h += sezione('In ritardo', r.ritardo.length, 'rust') + r.ritardo.map(v => rigaVoce(v)).join('');
+  h += sezione('Da fare oggi', r.diOggi.length) + (r.diOggi.length ? r.diOggi.map(v => rigaVoce(v)).join('') : '<p class="empty">Niente in scadenza oggi.</p>');
+  if (r.farmaci.length) h += sezione('Farmaci da controllare', r.farmaci.length, 'amber') + r.farmaci.map(x => rigaFarmaco(x.f)).join('');
+  if (r.inArrivo.length) h += sezione('In arrivo', r.inArrivo.length) + r.inArrivo.map(v => rigaVoce(v)).join('');
+  h += '<a class="row" href="#/registro" style="margin-top:8px"><span class="row-main"><span class="row-title">Tutto il registro</span><span class="row-meta">' +
+    plur(r.settimana.length, 'scadenza', 'scadenze') + ' nei prossimi 7 giorni</span></span>' + ic('chev', 18) + '</a>';
+  h += '<div class="two" style="margin-top:12px"><a class="btn btn-primary" href="#/servizi">' + ic('check', 19, 2.4) + ' Segna una cosa fatta</a>' +
+    '<a class="btn sq" href="#/nuova-voce" aria-label="Nuova voce da ricordare">' + ic('plus') + '</a>' +
+    '<a class="btn sq" href="#/nuovo-doc" aria-label="Aggiungi un documento">' + ic('camera') + '</a></div>';
+  return h + '</main>' + barra('oggi');
+}
+
+function ultimoEventoServizio(k) {
+  return S.eventi.filter(e => e.servizio === k || (e.voceId && (voce(e.voceId) || {}).servizio === k)).sort(eventiRecenti)[0] || null;
+}
+function vServizi() {
+  let h = testata('Servizi', { sub: 'Le cose di tutti i giorni. Tocca per segnarle.' }) + '<main class="pad"><div class="tiles">';
+  h += SERVIZI.map(sv => {
+    const voci = attive().filter(v => v.servizio === sv.k).sort(perData);
+    const rit = voci.some(v => stato(v) === 'ritardo');
+    const ult = ultimoEventoServizio(sv.k);
+    const pezzi = [];
+    if (rit) pezzi.push('in ritardo');
+    else if (voci[0]) pezzi.push('prossima ' + fmt(voci[0].prossima));
+    if (ult) pezzi.push('ultima ' + fmt(ult.data));
+    return '<a class="tile ' + (rit ? 'rust' : '') + '" href="#/servizio/' + encodeURIComponent(sv.k) + '"><span class="dicon">' + ic(sv.i) + '</span><b>' + esc(sv.k) + '</b><small>' + esc(pezzi.join(' · ') || 'tocca per segnare') + '</small></a>';
+  }).join('') + '</div>';
+  const recenti = [...S.eventi].sort(eventiRecenti).slice(0, 6);
+  h += sezione('Fatto di recente') + (recenti.length ? recenti.map(rigaEvento).join('') : '<p class="empty">Ancora niente: quando segni qualcosa, compare qui.</p>');
+  return h + '</main>' + barra('servizi');
+}
+
+function vServizio(k) {
+  const sv = SERVIZI.find(s => s.k === k);
+  if (!sv) return vServizi();
+  const voci = attive().filter(v => v.servizio === k).sort(perData);
+  const storico = S.eventi.filter(e => e.servizio === k || (e.voceId && (voce(e.voceId) || {}).servizio === k)).sort(eventiRecenti).slice(0, 10);
+  let h = testata(k, { indietro: true }) + '<main class="pad">';
+  h += voci.length
+    ? '<a class="btn btn-primary" href="#/segna?voce=' + voci[0].id + '">' + ic('check', 19, 2.4) + ' Segna fatto: ' + esc(voci[0].nome) + '</a>'
+    : '<a class="btn btn-primary" href="#/segna?servizio=' + encodeURIComponent(k) + '">' + ic('check', 19, 2.4) + ' Segna fatto adesso</a>';
+  h += sezione('Da ricordare') + (voci.length ? voci.map(v => rigaVoce(v)).join('') : '<p class="empty">Nessuna scadenza fissa per ' + esc(k.toLowerCase()) + '.</p>');
+  h += '<a class="btn btn-sm" href="#/nuova-voce?servizio=' + encodeURIComponent(k) + '">' + ic('plus', 18) + ' Ricordamelo regolarmente</a>';
+  if (voci.length) h += '<a class="btn btn-sm" href="#/segna?servizio=' + encodeURIComponent(k) + '">Segna un\'altra cosa di ' + esc(k.toLowerCase()) + '</a>';
+  h += sezione('Storico') + (storico.length ? storico.map(rigaEvento).join('') : '<p class="empty">Ancora niente.</p>');
+  return h + '</main>' + barra('servizi');
+}
+
+function vRegistro(q) {
+  const vista = q.get('vista') || 'data';
+  const cat = q.get('cat');
+  const destra = '<a class="icon-btn primary" href="#/nuova-voce' + (cat ? '?cat=' + encodeURIComponent(cat) : '') + '" aria-label="Aggiungi una voce">' + ic('plus') + '</a>';
+  let h = testata(cat || 'Registro', { sub: cat ? '' : 'Tutto quello che la cooperativa ha in piedi', destra, indietro: !!cat });
+  const att = attive().sort(perData);
+  if (cat) {
+    const lista = att.filter(v => v.categoria === cat);
+    h += '<main class="pad">';
+    if (cat === 'Farmaci') h += '<a class="btn btn-sm" href="#/farmaci">' + ic('pill', 18) + ' Scorte e scadenze dei farmaci</a>';
+    h += lista.length ? lista.map(v => rigaVoce(v)).join('') : '<p class="empty">Nessuna voce in questa categoria.</p>';
+    return h + '</main>' + barra('registro');
+  }
+  h += '<div class="pad" style="margin-bottom:4px"><div class="seg"><a href="#/registro?vista=data" class="' + (vista === 'data' ? 'on' : '') + '">Per data</a><a href="#/registro?vista=cat" class="' + (vista === 'cat' ? 'on' : '') + '">Per categoria</a></div></div><main class="pad">';
+  if (vista === 'chiuse') {
+    const chiuse = S.voci.filter(v => v.attiva === false).sort((a, b) => (b.chiusaIl || '').localeCompare(a.chiusaIl || ''));
+    h += sezione('Chiuse o sospese', chiuse.length) + (chiuse.length ? chiuse.map(v => rigaVoce(v, { check: false })).join('') : '<p class="empty">Nessuna.</p>');
+    return h + '</main>' + barra('registro');
+  }
+  if (!att.length) {
+    h += '<p class="empty">Il registro è vuoto. Aggiungi la prima cosa da ricordare: una bolletta, la lavanderia, una polizza.</p><a class="btn btn-primary" href="#/nuova-voce">' + ic('plus') + ' Nuova voce</a>';
+  } else if (vista === 'cat') {
+    h += CATEGORIE.map(c => {
+      const vs = att.filter(v => v.categoria === c);
+      const extra = c === 'Farmaci' ? S.farmaci.length : 0;
+      const tot = vs.length + extra;
+      const rit = vs.some(v => stato(v) === 'ritardo');
+      const meta = vs[0] ? 'prossima ' + fmt(vs[0].prossima) : (extra ? plur(extra, 'farmaco', 'farmaci') + ' in scorta' : 'vuota');
+      return '<a class="row ' + (rit ? 'row-rust' : '') + '" href="#/registro?cat=' + encodeURIComponent(c) + '"><span class="row-main"><span class="row-title">' + esc(c) + '</span><span class="row-meta">' + esc(rit ? 'qualcosa in ritardo' : meta) + '</span></span><span class="row-when">' + tot + '</span>' + ic('chev', 18) + '</a>';
+    }).join('');
+  } else {
+    const gruppi = [['ritardo', 'In ritardo', 'rust'], ['oggi', 'Oggi', ''], ['settimana', 'Entro una settimana', ''], ['mese', 'Entro un mese', ''], ['avanti', 'Più avanti', '']];
+    gruppi.forEach(g => {
+      const lista = att.filter(v => stato(v) === g[0]);
+      if (lista.length) h += sezione(g[1], lista.length, g[2]) + lista.map(v => rigaVoce(v)).join('');
+    });
+  }
+  const nChiuse = S.voci.filter(v => v.attiva === false).length;
+  if (nChiuse) h += '<a class="row" href="#/registro?vista=chiuse" style="margin-top:10px"><span class="row-main"><span class="row-title">Chiuse o sospese</span></span><span class="row-when">' + nChiuse + '</span>' + ic('chev', 18) + '</a>';
+  return h + '</main>' + barra('registro');
+}
+
+function vVoce(id) {
+  const v = voce(id);
+  if (!v) return nonTrovato();
+  const o = ospite(v.ospiteId);
+  const st = stato(v);
+  let tags = '<span class="tag' + (v.categoria === 'Ospiti' || v.categoria === 'Farmaci' ? ' plum' : '') + '">' + esc(v.categoria) + '</span>';
+  if (v.attiva === false) tags += '<span class="tag grey">Chiusa</span>';
+  else if (st === 'ritardo') tags += '<span class="tag rust">In ritardo di ' + plur(-giorniTra(oggi(), v.prossima), 'giorno', 'giorni') + '</span>';
+  let h = testata(v.nome, { indietro: true, destra: '<a class="icon-btn" href="#/nuova-voce?id=' + v.id + '" aria-label="Modifica">' + ic('edit', 18) + '</a>' }) +
+    '<div class="tags">' + tags + '</div><main class="pad"><div class="card">' +
+    '<div class="kv"><span class="k">' + (v.attiva === false ? 'Era prevista' : 'Prossima') + '</span><span class="v">' + esc(fmtLungo(v.prossima)) + '</span></div>' +
+    '<div class="kv"><span class="k">Si ripete</span><span class="v">' + esc(descRic(v.ric)) + '</span></div>' +
+    '<div class="kv"><span class="k">Responsabile</span><span class="v">' + esc(v.responsabile || '—') + '</span></div>' +
+    '<div class="kv"><span class="k">Avviso</span><span class="v">' + esc(descAvviso(v.avviso || 0)) + '</span></div>' +
+    '<div class="kv"><span class="k">Per chiuderla</span><span class="v">' + (v.chiusura === 'pagato' ? 'Va pagata' : 'Basta segnarla fatta') + '</span></div>' +
+    (o ? '<div class="kv"><span class="k">Ospite</span><span class="v"><a href="#/ospite/' + o.id + '">' + esc(o.nome) + '</a></span></div>' : '') +
+    (v.servizio ? '<div class="kv"><span class="k">Tra i servizi</span><span class="v">' + esc(v.servizio) + '</span></div>' : '') +
+    (v.note ? '<div class="kv"><span class="k">Note</span><span class="v" style="font-weight:500;white-space:pre-wrap">' + esc(v.note) + '</span></div>' : '') +
+    '</div>';
+  if (v.attiva !== false) h += '<a class="btn btn-primary" style="margin-top:8px" href="#/segna?voce=' + v.id + '">' + ic('check', 19, 2.4) + (v.chiusura === 'pagato' ? ' Segna come pagata' : ' Segna come fatta') + '</a>';
+  const docs = S.documenti.filter(d => d.voceId === v.id).sort((a, b) => b.data.localeCompare(a.data));
+  h += sezione('Documenti', docs.length || null) + (docs.length ? docs.map(rigaDoc).join('') : '') +
+    '<a class="btn btn-sm" href="#/nuovo-doc?voce=' + v.id + '">' + ic('camera', 18) + ' Aggiungi un documento</a>';
+  const storico = S.eventi.filter(e => e.voceId === v.id).sort(eventiRecenti);
+  h += sezione('Storico') + (storico.length ? storico.map(rigaEvento).join('') : '<p class="empty">Non è ancora stata segnata.</p>');
+  h += '<div class="actions"><button class="btn btn-sm" data-action="sospendi-voce" data-id="' + v.id + '">' + (v.attiva === false ? 'Riattiva' : 'Sospendi (non ricordarla più)') + '</button>' +
+    '<button class="btn btn-sm btn-danger" data-action="elimina-voce" data-id="' + v.id + '">Elimina</button></div>';
+  return h + '</main>' + barra('registro');
+}
+
+function chiaveRic(ric) {
+  if (!ric) return '';
+  const k = ric.ogni + '-' + ric.unita;
+  return RICORRENZE.some(r => r[0] === k) ? k : 'altro';
+}
+function vFormVoce(q) {
+  const id = q.get('id');
+  const v = id ? voce(id) : null;
+  if (id && !v) return nonTrovato();
+  const servizio = v ? v.servizio || '' : q.get('servizio') || '';
+  const categoria = v ? v.categoria : q.get('cat') || (servizio === 'Bollette' ? 'Bollette e utenze' : servizio ? 'Servizi' : (q.get('ospite') ? 'Ospiti' : 'Altro'));
+  const ricSel = v ? chiaveRic(v.ric) : '1-mesi';
+  const ricAltro = v && v.ric && ricSel === 'altro' ? v.ric : { ogni: 1, unita: 'settimane' };
+  const nomeIniz = v ? v.nome : (servizio && servizio !== 'Bollette' ? servizio : '');
+  let h = testata(v ? 'Modifica voce' : 'Nuova voce', { indietro: true, sub: v ? '' : 'Quattro domande, e l\'app se lo ricorda da sola.' }) +
+    '<main class="pad"><form data-form="voce"' + (v ? ' data-id="' + v.id + '"' : '') + ' novalidate>' +
+    '<div class="field"><label for="f-nome">1. Cos\'è?</label><input type="text" id="f-nome" name="nome" value="' + esc(nomeIniz) + '" placeholder="es. Manutenzione caldaia" maxlength="80" autocomplete="off"><p class="err" id="err-nome"></p></div>' +
+    '<div class="field"><label for="f-categoria">Categoria</label>' + selezione('categoria', CATEGORIE, categoria) + '</div>' +
+    '<div class="field"><label for="f-servizio">Mostrala anche tra i Servizi</label>' + selezione('servizio', [['', 'No']].concat(SERVIZI.map(s => [s.k, s.k])), servizio) + '</div>' +
+    '<div class="field"><label for="f-ospite">Riguarda un ospite?</label><select name="ospite" id="f-ospite">' + opzioniOspiti(v ? v.ospiteId : q.get('ospite')) + '</select></div>' +
+    '<div class="field"><label for="f-prossima">2. Quando è la prossima volta?</label><input type="date" id="f-prossima" name="prossima" value="' + esc(v ? v.prossima : oggi()) + '"><p class="err" id="err-prossima"></p></div>' +
+    '<div class="field"><span class="lab">Si ripete?</span>' + chipsRadio('ric', RICORRENZE, ricSel) +
+    '<div id="ric-altro" class="inline ' + (ricSel === 'altro' ? '' : 'hidden') + '"><span class="lbl">Ogni</span><input type="number" name="ric_n" min="1" max="365" value="' + esc(ricAltro.ogni) + '" aria-label="Ogni quanti">' +
+    selezione('ric_u', [['giorni', 'giorni'], ['settimane', 'settimane'], ['mesi', 'mesi'], ['anni', 'anni']], ricAltro.unita) + '</div></div>' +
+    '<div class="field"><span class="lab">3. Chi se ne occupa?</span>' + chipsRadio('responsabile', RESPONSABILI, v ? v.responsabile : (utente() === 'Michele' ? 'Michele' : utente() === 'Rita' ? 'Rita' : 'Entrambi')) + '</div>' +
+    '<div class="field"><span class="lab">4. Quando vuoi l\'avviso?</span>' + chipsRadio('avviso', AVVISI, v ? v.avviso || 0 : 7) + '</div>' +
+    '<div class="field"><span class="lab">Per chiuderla serve</span>' + chipsRadio('chiusura', [['fatto', 'Segnarla fatta'], ['pagato', 'Pagarla']], v ? v.chiusura : (categoria === 'Bollette e utenze' || servizio === 'Bollette' ? 'pagato' : 'fatto')) + '</div>' +
+    '<div class="field"><label for="f-note">Note (facoltative)</label><textarea id="f-note" name="note" maxlength="1000" placeholder="es. numero del tecnico, codice cliente">' + esc(v ? v.note || '' : '') + '</textarea></div>' +
+    '<div class="actions"><button class="btn btn-primary" type="submit">Salva</button><button class="btn" type="button" data-action="indietro">Annulla</button></div></form></main>';
+  return h + barra('registro');
+}
+
+function vSegna(q) {
+  const v = q.get('voce') ? voce(q.get('voce')) : null;
+  const k = q.get('servizio');
+  if (!v && !k) return vServizi();
+  if (q.get('voce') && !v) return nonTrovato();
+  const pagato = v ? v.chiusura === 'pagato' : k === 'Bollette';
+  let poi = '';
+  if (v && v.ric) poi = '<div class="banner green">' + ic('info', 17) + '<div>Dopo, l\'app prepara da sola la prossima: <b>' + esc(fmtLungo(prossimaDopo(v, oggi()))) + '</b>.</div></div>';
+  else if (v) poi = '<div class="banner green">' + ic('info', 17) + '<div>È una cosa da fare una volta sola: dopo la trovi tra le voci chiuse.</div></div>';
+  let h = testata(pagato ? 'Segna come pagata' : 'Segna come fatta', { indietro: true, sub: v ? v.nome : k }) +
+    '<main class="pad"><form data-form="segna"' + (v ? ' data-voce="' + v.id + '"' : '') + (k ? ' data-servizio="' + esc(k) + '"' : '') + ' novalidate>' + poi +
+    (!v ? '<div class="field"><label for="f-cosa">Cosa hai fatto? (facoltativo)</label><input type="text" id="f-cosa" name="cosa" maxlength="80" placeholder="es. ritirato il bucato"></div>' : '') +
+    '<div class="field"><span class="lab">Chi l\'ha fatto?</span>' + chipsRadio('chi', UTENTI, utente()) + '</div>' +
+    '<div class="field"><label for="f-data">Quando?</label><input type="date" id="f-data" name="data" value="' + oggi() + '"></div>' +
+    '<div class="field"><div class="chips"><label><input type="checkbox" name="pagato"' + (pagato ? ' checked' : '') + '><span>C\'è stato un pagamento</span></label></div>' +
+    '<div id="box-importo" class="' + (pagato ? '' : 'hidden') + '"><label for="f-importo" class="hint">Importo (facoltativo)</label><input type="text" id="f-importo" name="importo" inputmode="decimal" placeholder="es. 184,50"></div></div>' +
+    '<div class="field"><span class="lab">Ricevuta o foto (facoltativa)</span><div class="filebtns">' +
+    '<label class="btn btn-sm">' + ic('camera', 18) + ' Fotografa<input type="file" name="foto" accept="image/*" capture="environment"></label>' +
+    '<label class="btn btn-sm">' + ic('doc', 18) + ' Scegli file<input type="file" name="file" accept="image/*,application/pdf"></label></div><span class="hint" data-nomefile></span></div>' +
+    '<div class="field"><label for="f-nota">Nota (facoltativa)</label><textarea id="f-nota" name="nota" maxlength="500"></textarea></div>' +
+    '<div class="actions"><button class="btn btn-primary" type="submit">' + ic('check', 19, 2.4) + ' Conferma</button><button class="btn" type="button" data-action="indietro">Annulla</button></div></form></main>';
+  return h + barra('servizi');
+}
+function prossimaDopo(v, dataFatto) {
+  let n = prossimaData(v.prossima, v.ric);
+  let giri = 0;
+  while (n && n <= dataFatto && giri++ < 1000) n = prossimaData(n, v.ric);
+  return n;
+}
+
+function vOspiti() {
+  const destra = '<a class="icon-btn primary" href="#/nuovo-ospite" aria-label="Aggiungi un ospite">' + ic('plus') + '</a>';
+  let h = testata('Ospiti', { sub: plur(S.ospiti.length, 'ospite', 'ospiti'), destra }) + '<main class="pad">';
+  if (!S.ospiti.length) h += '<p class="empty">Nessun ospite ancora.</p><a class="btn btn-primary" href="#/nuovo-ospite">' + ic('plus') + ' Aggiungi un ospite</a>';
+  h += [...S.ospiti].sort((a, b) => a.nome.localeCompare(b.nome)).map(o => {
+    const vs = attive().filter(v => v.ospiteId === o.id);
+    const rit = vs.filter(v => stato(v) === 'ritardo').length;
+    const farm = S.farmaci.filter(f => f.ospiteId === o.id && (stimaFarmaco(f).daRiordinare || stimaFarmaco(f).scad)).length;
+    const pross = vs.sort(perData)[0];
+    let meta = rit ? plur(rit, 'cosa in ritardo', 'cose in ritardo') : pross ? esc(pross.nome) + ' ' + fmt(pross.prossima) : 'nessuna scadenza aperta';
+    if (farm) meta += ' · ' + plur(farm, 'farmaco', 'farmaci') + ' da controllare';
+    return '<a class="row" href="#/ospite/' + o.id + '"><span class="avatar">' + esc(iniziali(o.nome)) + '</span><span class="row-main"><span class="row-title">' + esc(o.nome) + '</span><span class="row-meta' + (rit ? ' t-rust' : '') + '">' + meta + '</span></span>' + ic('chev', 18) + '</a>';
+  }).join('');
+  return h + '</main>' + barra('ospiti');
+}
+
+function vOspite(id) {
+  const o = ospite(id);
+  if (!o) return nonTrovato();
+  const vs = attive().filter(v => v.ospiteId === o.id).sort(perData);
+  const fs = S.farmaci.filter(f => f.ospiteId === o.id);
+  const ds = S.documenti.filter(d => d.ospiteId === o.id).sort((a, b) => b.data.localeCompare(a.data));
+  let h = testata(o.nome, { indietro: true, sub: o.codice, destra: '<a class="icon-btn" href="#/nuovo-ospite?id=' + o.id + '" aria-label="Modifica ospite">' + ic('edit', 18) + '</a>' }) + '<main class="pad">';
+  if (o.note) h += '<div class="box"><span class="hint">Note</span><div style="white-space:pre-wrap;font-size:14px;margin-top:4px">' + esc(o.note) + '</div></div>';
+  h += sezione('Scadenze', vs.length || null) + vs.map(v => rigaVoce(v)).join('') +
+    '<a class="btn btn-sm" href="#/nuova-voce?ospite=' + o.id + '&cat=Ospiti">' + ic('plus', 18) + ' Aggiungi una scadenza</a>';
+  h += sezione('Farmaci', fs.length || null) + fs.map(rigaFarmaco).join('') +
+    '<a class="btn btn-sm" href="#/nuovo-farmaco?ospite=' + o.id + '">' + ic('plus', 18) + ' Aggiungi un farmaco</a>';
+  h += sezione('Documenti', ds.length || null) + ds.map(rigaDoc).join('') +
+    '<a class="btn btn-sm" href="#/nuovo-doc?ospite=' + o.id + '">' + ic('camera', 18) + ' Aggiungi un documento</a>';
+  return h + '</main>' + barra('ospiti');
+}
+
+function prossimoCodice() {
+  let n = 1;
+  const usati = new Set(S.ospiti.map(o => o.codice));
+  while (usati.has('OSP-' + pad(n))) n++;
+  return 'OSP-' + pad(n);
+}
+function vFormOspite(q) {
+  const id = q.get('id');
+  const o = id ? ospite(id) : null;
+  if (id && !o) return nonTrovato();
+  let h = testata(o ? 'Modifica ospite' : 'Nuovo ospite', { indietro: true }) +
+    '<main class="pad"><form data-form="ospite"' + (o ? ' data-id="' + o.id + '"' : '') + ' novalidate>' +
+    '<div class="field"><label for="f-nome">Nome e cognome</label><input type="text" id="f-nome" name="nome" value="' + esc(o ? o.nome : '') + '" maxlength="80" autocomplete="off"><p class="err" id="err-nome"></p></div>' +
+    '<div class="field"><label for="f-codice">Codice</label><input type="text" id="f-codice" name="codice" value="' + esc(o ? o.codice : prossimoCodice()) + '" maxlength="20"><span class="hint">Lo stesso codice delle cartelle sul PC, così i documenti si ritrovano.</span></div>' +
+    '<div class="field"><label for="f-note">Note (facoltative)</label><textarea id="f-note" name="note" maxlength="1000">' + esc(o ? o.note || '' : '') + '</textarea></div>' +
+    '<div class="actions"><button class="btn btn-primary" type="submit">Salva</button>' +
+    (o ? '<button class="btn btn-danger btn-sm" type="button" data-action="elimina-ospite" data-id="' + o.id + '">Elimina ospite</button>' : '') +
+    '<button class="btn" type="button" data-action="indietro">Annulla</button></div></form></main>';
+  return h + barra('ospiti');
+}
+
+function vFarmaci() {
+  const destra = '<a class="icon-btn primary" href="#/nuovo-farmaco" aria-label="Aggiungi un farmaco">' + ic('plus') + '</a>';
+  let h = testata('Farmaci', { indietro: true, sub: 'Scorte e scadenze delle confezioni', destra }) + '<main class="pad">';
+  const lista = [...S.farmaci].sort((a, b) => {
+    const sa = stimaFarmaco(a), sb = stimaFarmaco(b);
+    return (sa.giorni == null ? 9999 : sa.giorni) - (sb.giorni == null ? 9999 : sb.giorni);
+  });
+  h += lista.length ? lista.map(rigaFarmaco).join('') : '<p class="empty">Nessun farmaco inserito.</p>';
+  return h + '</main>' + barra('ospiti');
+}
+
+function vFarmaco(id) {
+  const f = farmaco(id);
+  if (!f) return nonTrovato();
+  const s = stimaFarmaco(f);
+  const o = ospite(f.ospiteId);
+  let avviso = '';
+  if (s.scad === 'scaduto') avviso = '<div class="banner rust">' + ic('info', 17) + '<div><b>Confezione scaduta:</b> non usarla, va riportata in farmacia per lo smaltimento.</div></div>';
+  else if (s.scad) avviso = '<div class="banner amber">' + ic('info', 17) + '<div>La confezione scade il <b>' + esc(fmtLungo(f.scadenza)) + '</b>.</div></div>';
+  if (s.daRiordinare) avviso += '<div class="banner ' + (s.giorni <= 3 ? 'rust' : 'amber') + '">' + ic('info', 17) + '<div><b>Da rifornire:</b> ' + (s.giorni <= 0 ? 'la scorta stimata è finita.' : 'restano circa ' + plur(s.giorni, 'giorno', 'giorni') + '.') + ' Chiedi la ricetta al medico, poi ritira in farmacia.</div></div>';
+  let h = testata(f.nome, { indietro: true, sub: o ? o.nome : '', destra: '<a class="icon-btn" href="#/nuovo-farmaco?id=' + f.id + '" aria-label="Modifica farmaco">' + ic('edit', 18) + '</a>' }) +
+    '<main class="pad">' + avviso + '<div class="card">' +
+    '<div class="kv"><span class="k">Scorta stimata</span><span class="v">' + esc(s.rimaste + ' ' + f.unita) + '</span></div>' +
+    '<div class="kv"><span class="k">Basta per</span><span class="v">' + (s.giorni == null ? '—' : esc(plur(s.giorni, 'giorno', 'giorni'))) + '</span></div>' +
+    '<div class="kv"><span class="k">Uso al giorno</span><span class="v">' + esc((f.alGiorno || 0) + ' ' + f.unita) + ' <span class="muted" style="font-weight:500">(dalla prescrizione)</span></span></div>' +
+    '<div class="kv"><span class="k">Ultima conta</span><span class="v">' + esc(fmt(f.contatoIl)) + '</span></div>' +
+    '<div class="kv"><span class="k">Scadenza confezione</span><span class="v">' + esc(f.scadenza ? fmtLungo(f.scadenza) : 'non inserita') + '</span></div>' +
+    '<div class="kv"><span class="k">Avvisami quando</span><span class="v">restano ' + esc(plur(f.soglia == null ? 10 : f.soglia, 'giorno', 'giorni')) + '</span></div></div>';
+  h += '<form class="box" data-form="ritiro" data-id="' + f.id + '" novalidate style="margin-top:8px"><h3>Ritirato in farmacia</h3>' +
+    '<div class="field" style="margin-top:8px"><label for="f-ritirate">Quante ' + esc(f.unita) + ' hai portato?</label><input type="number" id="f-ritirate" name="quante" min="0" step="any" inputmode="decimal"><p class="err" id="err-quante"></p></div>' +
+    '<div class="field"><label for="f-scad-nuova">Scadenza della nuova confezione (facoltativa)</label><input type="date" id="f-scad-nuova" name="scadenza"></div>' +
+    '<div class="actions" style="margin-top:12px"><button class="btn btn-primary btn-sm" type="submit">Aggiungi alla scorta</button></div></form>';
+  h += '<form class="box" data-form="conta" data-id="' + f.id + '" novalidate><h3>Ho contato le scorte</h3><p class="hint" style="margin:0">Una conta a settimana corregge le stime.</p>' +
+    '<div class="field" style="margin-top:8px"><label for="f-contate">Quante ' + esc(f.unita) + ' ci sono adesso?</label><input type="number" id="f-contate" name="quante" min="0" step="any" inputmode="decimal"><p class="err" id="err-contate"></p></div>' +
+    '<div class="actions" style="margin-top:12px"><button class="btn btn-sm" type="submit">Aggiorna la scorta</button></div></form>';
+  h += '<div class="actions"><button class="btn btn-sm btn-danger" data-action="elimina-farmaco" data-id="' + f.id + '">Elimina farmaco</button></div>';
+  return h + '</main>' + barra('ospiti');
+}
+
+function vFormFarmaco(q) {
+  const id = q.get('id');
+  const f = id ? farmaco(id) : null;
+  if (id && !f) return nonTrovato();
+  const s = f ? stimaFarmaco(f) : null;
+  let h = testata(f ? 'Modifica farmaco' : 'Nuovo farmaco', { indietro: true }) +
+    '<main class="pad"><div class="banner amber">' + ic('info', 17) + '<div>Questi numeri servono solo a contare le scorte. Le dosi le decide il medico: qui si ricopiano dalla prescrizione.</div></div>' +
+    '<form data-form="farmaco"' + (f ? ' data-id="' + f.id + '"' : '') + ' novalidate>' +
+    '<div class="field"><label for="f-nome">Nome del farmaco</label><input type="text" id="f-nome" name="nome" value="' + esc(f ? f.nome : '') + '" maxlength="80" autocomplete="off"><p class="err" id="err-nome"></p></div>' +
+    '<div class="field"><label for="f-ospite">Per quale ospite?</label><select name="ospite" id="f-ospite">' + opzioniOspiti(f ? f.ospiteId : q.get('ospite')) + '</select></div>' +
+    '<div class="field"><label for="f-unita">Come si conta</label>' + selezione('unita', UNITA_FARMACO, f ? f.unita : 'compresse') + '</div>' +
+    '<div class="field"><label for="f-incasa">Quante ce ne sono adesso in casa?</label><input type="number" id="f-incasa" name="inCasa" min="0" step="any" inputmode="decimal" value="' + esc(f ? s.rimaste : '') + '"><p class="err" id="err-incasa"></p></div>' +
+    '<div class="field"><label for="f-algiorno">Quante se ne usano al giorno, secondo la prescrizione?</label><input type="number" id="f-algiorno" name="alGiorno" min="0" step="any" inputmode="decimal" value="' + esc(f ? f.alGiorno : '') + '"><p class="err" id="err-algiorno"></p></div>' +
+    '<div class="field"><label for="f-scadenza">Scadenza della confezione (facoltativa)</label><input type="date" id="f-scadenza" name="scadenza" value="' + esc(f ? f.scadenza || '' : '') + '"></div>' +
+    '<div class="field"><label for="f-soglia">Avvisami quando restano (giorni)</label><input type="number" id="f-soglia" name="soglia" min="0" max="90" inputmode="numeric" value="' + esc(f ? (f.soglia == null ? 10 : f.soglia) : 10) + '"><span class="hint">Lascia il tempo di chiedere la ricetta e passare in farmacia.</span></div>' +
+    '<div class="actions"><button class="btn btn-primary" type="submit">Salva</button><button class="btn" type="button" data-action="indietro">Annulla</button></div></form></main>';
+  return h + barra('ospiti');
+}
+
+function vArchivio(q) {
+  const vista = q.get('vista') || 'tutti';
+  const destra = '<a class="icon-btn primary" href="#/nuovo-doc" aria-label="Aggiungi un documento">' + ic('plus') + '</a>';
+  let h = testata('Archivio', { sub: plur(S.documenti.length, 'documento', 'documenti') + ' su questo telefono', destra });
+  const daSmistare = S.documenti.filter(d => d.daSmistare);
+  h += '<div class="pad" style="margin-bottom:4px"><div class="seg"><a href="#/archivio" class="' + (vista === 'tutti' ? 'on' : '') + '">Tutti</a><a href="#/archivio?vista=smistare" class="' + (vista === 'smistare' ? 'on' : '') + '">Da smistare (' + daSmistare.length + ')</a></div></div><main class="pad">';
+  const lista = (vista === 'smistare' ? daSmistare : S.documenti).slice().sort((a, b) => (b.data + b.creato).localeCompare(a.data + a.creato));
+  h += lista.length ? lista.map(rigaDoc).join('') : '<p class="empty">' + (vista === 'smistare' ? 'Niente da smistare.' : 'Ancora nessun documento.') + '</p>';
+  h += '<a class="btn btn-primary" style="margin-top:8px" href="#/nuovo-doc">' + ic('camera', 19) + ' Aggiungi un documento</a>';
+  return h + '</main>' + barra('archivio');
+}
+
+function vDoc(id) {
+  const d = documento(id);
+  if (!d) return nonTrovato();
+  const o = ospite(d.ospiteId);
+  const v = d.voceId ? voce(d.voceId) : null;
+  let anteprima = '';
+  if (d.blob) {
+    const u = urlDi(d.blob);
+    anteprima = d.mime && d.mime.startsWith('image/')
+      ? '<img class="docimg" src="' + u + '" alt="' + esc(d.nome) + '">'
+      : '<a class="btn btn-primary" href="' + u + '" target="_blank" rel="noopener" download="' + esc(d.nome) + '.pdf">' + ic('doc', 19) + ' Apri il documento</a>';
+  }
+  let h = testata(d.nome, { indietro: true, sub: d.tipo }) + '<main class="pad">' + anteprima +
+    '<div class="card"><div class="kv"><span class="k">Data</span><span class="v">' + esc(fmtLungo(d.data)) + '</span></div>' +
+    '<div class="kv"><span class="k">Ospite</span><span class="v">' + (o ? '<a href="#/ospite/' + o.id + '">' + esc(o.nome) + '</a>' : (d.daSmistare ? 'da smistare' : '—')) + '</span></div>' +
+    (v ? '<div class="kv"><span class="k">Collegato a</span><span class="v"><a href="#/voce/' + v.id + '">' + esc(v.nome) + '</a></span></div>' : '') +
+    '<div class="kv"><span class="k">Caricato</span><span class="v">' + esc(fmt((d.creato || '').slice(0, 10)) + (d.da ? ' da ' + d.da : '')) + '</span></div>' +
+    '<div class="kv"><span class="k">Peso</span><span class="v">' + esc(d.dim ? Math.max(1, Math.round(d.dim / 1024)) + ' KB' : '—') + '</span></div></div>' +
+    '<form class="box" data-form="doc-modifica" data-id="' + d.id + '" novalidate style="margin-top:8px"><h3>Sistema il documento</h3>' +
+    '<div class="field" style="margin-top:8px"><label for="f-nome">Nome</label><input type="text" id="f-nome" name="nome" value="' + esc(d.nome) + '" maxlength="80"></div>' +
+    '<div class="field"><label for="f-tipo">Tipo</label>' + selezione('tipo', TIPI_DOC, d.tipo) + '</div>' +
+    '<div class="field"><label for="f-ospite">Ospite</label><select name="ospite" id="f-ospite">' + opzioniOspiti(d.ospiteId, '— nessuno —') + '</select></div>' +
+    '<div class="actions" style="margin-top:12px"><button class="btn btn-sm btn-primary" type="submit">Salva</button></div></form>' +
+    '<div class="actions"><button class="btn btn-sm btn-danger" data-action="elimina-doc" data-id="' + d.id + '">Elimina documento</button></div>';
+  return h + '</main>' + barra('archivio');
+}
+
+function vFormDoc(q) {
+  const osp = q.get('ospite') || '';
+  const vid = q.get('voce') || '';
+  const v = vid ? voce(vid) : null;
+  let h = testata('Nuovo documento', { indietro: true, sub: v ? 'Per: ' + v.nome : (ospite(osp) ? 'Per: ' + ospite(osp).nome : '') }) +
+    '<main class="pad"><form data-form="doc"' + (vid ? ' data-voce="' + esc(vid) + '"' : '') + ' novalidate>' +
+    '<div class="field"><span class="lab">Il documento</span><div class="filebtns">' +
+    '<label class="btn btn-primary">' + ic('camera', 19) + ' Fotografa<input type="file" name="foto" accept="image/*" capture="environment"></label>' +
+    '<label class="btn">' + ic('doc', 19) + ' Scegli file<input type="file" name="file" accept="image/*,application/pdf"></label></div>' +
+    '<span class="hint" data-nomefile>Nessun file scelto.</span><p class="err" id="err-file"></p></div>' +
+    '<div class="field"><label for="f-nome">Nome</label><input type="text" id="f-nome" name="nome" maxlength="80" placeholder="es. Referto emocromo" autocomplete="off"></div>' +
+    '<div class="field"><label for="f-tipo">Tipo</label>' + selezione('tipo', TIPI_DOC, v && v.chiusura === 'pagato' ? 'Ricevuta' : 'Referto') + '</div>' +
+    '<div class="field"><label for="f-ospite">Di quale ospite?</label><select name="ospite" id="f-ospite">' + opzioniOspiti(osp || (v ? v.ospiteId : ''), '— nessuno / da smistare —') + '</select></div>' +
+    '<div class="field"><label for="f-data">Data del documento</label><input type="date" id="f-data" name="data" value="' + oggi() + '"></div>' +
+    '<div class="actions"><button class="btn btn-primary" type="submit">Salva nell\'archivio</button><button class="btn" type="button" data-action="indietro">Annulla</button></div></form></main>';
+  return h + barra('archivio');
+}
+
+function statoNotifiche() {
+  if (!('Notification' in window)) return 'non disponibili su questo browser';
+  return { granted: 'attive', denied: 'bloccate (riattivale dalle impostazioni di Chrome)', default: 'non ancora attivate' }[Notification.permission];
+}
+function vImpostazioni() {
+  const pinOk = !!(window.crypto && crypto.subtle);
+  let h = testata('Impostazioni', { indietro: true }) + '<main class="pad">';
+  h += '<div class="box"><h3>Chi usa questo telefono</h3><p class="hint" style="margin:0 0 10px">Serve a segnare chi ha fatto cosa.</p>' + chipsRadio('utente-set', UTENTI, utente()) + '</div>';
+  h += '<div class="box"><h3>PIN dell\'app</h3>';
+  if (!pinOk) h += '<p class="hint" style="margin:0">Il PIN funziona solo quando l\'app è aperta dal suo indirizzo sicuro (https).</p>';
+  else if (S.kv.pin) h += '<p class="hint" style="margin:0 0 10px">Il PIN è attivo: l\'app lo chiede all\'apertura e dopo 5 minuti in background.</p><button class="btn btn-sm" data-action="togli-pin">Togli il PIN</button>';
+  else h += '<p class="hint" style="margin:0 0 6px">Impedisce a chi prende il telefono di aprire l\'app. La protezione principale resta il blocco schermo del telefono.</p>' +
+    '<form data-form="imposta-pin" novalidate><div class="field" style="margin-top:6px"><label for="f-nuovopin">Nuovo PIN (da 4 a 8 cifre)</label><input type="password" id="f-nuovopin" name="pin" inputmode="numeric" autocomplete="off"><p class="err" id="err-nuovopin"></p></div>' +
+    '<div class="actions" style="margin-top:10px"><button class="btn btn-sm btn-primary" type="submit">Attiva il PIN</button></div></form>';
+  h += '</div>';
+  h += '<div class="box"><h3>Avvisi</h3><p class="hint" style="margin:0 0 10px">Notifiche: <b>' + esc(statoNotifiche()) + '</b>. In questa versione di prova Chrome mostra il riepilogo una o due volte al giorno, quando decide lui; nella versione definitiva l\'avviso arriverà all\'orario preciso.</p>' +
+    '<div class="two"><button class="btn btn-sm" data-action="attiva-notifiche">Attiva</button><button class="btn btn-sm" data-action="prova-notifica">Prova</button></div></div>';
+  h += '<div class="box"><h3>Copia di sicurezza</h3><p class="hint" style="margin:0 0 10px">Ultima copia: <b>' + esc(S.kv.ultimoBackup ? fmtLungo(S.kv.ultimoBackup) : 'mai') + '</b>. Il file finisce nella cartella Download: copialo sul PC della comunità.</p>' +
+    '<div class="actions" style="margin-top:0"><button class="btn btn-sm btn-primary" data-action="esporta">Salva una copia</button>' +
+    '<label class="btn btn-sm" style="position:relative;overflow:hidden">Ripristina da una copia<input type="file" name="importa" accept="application/json,.json" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label></div></div>';
+  h += '<div class="box"><h3>Dati di esempio</h3><p class="hint" style="margin:0 0 10px">Ospiti, scadenze e farmaci inventati, per provare.</p><button class="btn btn-sm" data-action="carica-esempio">Carica dati di esempio</button></div>';
+  h += '<div class="box"><h3>Cancella tutto</h3><p class="hint" style="margin:0 0 10px">Toglie tutti i dati da questo telefono. Prima salva una copia.</p><button class="btn btn-sm btn-danger" data-action="cancella-tutto">Cancella tutti i dati</button></div>';
+  h += '<p class="hint" style="text-align:center;margin:10px 0">Kenosis · versione ' + VERSIONE + '<br>I dati restano solo su questo telefono.</p>';
+  return h + '</main>' + barra('oggi');
+}
+
+/* =========================================================== router */
+
+function rotta() {
+  const h = location.hash.slice(1) || '/oggi';
+  const [percorso, query] = h.split('?');
+  const parti = percorso.split('/').filter(Boolean);
+  return { parti, q: new URLSearchParams(query || '') };
+}
+let ultimaRotta = '';
+function render() {
+  urlAperti.forEach(u => URL.revokeObjectURL(u));
+  urlAperti = [];
+  const app = document.getElementById('app');
+  let html;
+  if (bloccato) html = vBlocco();
+  else if (!utente()) html = vBenvenuto();
+  else {
+    const { parti, q } = rotta();
+    const id = parti[1] ? decodeURIComponent(parti[1]) : '';
+    switch (parti[0]) {
+      case 'servizi': html = vServizi(); break;
+      case 'servizio': html = vServizio(id); break;
+      case 'registro': html = vRegistro(q); break;
+      case 'voce': html = vVoce(id); break;
+      case 'nuova-voce': html = vFormVoce(q); break;
+      case 'segna': html = vSegna(q); break;
+      case 'ospiti': html = vOspiti(); break;
+      case 'ospite': html = vOspite(id); break;
+      case 'nuovo-ospite': html = vFormOspite(q); break;
+      case 'farmaci': html = vFarmaci(); break;
+      case 'farmaco': html = vFarmaco(id); break;
+      case 'nuovo-farmaco': html = vFormFarmaco(q); break;
+      case 'archivio': html = vArchivio(q); break;
+      case 'doc': html = vDoc(id); break;
+      case 'nuovo-doc': html = vFormDoc(q); break;
+      case 'impostazioni': html = vImpostazioni(); break;
+      default: html = vOggi();
+    }
+  }
+  app.innerHTML = html;
+  if (location.hash !== ultimaRotta) { window.scrollTo(0, 0); ultimaRotta = location.hash; }
+}
+function vai(hash, sostituisci) {
+  if (sostituisci) { history.replaceState(null, '', hash); render(); }
+  else if (location.hash === hash) render();
+  else location.hash = hash;
+}
+let navigato = false;
+function indietro() {
+  if (navigato && history.length > 1) history.back();
+  else vai('#/oggi', true);
+}
+window.addEventListener('hashchange', () => { navigato = true; render(); });
+
+let toastTimer = null;
+function avvisa(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+function errore(id, msg) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = msg;
+  const campo = el && el.parentElement ? el.parentElement.querySelector('input,select,textarea') : null;
+  if (campo) campo.focus();
+}
+
+/* ========================================================== file */
+
+async function comprimi(file) {
+  if (!file || !file.type || !file.type.startsWith('image/')) return file;
+  try {
+    const bmp = await createImageBitmap(file);
+    const lato = 2000;
+    const scala = Math.min(1, lato / Math.max(bmp.width, bmp.height));
+    if (scala === 1 && file.size < 1500000) return file;
+    const c = document.createElement('canvas');
+    c.width = Math.round(bmp.width * scala);
+    c.height = Math.round(bmp.height * scala);
+    c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+    const b = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.82));
+    return b || file;
+  } catch (e) { return file; }
+}
+function fileScelto(form) {
+  const ins = form.querySelectorAll('input[type=file]');
+  for (const i of ins) if (i.files && i.files[0]) return i.files[0];
+  return null;
+}
+function blobInBase64(b) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result);
+    r.onerror = () => reject(r.error);
+    r.readAsDataURL(b);
+  });
+}
+async function base64InBlob(dataUrl) {
+  const [testa, corpo] = dataUrl.split(',');
+  const mime = (testa.match(/data:([^;]+)/) || [])[1] || 'application/octet-stream';
+  const bin = atob(corpo);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+  return new Blob([arr], { type: mime });
+}
+
+/* ========================================================== moduli */
+
+const moduli = {
+  async benvenuto(form) {
+    const fd = new FormData(form);
+    await setKV('utente', fd.get('utente') || 'Rita');
+    if (fd.get('dati') === 'esempio') await caricaEsempio();
+    vai('#/oggi', true);
+  },
+
+  async sblocca(form) {
+    const pin = String(new FormData(form).get('pin') || '');
+    const ok = S.kv.pin && (await hashPin(pin, S.kv.pin.sale)) === S.kv.pin.hash;
+    if (!ok) { errore('err-pin', 'PIN sbagliato.'); form.querySelector('input').value = ''; return; }
+    bloccato = false;
+    render();
+  },
+
+  async 'imposta-pin'(form) {
+    const pin = String(new FormData(form).get('pin') || '');
+    if (!/^\d{4,8}$/.test(pin)) { errore('err-nuovopin', 'Servono da 4 a 8 cifre.'); return; }
+    const sale = uid();
+    await setKV('pin', { sale, hash: await hashPin(pin, sale) });
+    avvisa('PIN attivato');
+    render();
+  },
+
+  async voce(form) {
+    const fd = new FormData(form);
+    const nome = String(fd.get('nome') || '').trim();
+    const prossima = String(fd.get('prossima') || '');
+    if (!nome) { errore('err-nome', 'Scrivi cos\'è, anche in due parole.'); return; }
+    if (!dataValida(prossima)) { errore('err-prossima', 'Scegli una data.'); return; }
+    const ricK = String(fd.get('ric') || '');
+    let ric = null;
+    if (ricK === 'altro') ric = { ogni: Math.max(1, parseInt(fd.get('ric_n'), 10) || 1), unita: String(fd.get('ric_u') || 'settimane') };
+    else if (ricK) { const [n, u] = ricK.split('-'); ric = { ogni: parseInt(n, 10), unita: u }; }
+    const id = form.dataset.id || uid();
+    const vecchia = form.dataset.id ? voce(form.dataset.id) : null;
+    const v = Object.assign({}, vecchia || { creato: adesso(), attiva: true }, {
+      id, nome, prossima, ric,
+      categoria: String(fd.get('categoria') || 'Altro'),
+      servizio: String(fd.get('servizio') || '') || null,
+      ospiteId: String(fd.get('ospite') || '') || null,
+      responsabile: String(fd.get('responsabile') || 'Entrambi'),
+      avviso: parseInt(fd.get('avviso'), 10) || 0,
+      chiusura: fd.get('chiusura') === 'pagato' ? 'pagato' : 'fatto',
+      note: String(fd.get('note') || '').trim() || null
+    });
+    await salva('voci', v);
+    dopoModifica();
+    avvisa(vecchia ? 'Modifiche salvate' : 'Salvata: te la ricordo io');
+    vai('#/voce/' + id, true);
+  },
+
+  async segna(form) {
+    const fd = new FormData(form);
+    const v = form.dataset.voce ? voce(form.dataset.voce) : null;
+    const servizio = v ? v.servizio || null : form.dataset.servizio || null;
+    const data = dataValida(fd.get('data')) ? String(fd.get('data')) : oggi();
+    const pagato = fd.get('pagato') === 'on';
+    let importo = parseFloat(String(fd.get('importo') || '').replace(/\./g, '').replace(',', '.'));
+    if (isNaN(importo) || !pagato) importo = null;
+    const cosa = String(fd.get('cosa') || '').trim();
+    const nota = [cosa, String(fd.get('nota') || '').trim()].filter(Boolean).join(' — ') || null;
+    const file = fileScelto(form);
+    let docId = null;
+    if (file) {
+      const blob = await comprimi(file);
+      const d = {
+        id: uid(), nome: (pagato ? 'Ricevuta ' : 'Foto ') + (v ? v.nome : servizio || '') + ' ' + fmt(data),
+        tipo: pagato ? 'Ricevuta' : 'Altro', ospiteId: v ? v.ospiteId || null : null, voceId: v ? v.id : null,
+        data, mime: blob.type || file.type, dim: blob.size, blob, creato: adesso(), daSmistare: false
+      };
+      await salva('documenti', d);
+      docId = d.id;
+    }
+    await salva('eventi', {
+      id: uid(), voceId: v ? v.id : null, servizio, data, chi: String(fd.get('chi') || utente()),
+      tipo: pagato ? 'pagato' : 'fatto', importo, nota, docId, creato: adesso()
+    });
+    let msg = pagato ? 'Segnata come pagata' : 'Segnata come fatta';
+    if (v) {
+      if (v.ric) { v.prossima = prossimaDopo(v, data); msg += ' · prossima ' + fmt(v.prossima); }
+      else { v.attiva = false; v.chiusaIl = data; }
+      await salva('voci', v);
+    }
+    dopoModifica();
+    avvisa(msg);
+    indietro();
+  },
+
+  async ospite(form) {
+    const fd = new FormData(form);
+    const nome = String(fd.get('nome') || '').trim();
+    if (!nome) { errore('err-nome', 'Scrivi il nome.'); return; }
+    const vecchio = form.dataset.id ? ospite(form.dataset.id) : null;
+    const o = Object.assign({}, vecchio || { creato: adesso() }, {
+      id: vecchio ? vecchio.id : uid(), nome,
+      codice: String(fd.get('codice') || '').trim() || prossimoCodice(),
+      note: String(fd.get('note') || '').trim() || null
+    });
+    await salva('ospiti', o);
+    avvisa('Ospite salvato');
+    vai('#/ospite/' + o.id, true);
+  },
+
+  async farmaco(form) {
+    const fd = new FormData(form);
+    const nome = String(fd.get('nome') || '').trim();
+    const num = k => { const x = parseFloat(String(fd.get(k) || '').replace(',', '.')); return isNaN(x) ? null : x; };
+    const inCasa = num('inCasa'), alGiorno = num('alGiorno');
+    if (!nome) { errore('err-nome', 'Scrivi il nome del farmaco.'); return; }
+    if (inCasa === null || inCasa < 0) { errore('err-incasa', 'Scrivi quante ce ne sono, anche 0.'); return; }
+    if (alGiorno === null || alGiorno < 0) { errore('err-algiorno', 'Ricopialo dalla prescrizione. Se si usa solo al bisogno, scrivi 0.'); return; }
+    const vecchio = form.dataset.id ? farmaco(form.dataset.id) : null;
+    const scad = String(fd.get('scadenza') || '');
+    const soglia = parseInt(fd.get('soglia'), 10);
+    const f = Object.assign({}, vecchio || { creato: adesso() }, {
+      id: vecchio ? vecchio.id : uid(), nome,
+      ospiteId: String(fd.get('ospite') || '') || null,
+      unita: String(fd.get('unita') || 'compresse'),
+      inCasa, alGiorno, contatoIl: oggi(),
+      scadenza: dataValida(scad) ? scad : null,
+      soglia: isNaN(soglia) ? 10 : soglia
+    });
+    await salva('farmaci', f);
+    dopoModifica();
+    avvisa('Farmaco salvato');
+    vai('#/farmaco/' + f.id, true);
+  },
+
+  async ritiro(form) {
+    const f = farmaco(form.dataset.id);
+    if (!f) return;
+    const fd = new FormData(form);
+    const n = parseFloat(String(fd.get('quante') || '').replace(',', '.'));
+    if (isNaN(n) || n <= 0) { errore('err-quante', 'Scrivi quante ne hai portate.'); return; }
+    const s = stimaFarmaco(f);
+    f.inCasa = s.rimaste + n;
+    f.contatoIl = oggi();
+    const nuova = String(fd.get('scadenza') || '');
+    if (dataValida(nuova)) {
+      const vecchiaValida = f.scadenza && f.scadenza >= oggi() && s.rimaste > 0;
+      f.scadenza = vecchiaValida && f.scadenza < nuova ? f.scadenza : nuova;
+    }
+    await salva('farmaci', f);
+    const o = ospite(f.ospiteId);
+    await salva('eventi', { id: uid(), voceId: null, servizio: 'Farmacia', data: oggi(), chi: utente(), tipo: 'fatto', importo: null,
+      nota: 'Ritirato ' + n + ' ' + f.unita + ' di ' + f.nome + (o ? ' per ' + o.nome : ''), docId: null, creato: adesso() });
+    dopoModifica();
+    avvisa('Scorta aggiornata');
+    render();
+  },
+
+  async conta(form) {
+    const f = farmaco(form.dataset.id);
+    if (!f) return;
+    const n = parseFloat(String(new FormData(form).get('quante') || '').replace(',', '.'));
+    if (isNaN(n) || n < 0) { errore('err-contate', 'Scrivi quante ce ne sono, anche 0.'); return; }
+    f.inCasa = n;
+    f.contatoIl = oggi();
+    await salva('farmaci', f);
+    dopoModifica();
+    avvisa('Scorta aggiornata');
+    render();
+  },
+
+  async doc(form) {
+    const fd = new FormData(form);
+    const file = fileScelto(form);
+    if (!file) { document.getElementById('err-file').textContent = 'Fotografa o scegli un file.'; return; }
+    const pulsante = form.querySelector('button[type=submit]');
+    pulsante.disabled = true;
+    pulsante.textContent = 'Salvataggio…';
+    const blob = await comprimi(file);
+    const ospiteId = String(fd.get('ospite') || '') || null;
+    const voceId = form.dataset.voce || null;
+    const nome = String(fd.get('nome') || '').trim() || file.name.replace(/\.[^.]+$/, '') || 'Documento';
+    const d = {
+      id: uid(), nome, tipo: String(fd.get('tipo') || 'Altro'), ospiteId, voceId,
+      data: dataValida(fd.get('data')) ? String(fd.get('data')) : oggi(),
+      mime: blob.type || file.type || 'application/octet-stream', dim: blob.size, blob,
+      creato: adesso(), daSmistare: !ospiteId && !voceId
+    };
+    await salva('documenti', d);
+    avvisa(d.daSmistare ? 'Salvato tra i documenti da smistare' : 'Documento salvato');
+    vai('#/doc/' + d.id, true);
+  },
+
+  async 'doc-modifica'(form) {
+    const d = documento(form.dataset.id);
+    if (!d) return;
+    const fd = new FormData(form);
+    d.nome = String(fd.get('nome') || '').trim() || d.nome;
+    d.tipo = String(fd.get('tipo') || d.tipo);
+    d.ospiteId = String(fd.get('ospite') || '') || null;
+    d.daSmistare = !d.ospiteId && !d.voceId;
+    await salva('documenti', d);
+    avvisa('Documento aggiornato');
+    render();
+  }
+};
+
+/* ========================================================== azioni */
+
+const azioni = {
+  indietro() { indietro(); },
+
+  async 'sospendi-voce'(el) {
+    const v = voce(el.dataset.id);
+    if (!v) return;
+    v.attiva = v.attiva === false;
+    if (v.attiva) delete v.chiusaIl; else v.chiusaIl = oggi();
+    await salva('voci', v);
+    dopoModifica();
+    avvisa(v.attiva ? 'Riattivata' : 'Sospesa: non te la ricordo più');
+    render();
+  },
+
+  async 'elimina-voce'(el) {
+    const v = voce(el.dataset.id);
+    if (!v || !confirm('Eliminare "' + v.nome + '"? Lo storico resta, la voce sparisce.')) return;
+    await togli('voci', v.id);
+    dopoModifica();
+    avvisa('Voce eliminata');
+    vai('#/registro', true);
+  },
+
+  async 'elimina-ospite'(el) {
+    const o = ospite(el.dataset.id);
+    if (!o || !confirm('Eliminare ' + o.nome + '? Scadenze, farmaci e documenti restano, ma non saranno più collegati a nessun ospite.')) return;
+    for (const v of S.voci.filter(x => x.ospiteId === o.id)) { v.ospiteId = null; await salva('voci', v); }
+    for (const f of S.farmaci.filter(x => x.ospiteId === o.id)) { f.ospiteId = null; await salva('farmaci', f); }
+    for (const d of S.documenti.filter(x => x.ospiteId === o.id)) { d.ospiteId = null; d.daSmistare = !d.voceId; await salva('documenti', d); }
+    await togli('ospiti', o.id);
+    avvisa('Ospite eliminato');
+    vai('#/ospiti', true);
+  },
+
+  async 'elimina-farmaco'(el) {
+    const f = farmaco(el.dataset.id);
+    if (!f || !confirm('Eliminare ' + f.nome + '?')) return;
+    await togli('farmaci', f.id);
+    dopoModifica();
+    avvisa('Farmaco eliminato');
+    vai('#/farmaci', true);
+  },
+
+  async 'elimina-doc'(el) {
+    const d = documento(el.dataset.id);
+    if (!d || !confirm('Eliminare il documento "' + d.nome + '" da questo telefono?')) return;
+    await togli('documenti', d.id);
+    avvisa('Documento eliminato');
+    vai('#/archivio', true);
+  },
+
+  async 'togli-pin'() {
+    if (!confirm('Togliere il PIN? Chiunque prenda il telefono sbloccato potrà aprire l\'app.')) return;
+    await DB.del('kv', 'pin');
+    delete S.kv.pin;
+    avvisa('PIN tolto');
+    render();
+  },
+
+  async 'attiva-notifiche'() {
+    if (!('Notification' in window)) { avvisa('Questo browser non supporta le notifiche'); return; }
+    const p = await Notification.requestPermission();
+    if (p === 'granted') { await registraAvvisiBackground(); avvisa('Notifiche attive'); }
+    else avvisa('Notifiche non attivate');
+    render();
+  },
+
+  async 'prova-notifica'() {
+    if (!('Notification' in window) || Notification.permission !== 'granted') { avvisa('Prima attiva le notifiche'); return; }
+    await mostraNotifica('Kenosis', 'Le notifiche funzionano su questo telefono.');
+  },
+
+  async esporta() { await esportaCopia(); },
+
+  async 'carica-esempio'() {
+    if ((S.voci.length || S.ospiti.length) && !confirm('Aggiungo i dati di esempio a quelli che ci sono già?')) return;
+    await caricaEsempio();
+    avvisa('Dati di esempio caricati');
+    vai('#/oggi');
+  },
+
+  async 'cancella-tutto'() {
+    if (!confirm('Cancellare TUTTI i dati da questo telefono? Se non hai una copia di sicurezza, non si possono recuperare.')) return;
+    if (!confirm('Sei sicuro? Questa operazione non si può annullare.')) return;
+    for (const s of STORES) await DB.clear(s);
+    await carica();
+    bloccato = false;
+    vai('#/oggi', true);
+  }
+};
+
+/* ============================================== copia di sicurezza */
+
+async function esportaCopia() {
+  avvisa('Preparo la copia…');
+  const documenti = [];
+  for (const d of S.documenti) {
+    const copia = Object.assign({}, d);
+    delete copia.blob;
+    copia.b64 = d.blob ? await blobInBase64(d.blob) : null;
+    documenti.push(copia);
+  }
+  const contenuto = { app: 'kenosis', formato: 1, creato: adesso(), da: utente(), voci: S.voci, eventi: S.eventi, ospiti: S.ospiti, farmaci: S.farmaci, documenti };
+  const blob = new Blob([JSON.stringify(contenuto)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'kenosis-copia-' + oggi() + '.json';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+  await setKV('ultimoBackup', oggi());
+  avvisa('Copia salvata nei Download');
+  render();
+}
+
+async function importaCopia(file) {
+  let j;
+  try { j = JSON.parse(await file.text()); } catch (e) { avvisa('Questo file non è una copia valida'); return; }
+  if (!j || j.app !== 'kenosis') { avvisa('Questo file non è una copia di Kenosis'); return; }
+  const quando = j.creato ? fmtLungo(j.creato.slice(0, 10)) : 'data sconosciuta';
+  if (!confirm('Ripristinare la copia del ' + quando + '? I dati attuali su questo telefono verranno sostituiti.')) return;
+  for (const s of ['voci', 'eventi', 'ospiti', 'farmaci', 'documenti']) await DB.clear(s);
+  for (const s of ['voci', 'eventi', 'ospiti', 'farmaci']) for (const o of (j[s] || [])) await DB.put(s, o);
+  for (const d of (j.documenti || [])) {
+    const copia = Object.assign({}, d);
+    const b64 = copia.b64;
+    delete copia.b64;
+    copia.blob = b64 ? await base64InBlob(b64) : null;
+    await DB.put('documenti', copia);
+  }
+  await carica();
+  dopoModifica();
+  avvisa('Copia ripristinata');
+  vai('#/oggi', true);
+}
+
+/* ========================================================== PIN */
+
+async function hashPin(pin, sale) {
+  const dati = new TextEncoder().encode(sale + ':' + pin);
+  const h = await crypto.subtle.digest('SHA-256', dati);
+  return [...new Uint8Array(h)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+let nascostoDa = 0;
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { nascostoDa = Date.now(); return; }
+  // Non ridisegnare al ritorno: chi torna dalla fotocamera perderebbe la foto appena scelta.
+  if (S.kv.pin && nascostoDa && Date.now() - nascostoDa > 5 * 60 * 1000) { bloccato = true; render(); }
+});
+
+/* ========================================================== avvisi */
+
+async function mostraNotifica(titolo, corpo) {
+  const opz = { body: corpo, icon: 'icon-192.png', badge: 'icon-192.png', tag: 'kenosis' };
+  try {
+    const reg = 'serviceWorker' in navigator ? await navigator.serviceWorker.getRegistration() : null;
+    if (reg) await reg.showNotification(titolo, opz); else new Notification(titolo, opz);
+  } catch (e) { avvisa('Notifica non riuscita su questo browser'); }
+}
+async function registraAvvisiBackground() {
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    if (!('periodicSync' in reg)) return;
+    const perm = await navigator.permissions.query({ name: 'periodic-background-sync' });
+    if (perm.state !== 'granted') return;
+    await reg.periodicSync.register('kenosis-avvisi', { minInterval: 12 * 60 * 60 * 1000 });
+  } catch (e) { /* non supportato: pazienza */ }
+}
+// Nella versione APK (Capacitor) gli avvisi vengono programmati all'orario esatto.
+async function programmaAvvisiNativi() {
+  const LN = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications;
+  if (!LN) return;
+  try {
+    const pend = await LN.getPending();
+    if (pend.notifications.length) await LN.cancel({ notifications: pend.notifications.map(n => ({ id: n.id })) });
+    const notifiche = [];
+    let n = 1;
+    for (const v of attive()) {
+      const giorno = piuGiorni(v.prossima, -(v.avviso || 0));
+      const at = aData(giorno); at.setHours(9, 0, 0, 0);
+      if (at > new Date()) notifiche.push({ id: n++, title: v.nome, body: (v.avviso ? 'Scade ' + fmtLungo(v.prossima) : 'È per oggi') + (v.responsabile ? ' · ' + v.responsabile : ''), schedule: { at } });
+    }
+    if (notifiche.length) await LN.schedule({ notifications: notifiche.slice(0, 60) });
+  } catch (e) { /* ignorato */ }
+}
+function dopoModifica() { programmaAvvisiNativi(); }
+
+/* ==================================================== dati di esempio */
+
+async function caricaEsempio() {
+  const t = oggi();
+  const o1 = { id: uid(), codice: 'OSP-01', nome: 'Giovanni P.', creato: adesso() };
+  const o2 = { id: uid(), codice: 'OSP-02', nome: 'Maria R.', creato: adesso() };
+  const o3 = { id: uid(), codice: 'OSP-03', nome: 'Antonio L.', creato: adesso() };
+  for (const o of [o1, o2, o3]) if (!S.ospiti.some(x => x.codice === o.codice)) await salva('ospiti', o);
+  const osp = c => (S.ospiti.find(x => x.codice === c) || {}).id || null;
+  const d = new Date();
+  const lunedi = piuGiorni(t, ((8 - d.getDay()) % 7) || 7);
+  let q31 = new Date().getFullYear() + '-01-31';
+  if (q31 < t) q31 = (new Date().getFullYear() + 1) + '-01-31';
+  const base = { attiva: true, creato: adesso(), note: null, ospiteId: null, servizio: null };
+  const voci = [
+    { nome: 'Bolletta luce', categoria: 'Bollette e utenze', servizio: 'Bollette', prossima: piuGiorni(t, -3), ric: { ogni: 2, unita: 'mesi' }, responsabile: 'Michele', avviso: 7, chiusura: 'pagato' },
+    { nome: 'Bolletta acqua', categoria: 'Bollette e utenze', servizio: 'Bollette', prossima: piuGiorni(t, 20), ric: { ogni: 3, unita: 'mesi' }, responsabile: 'Michele', avviso: 7, chiusura: 'pagato' },
+    { nome: 'Lavanderia', categoria: 'Servizi', servizio: 'Lavanderia', prossima: t, ric: { ogni: 1, unita: 'settimane' }, responsabile: 'Rita', avviso: 0, chiusura: 'fatto' },
+    { nome: 'Spesa settimanale', categoria: 'Servizi', servizio: 'Spesa', prossima: piuGiorni(t, 2), ric: { ogni: 1, unita: 'settimane' }, responsabile: 'Michele', avviso: 1, chiusura: 'fatto' },
+    { nome: 'Raccolta umido', categoria: 'Servizi', servizio: 'Rifiuti', prossima: lunedi, ric: { ogni: 1, unita: 'settimane' }, responsabile: 'Entrambi', avviso: 1, chiusura: 'fatto' },
+    { nome: 'Manutenzione caldaia', categoria: 'Servizi', servizio: 'Manutenzioni', prossima: piuGiorni(t, 40), ric: { ogni: 1, unita: 'anni' }, responsabile: 'Michele', avviso: 30, chiusura: 'pagato', note: 'Chiamare il tecnico una settimana prima.' },
+    { nome: 'Polizza RC struttura', categoria: 'Assicurazioni', prossima: piuGiorni(t, 5), ric: { ogni: 1, unita: 'anni' }, responsabile: 'Michele', avviso: 30, chiusura: 'pagato' },
+    { nome: 'Quota Confcooperative', categoria: 'Quote e adesioni', prossima: q31, ric: { ogni: 1, unita: 'anni' }, responsabile: 'Michele', avviso: 30, chiusura: 'pagato' },
+    { nome: 'Buste paga', categoria: 'Personale', prossima: piuGiorni(t, 4), ric: { ogni: 1, unita: 'mesi' }, responsabile: 'Michele', avviso: 3, chiusura: 'pagato' },
+    { nome: 'Verifica estintori', categoria: 'Autorizzazioni e certificati', servizio: 'Manutenzioni', prossima: piuGiorni(t, 12), ric: { ogni: 6, unita: 'mesi' }, responsabile: 'Michele', avviso: 7, chiusura: 'fatto' },
+    { nome: 'Visita cardiologica', categoria: 'Ospiti', ospiteId: osp('OSP-01'), prossima: piuGiorni(t, -1), ric: { ogni: 6, unita: 'mesi' }, responsabile: 'Rita', avviso: 7, chiusura: 'fatto' },
+    { nome: 'Rinnovo esenzione', categoria: 'Ospiti', ospiteId: osp('OSP-02'), prossima: piuGiorni(t, 10), ric: { ogni: 1, unita: 'anni' }, responsabile: 'Rita', avviso: 30, chiusura: 'fatto' },
+    { nome: 'Prelievo esami del sangue', categoria: 'Ospiti', ospiteId: osp('OSP-03'), prossima: t, ric: null, responsabile: 'Rita', avviso: 1, chiusura: 'fatto' }
+  ];
+  for (const v of voci) await salva('voci', Object.assign({ id: uid() }, base, v));
+  const farmaci = [
+    { nome: 'Farmaco A (esempio)', ospiteId: osp('OSP-01'), unita: 'compresse', inCasa: 12, alGiorno: 2, scadenza: piuGiorni(t, 200), soglia: 10 },
+    { nome: 'Farmaco B (esempio)', ospiteId: osp('OSP-02'), unita: 'compresse', inCasa: 60, alGiorno: 1, scadenza: piuGiorni(t, 25), soglia: 10 },
+    { nome: 'Farmaco C (esempio)', ospiteId: osp('OSP-03'), unita: 'gocce', inCasa: 400, alGiorno: 20, scadenza: piuGiorni(t, 300), soglia: 7 }
+  ];
+  for (const f of farmaci) await salva('farmaci', Object.assign({ id: uid(), contatoIl: t, creato: adesso() }, f));
+  await salva('eventi', { id: uid(), voceId: null, servizio: 'Pulizie', data: t, chi: 'Rita', tipo: 'fatto', importo: null, nota: 'Pulizie del piano di sopra', docId: null, creato: adesso() });
+  await salva('eventi', { id: uid(), voceId: null, servizio: 'Spesa', data: piuGiorni(t, -5), chi: 'Michele', tipo: 'pagato', importo: 86.4, nota: null, docId: null, creato: adesso() });
+  dopoModifica();
+}
+
+/* ============================================================ eventi */
+
+document.addEventListener('click', async e => {
+  const el = e.target.closest('[data-action]');
+  if (!el) return;
+  e.preventDefault();
+  const f = azioni[el.dataset.action];
+  if (f) { try { await f(el); } catch (err) { console.error(err); avvisa('Qualcosa non ha funzionato: riprova'); } }
+});
+document.addEventListener('submit', async e => {
+  const form = e.target.closest('form[data-form]');
+  if (!form) return;
+  e.preventDefault();
+  form.querySelectorAll('.err').forEach(x => { x.textContent = ''; });
+  const f = moduli[form.dataset.form];
+  if (f) { try { await f(form); } catch (err) { console.error(err); avvisa('Qualcosa non ha funzionato: riprova'); } }
+});
+document.addEventListener('input', e => {
+  const err = e.target.closest('.field') && e.target.closest('.field').querySelector('.err');
+  if (err) err.textContent = '';
+});
+document.addEventListener('change', async e => {
+  const t = e.target;
+  if (t.name === 'ric') { const box = document.getElementById('ric-altro'); if (box) box.classList.toggle('hidden', t.value !== 'altro'); }
+  if (t.name === 'pagato') { const box = document.getElementById('box-importo'); if (box) box.classList.toggle('hidden', !t.checked); }
+  if (t.type === 'file' && t.name !== 'importa') {
+    const form = t.closest('form');
+    if (t.files[0]) form.querySelectorAll('input[type=file]').forEach(i => { if (i !== t) i.value = ''; });
+    const lab = form.querySelector('[data-nomefile]');
+    if (lab) lab.textContent = t.files[0] ? 'Scelto: ' + t.files[0].name : 'Nessun file scelto.';
+    const nome = form.querySelector('input[name=nome]');
+    if (nome && !nome.value && t.files[0]) nome.value = t.files[0].name.replace(/\.[^.]+$/, '').slice(0, 80);
+    const err = document.getElementById('err-file');
+    if (err) err.textContent = '';
+  }
+  if (t.name === 'importa' && t.files[0]) { await importaCopia(t.files[0]); t.value = ''; }
+  if (t.name === 'utente-set') { await setKV('utente', t.value); avvisa('Ora questo telefono è di ' + t.value); }
+});
+
+/* ============================================================ avvio */
+
+(async function avvio() {
+  persistente = await apriDB();
+  await carica();
+  bloccato = !!S.kv.pin;
+  render();
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    try { await navigator.serviceWorker.register('sw.js'); if (window.Notification && Notification.permission === 'granted') registraAvvisiBackground(); } catch (e) { /* anteprima senza service worker */ }
+  }
+  programmaAvvisiNativi();
+})();
+</script>
+</body>
+</html>
