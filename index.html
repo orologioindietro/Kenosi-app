@@ -3377,7 +3377,7 @@ async function mettiInCoda(store, id, cancellato) {
   await DB.put('coda', { id: store + ':' + id, s: store, rid: id, x: !!cancellato, t: adesso(), n: uid() });
   await contaCoda();
   aggiornaStatoSync();
-  programmaSync(4000);
+  programmaSync(800);
 }
 
 async function accodaTutto() {
@@ -3508,7 +3508,8 @@ async function scollegaDispositivo() {
 
 function ridisegnaSePossibile() {
   if (bloccato || !utente()) return;
-  if (document.querySelector('form[data-form]')) avvisa('Sono arrivati aggiornamenti dagli altri dispositivi');
+  // si ridisegna, tranne se qualcuno sta scrivendo in un modulo
+  if (formSporco) avvisa('Sono arrivati aggiornamenti dagli altri dispositivi');
   else render();
 }
 
@@ -3614,7 +3615,8 @@ function boxSync() {
     : 'Promemoria non ancora attivi: premi "Salva gli avvisi" e consenti le notifiche.';
   return '<div class="box"><h3>Sincronizzazione</h3>' +
     '<p class="hint" style="margin:0 0 6px">Collegato a <b>' + esc(host) + '</b></p>' +
-    '<p style="margin:0 0 10px;font-weight:600;font-size:14px" data-stato-sync>' + esc(testoStatoSync()) + '</p>' +
+    '<p style="margin:0 0 4px;font-weight:600;font-size:15px" data-stato-sync>' + esc(testoStatoSync()) + '</p>' +
+    '<p class="hint" style="margin:0 0 10px">Ricevuti finora: ' + (c.ultimo || 0) + ' aggiornamenti' + (SY.errore ? ' · ultimo problema: ' + esc(SY.errore) : '') + '</p>' +
     '<div class="two"><button class="btn btn-sm" data-action="sync-ora">Sincronizza ora</button><button class="btn btn-sm btn-danger" data-action="scollega">Scollega</button></div>' +
     '<form data-form="sync-avvisi" novalidate style="margin-top:6px">' +
     '<div class="field"><label for="f-ora">Riepilogo del mattino alle</label><input type="time" id="f-ora" name="ora" value="' + esc(c.ora || '08:30') + '"></div>' +
@@ -3787,7 +3789,9 @@ const VISTE = {
 const PRINCIPALI = ['', 'oggi', 'ospiti', 'ospite', 'servizi', 'servizio', 'diario', 'archivio', 'scadenze', 'farmaco', 'visita', 'voce'];
 
 let ultimaRotta = '';
+let formSporco = false;   // qualcuno sta scrivendo: non ridisegnare sotto le dita
 function render() {
+  formSporco = false;
   urlAperti.forEach(u => URL.revokeObjectURL(u));
   urlAperti = [];
   document.body.classList.toggle('grande', !!S.kv.grande);
@@ -3925,6 +3929,7 @@ document.addEventListener('submit', async e => {
 });
 document.addEventListener('input', e => {
   const t = e.target;
+  if (t.closest('form[data-form]') && t.id !== 'cerca') formSporco = true;
   if (t.id === 'cerca') { SY_CERCA[location.hash.split('?')[0]] = t.value; filtraRicerca(t.value); return; }
   const err = t.closest('.field') && t.closest('.field').querySelector('.err');
   if (err) err.textContent = '';
@@ -4095,7 +4100,7 @@ async function caricaEsempio() {
   }
   dopoModifica();
   if (collegato()) { await contaCoda(); sincronizza(); }
-  setInterval(() => { if (!document.hidden && collegato()) sincronizza(); }, 2 * 60 * 1000);
+  setInterval(() => { if (!document.hidden && collegato()) sincronizza(); }, 30 * 1000);
   // a mezzanotte e ogni tanto, Oggi si aggiorna da sola
   let giornoVisto = oggi();
   setInterval(() => {
@@ -4106,7 +4111,11 @@ async function caricaEsempio() {
 })();
 window.addEventListener('online', () => programmaSync(500));
 window.addEventListener('offline', aggiornaStatoSync);
-document.addEventListener('visibilitychange', () => { if (!document.hidden && collegato()) programmaSync(300); });
+document.addEventListener('visibilitychange', () => {
+  if (!collegato()) return;
+  if (!document.hidden) programmaSync(300);
+  else if (SY.inCoda) sincronizza();   // si chiude l'app: prima invia quello che manca
+});
 </script>
 </body>
 </html>
