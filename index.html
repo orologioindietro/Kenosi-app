@@ -195,6 +195,44 @@ input:focus,select:focus,textarea:focus{outline:3px solid var(--greenline);borde
 .bolla{position:relative;flex:1;background:var(--card);border:1px solid var(--line);border-radius:18px 18px 18px 6px;padding:12px 15px;font-size:16px;line-height:1.45;box-shadow:0 6px 18px rgba(60,35,10,.08)}
 .bolla b{font-weight:800}
 
+/* Oggi: una lista, un pulsante per cosa */
+.cosa{display:flex;align-items:center;gap:12px;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:18px;min-height:74px}
+.cosa.rust{background:var(--rustbg);border-color:var(--rustline)}
+.cosa.rust .row-meta{color:var(--rustink)}
+.cosa.adesso{border:2px solid var(--green)}
+.cosa.amber{background:var(--amberbg);border-color:var(--amberline)}
+.cosa-ora{width:56px;flex:none;font-size:19px;font-weight:800}
+.cosa-link{flex:1;min-width:0;text-decoration:none;color:inherit;display:flex}
+.cosa .row-title{font-size:18px}
+.cosa .row-meta{font-size:15px}
+.cosa-az{flex:none;min-height:52px;padding:0 16px;border-radius:14px;border:0;font-size:17px;font-weight:800;display:inline-flex;align-items:center;text-decoration:none;cursor:pointer;font-family:inherit}
+.cosa-az.ok{background:var(--ok);color:#fff}
+.cosa-az.p{background:var(--green);color:#fff}
+.gia{display:flex;align-items:center;gap:12px;padding:14px;background:var(--okbg);border:1px solid var(--okline);border-radius:18px;text-decoration:none;color:var(--ok)}
+.gia b{flex:1;font-size:18px}
+.gia .tondo{width:44px;height:44px;border-radius:22px;background:var(--ok);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+/* riquadri grandi */
+.riq{display:flex;flex-direction:column;gap:8px;padding:16px;min-height:142px;background:var(--card);border:1px solid var(--line);border-radius:20px;text-decoration:none;color:inherit;position:relative}
+.riq b{font-size:19px;line-height:1.2}
+.riq small{font-size:15px;line-height:1.35;color:var(--ink2)}
+.riq.rust{border-color:var(--rustline)}
+.riq.rust small{color:var(--rust);font-weight:700}
+.riq .dicon{width:50px;height:50px;border-radius:14px}
+.scelta{display:flex;align-items:center;gap:16px;padding:16px;min-height:86px;background:var(--card);border:1px solid var(--line);border-radius:20px;text-decoration:none;color:inherit}
+.scelta .dicon{width:56px;height:56px;border-radius:16px}
+.scelta .row-title{font-size:20px;font-weight:800}
+/* opzioni che servono di rado */
+details.altre{margin-top:18px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+details.altre summary{cursor:pointer;padding:14px 16px;font-size:16px;font-weight:750;color:var(--greenink);list-style:none;min-height:50px;box-sizing:border-box}
+details.altre summary::-webkit-details-marker{display:none}
+details.altre summary::before{content:"＋ ";font-weight:800}
+details.altre[open] summary::before{content:"− "}
+.altre-in{padding:0 14px 14px}
+.altre-in>.field:first-child{margin-top:4px}
+.nota-card{padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:18px;text-decoration:none;color:inherit;display:block}
+.nota-card .testo{font-size:17px;line-height:1.45;white-space:pre-wrap}
+.nota-card .chi{font-size:14px;color:var(--ink2);margin-top:8px}
+
 /* terapia */
 .dose{display:flex;flex-direction:column;gap:10px;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
 .dose.ok{background:var(--okbg);border-color:var(--okline)}
@@ -249,7 +287,7 @@ const moduli = {};   // gestori dei moduli (data-form)
 const azioni = {};   // gestori dei pulsanti (data-action)
 
 
-const VERSIONE = '0.3 (prova)';
+const VERSIONE = '0.4 (prova)';
 const UTENTI = ['Rita', 'Michele', 'Vincenzo'];
 const RESPONSABILI = ['Rita', 'Michele', 'Entrambi'];
 const CATEGORIE = ['Pagamenti', 'Servizi della casa', 'Salute ospiti', 'Personale', 'Autorizzazioni e certificati', 'Ospiti', 'Altro'];
@@ -289,7 +327,7 @@ const TIPI_SERVIZIO = [
   ['farmacia', 'Farmacia', 'Farmaci da ordinare, anche su WhatsApp'],
   ['semplice', 'Semplice', 'Solo "fatto", con note e foto']
 ];
-const ICONE_SERVIZIO = ['bolt', 'cart', 'shirt', 'spark', 'trash', 'tool', 'car', 'pill', 'grid', 'home', 'cal', 'doc', 'heart', 'user'];
+const ICONE_SERVIZIO = ['euro', 'bolt', 'cart', 'shirt', 'spark', 'trash', 'tool', 'car', 'pill', 'grid', 'home', 'cal', 'doc', 'heart', 'user'];
 const CAPI_LAVANDERIA = ['Lenzuola', 'Federe', 'Asciugamani', 'Indumenti', 'Coperte', 'Tovaglie'];
 const ZONE_PULIZIE = ['Cucina', 'Bagni', 'Camere', 'Soggiorno', 'Scale e ingresso', 'Vetri'];
 const TIPI_RIFIUTI = ['Umido', 'Plastica', 'Carta', 'Vetro', 'Indifferenziato', 'Sfalci'];
@@ -298,13 +336,13 @@ const TIPI_RIFIUTI = ['Umido', 'Plastica', 'Carta', 'Vetro', 'Indifferenziato', 
 // su un telefono vince, anche una cancellazione.
 const ANTICO = '2000-01-01T00:00:00.000Z';
 const SERVIZI_BASE = [
-  { id: 'srvpagamenti', nome: 'Pagamenti', tipo: 'pagamenti', icona: 'bolt', ordine: 1 },
+  { id: 'srvpagamenti', nome: 'Pagamenti', tipo: 'pagamenti', icona: 'euro', ordine: 1 },
   { id: 'srvspesa', nome: 'Spesa', tipo: 'spesa', icona: 'cart', ordine: 2 },
   { id: 'srvlavanderia', nome: 'Lavanderia', tipo: 'lavanderia', icona: 'shirt', ordine: 3, conf: { capi: CAPI_LAVANDERIA } },
   { id: 'srvpulizie', nome: 'Pulizie', tipo: 'pulizie', icona: 'spark', ordine: 4, conf: { zone: ZONE_PULIZIE } },
   { id: 'srvrifiuti', nome: 'Rifiuti', tipo: 'rifiuti', icona: 'trash', ordine: 5, conf: { calendario: {}, ora: '20:00' } },
-  { id: 'srvmanutenzioni', nome: 'Manutenzioni', tipo: 'manutenzioni', icona: 'tool', ordine: 6 },
-  { id: 'srvtrasporti', nome: 'Trasporti', tipo: 'trasporti', icona: 'car', ordine: 7 },
+  { id: 'srvmanutenzioni', nome: 'Guasti', tipo: 'manutenzioni', icona: 'tool', ordine: 6 },
+  { id: 'srvtrasporti', nome: 'Uscite', tipo: 'trasporti', icona: 'car', ordine: 7 },
   { id: 'srvfarmacia', nome: 'Farmacia', tipo: 'farmacia', icona: 'pill', ordine: 8, conf: { telefono: '', nomi: 'iniziali' } }
 ];
 const SERVIZI_VECCHI = { Lavanderia: 'srvlavanderia', Spesa: 'srvspesa', Pulizie: 'srvpulizie', Rifiuti: 'srvrifiuti', Manutenzioni: 'srvmanutenzioni', Trasporti: 'srvtrasporti', Bollette: 'srvpagamenti', Farmacia: 'srvfarmacia' };
@@ -314,6 +352,8 @@ const sid = x => (x && SERVIZI_VECCHI[x]) || x || null;
 
 const ICONS = {
   home: '<path d="M4 11l8-6.5 8 6.5v8a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 014 19z"/>',
+  casa: '<path d="M3.5 10.5L12 4l8.5 6.5"/><path d="M6 9v10.5h12V9"/><path d="M10 19.5v-5h4v5"/>',
+  euro: '<path d="M17 6.5A6.5 6.5 0 007 12a6.5 6.5 0 0010 5.5M5 10.5h8M5 13.5h8"/>',
   grid: '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
   cal: '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8.5 3.5v3M15.5 3.5v3"/>',
   user: '<circle cx="12" cy="8.5" r="3.6"/><path d="M5 20c0-3.3 3.1-5.5 7-5.5s7 2.2 7 5.5"/>',
@@ -503,6 +543,11 @@ async function carica() {
 }
 // I servizi di partenza si mettono una volta sola per telefono, senza inviarli.
 async function semina() {
+  // nomi nuovi per i servizi di partenza mai toccati
+  for (const [id, vecchio, nuovo] of [['srvmanutenzioni', 'Manutenzioni', 'Guasti'], ['srvtrasporti', 'Trasporti', 'Uscite']]) {
+    const x = S.servizi.find(o => o.id === id);
+    if (x && x.agg === ANTICO && x.nome === vecchio) { x.nome = nuovo; await DB.put('servizi', x); }
+  }
   if (S.kv.seminato) return;
   for (const b of SERVIZI_BASE) {
     if (S.servizi.some(x => x.id === b.id)) continue;
@@ -793,9 +838,9 @@ function momenti(giorni = 14) {
     if (pezzi.length) aggiungi(d, oraMattino, 'm', 'Oggi: ' + pezzi.join(' · '));
     for (const s of slots) {
       if (!s.mancano) continue;   // già tutto segnato
-      aggiungi(d, s.ora, 't', 'È l\'ora della terapia delle ' + fmtOra(s.ora) + ': ' + plur(s.dosi.length, 'farmaco', 'farmaci') + ' da dare');
+      aggiungi(d, s.ora, 't', 'Medicine delle ' + fmtOra(s.ora) + ': ' + plur(s.dosi.length, 'medicina', 'medicine') + ' da dare');
       const dopo = piuMinuti(d, s.ora, 30);
-      aggiungi(dopo.data, dopo.ora, 's', 'Terapia delle ' + fmtOra(s.ora) + ': c\'è ancora qualcosa da segnare', d + 'T' + s.ora);
+      aggiungi(dopo.data, dopo.ora, 's', 'Medicine delle ' + fmtOra(s.ora) + ': qualcosa non è ancora segnato', d + 'T' + s.ora);
     }
     const fuori = rifiutiStasera(d);
     const sv = servizioDiTipo('rifiuti');
@@ -825,8 +870,8 @@ function sezione(titolo, n, cls = '', destra = '') {
   return '<div class="sec ' + cls + '"><h2>' + esc(titolo) + '</h2>' + (n ? '<span class="badge ' + cls + '">' + n + '</span>' : '') + destra + '</div>';
 }
 function barra(attiva) {
-  const voci = [['oggi', 'Oggi', 'home', '#/oggi'], ['ospiti', 'Ospiti', 'users', '#/ospiti'], ['servizi', 'Servizi', 'grid', '#/servizi'],
-    ['diario', 'Diario', 'book', '#/diario'], ['archivio', 'Archivio', 'folder', '#/archivio']];
+  const voci = [['oggi', 'Oggi', 'home', '#/oggi'], ['ospiti', 'Ospiti', 'users', '#/ospiti'], ['casa', 'Casa', 'casa', '#/casa'],
+    ['fatto', 'Fatto', 'check', '#/fatto'], ['note', 'Note', 'note', '#/note']];
   return '<nav class="bottom" aria-label="Sezioni principali"><div class="in">' + voci.map(v =>
     '<a href="' + v[3] + '" class="' + (v[0] === attiva ? 'on' : '') + '"' + (v[0] === attiva ? ' aria-current="page"' : '') + '>' + ic(v[2], 24) + '<span>' + v[1] + '</span></a>'
   ).join('') + '</div></nav>';
@@ -938,7 +983,7 @@ function rigaSlot(s, opz = {}) {
     : (s.dati ? s.dati + ' date · ' : '') + plur(s.mancano, 'da dare', 'da dare') + (opz.ospite ? '' : '');
   return '<a class="row ' + cls + '" href="#/giro/' + s.data + '/' + s.ora.replace(':', '') + (opz.ospite ? '?ospite=' + opz.ospite : '') + '">' +
     '<span class="dicon ' + (finito ? '' : passato ? 'rust' : 'plum') + '">' + ic(finito ? 'check' : 'clock', 21) + '</span>' +
-    '<span class="row-main"><span class="row-title">Terapia delle ' + fmtOra(s.ora) + '</span><span class="row-meta">' + esc(meta) + '</span></span>' +
+    '<span class="row-main"><span class="row-title">Medicine delle ' + fmtOra(s.ora) + '</span><span class="row-meta">' + esc(meta) + '</span></span>' +
     '<span class="row-when">' + plur(s.dosi.length, 'farmaco', 'farmaci') + '</span>' + ic('chev', 20) + '</a>';
 }
 function rigaLink(href, icona, titolo, meta, cls = '') {
@@ -985,6 +1030,21 @@ function campoRic(ricSel, ricAltro) {
   return '<div class="field"><span class="lab">Si ripete?</span>' + chipsRadio('ric', RICORRENZE, ricSel) +
     '<div id="ric-altro" class="inline ' + (ricSel === 'altro' ? '' : 'hidden') + '"><span class="lbl">Ogni</span><input type="number" name="ric_n" min="1" max="365" value="' + esc(ricAltro.ogni) + '" aria-label="Ogni quanti">' +
     selezione('ric_u', [['giorni', 'giorni'], ['settimane', 'settimane'], ['mesi', 'mesi'], ['anni', 'anni']], ricAltro.unita) + '</div></div>';
+}
+// Le opzioni che servono di rado: chiuse, si aprono con un tocco.
+function altreOpzioni(html, titolo = 'Altre opzioni') {
+  return '<details class="altre"><summary>' + esc(titolo) + '</summary><div class="altre-in">' + html + '</div></details>';
+}
+// Una "cosa" della lista di Oggi: ora, cosa, dettagli, un solo pulsante.
+function cosaOggi(c) {
+  const cls = c.cls || '';
+  const ora = c.ora ? '<span class="cosa-ora">' + esc(fmtOra(c.ora)) + '</span>' : '';
+  const az = c.azione
+    ? (c.azione.href ? '<a class="cosa-az ' + (c.azione.tipo || 'ok') + '" href="' + c.azione.href + '">' + esc(c.azione.testo) + '</a>'
+      : '<button class="cosa-az ' + (c.azione.tipo || 'ok') + '" data-action="' + c.azione.action + '"' + Object.entries(c.azione.dati || {}).map(([k, v]) => ' data-' + k + '="' + esc(v) + '"').join('') + '>' + esc(c.azione.testo) + '</button>')
+    : '';
+  const corpo = '<span class="row-main"><span class="row-title">' + esc(c.titolo) + '</span>' + (c.meta ? '<span class="row-meta">' + esc(c.meta) + '</span>' : '') + '</span>';
+  return '<div class="cosa ' + cls + '">' + ora + (c.href ? '<a class="cosa-link" href="' + c.href + '">' + corpo + '</a>' : corpo) + az + '</div>';
 }
 function bottoniFine(testoSalva = 'Salva') {
   return '<div class="actions"><button class="btn btn-primary" type="submit">' + testoSalva + '</button><button class="btn" type="button" data-action="indietro">Annulla</button></div>';
@@ -1059,107 +1119,159 @@ moduli.sblocca = async form => {
   render();
 };
 
-function vOggi() {
-  const r = riepilogo();
-  const t = oggi();
-  const destra = '<a class="icon-btn" href="#/impostazioni" aria-label="Impostazioni">' + ic('gear') + '</a>';
-  let h = testata('Oggi', { kicker: fmtLungo(t), destra }) + effie(fraseEffie(r)) + bannerMemoria() + bannerProva() + bannerBackup() + '<main class="pad">';
-
-  if (r.slot.length) {
-    const daFare = r.slot.filter(s => s.mancano);
-    h += sezione('Terapia di oggi', daFare.length ? null : null, daFare.some(s => s.ora <= oraAdesso()) ? 'rust' : '',
-      '<a class="destra" href="#/registro-terapia">Registro</a>');
-    h += r.slot.map(s => rigaSlot(s)).join('');
+// Tutto quello che c'è da fare oggi, in un'unica lista ordinata per ora.
+function coseDiOggi() {
+  const t = oggi(), ora = oraAdesso();
+  const cose = [];
+  for (const s of slotDel(t)) {
+    if (!s.mancano) continue;
+    const nomi = [...new Set(s.dosi.filter(d => !d.sm).map(d => ((ospite(d.f.ospiteId) || {}).nome || '').split(' ')[0]))].filter(Boolean);
+    cose.push({ ora: s.ora, titolo: 'Medicine delle ' + fmtOra(s.ora), meta: plur(s.mancano, 'da dare', 'da dare') + (nomi.length ? ' · ' + nomi.join(', ') : ''),
+      href: '#/giro/' + t + '/' + s.ora.replace(':', ''), azione: { href: '#/giro/' + t + '/' + s.ora.replace(':', ''), testo: 'Apri', tipo: 'p' }, medicine: true });
   }
-
-  const urgenti = r.ritardo.concat(r.diOggi);
-  if (r.ritardo.length) h += sezione('In ritardo', r.ritardo.length, 'rust') + r.ritardo.map(v => rigaVoce(v)).join('');
-  if (r.diOggi.length) h += sezione('Da fare oggi', r.diOggi.length) + r.diOggi.map(v => rigaVoce(v)).join('');
-
-  const visiteOggi = r.visite;
-  if (visiteOggi.length || r.trasporti.length) {
-    h += sezione('Visite e uscite', visiteOggi.length + r.trasporti.length);
-    h += visiteOggi.map(v => rigaVisita(v)).join('');
-    h += r.trasporti.map(rigaTrasporto).join('');
+  for (const v of attive().filter(v => v.prossima <= t)) {
+    const rit = v.prossima < t;
+    const o = ospite(v.ospiteId);
+    const meta = [v.importo != null ? euro(v.importo) : null, rit ? (ePagamento(v) ? 'scadeva ' : 'era per ') + fmt(v.prossima) : null,
+      v.domiciliato ? 'si paga da solo' : (v.responsabile && v.responsabile !== 'Entrambi' ? v.responsabile : null), o && !v.nome.includes(o.nome) ? o.nome : null].filter(Boolean).join(' · ');
+    let azione;
+    if (v.tipo === 'misura') azione = { href: '#/misura?voce=' + v.id, testo: 'Scrivi', tipo: 'p' };
+    else if (v.domiciliato) azione = { href: '#/segna?voce=' + v.id, testo: 'Controllato' };
+    else if (ePagamento(v)) azione = { href: '#/segna?voce=' + v.id, testo: 'Pagato' };
+    else azione = { action: 'fatto-veloce', dati: { id: v.id }, testo: 'Fatto' };
+    cose.push({ titolo: (ePagamento(v) && !v.domiciliato ? 'Pagare: ' : '') + v.nome, meta, href: '#/voce/' + v.id, azione, cls: rit ? 'rust' : '' });
   }
-
-  if (r.rifiuti.length && !r.rifiutiFatto) {
+  for (const v of visitePreviste().filter(v => v.data <= t)) {
+    const o = ospite(v.ospiteId);
+    const prima = v.data < t;
+    cose.push({ ora: prima ? null : v.ora, titolo: 'Visita: ' + (v.tipo || '') , meta: [o ? o.nome : null, prima ? 'era ' + fmt(v.data) + ': com\'è andata?' : v.accompagna && v.accompagna !== 'Da decidere' ? 'accompagna ' + v.accompagna : null].filter(Boolean).join(' · '),
+      href: '#/visita/' + v.id, azione: { href: '#/esito/' + v.id, testo: prima ? 'Scrivi' : 'Fatta' }, cls: prima ? 'amber' : '' });
+  }
+  for (const e of trasportiPrevisti().filter(e => e.data <= t)) {
+    const o = ospite(e.ospiteId);
+    cose.push({ ora: e.data === t ? e.ora : null, titolo: 'Uscita: ' + (e.dove || ''), meta: [o ? o.nome : null, e.accompagna && e.accompagna !== 'Da decidere' ? 'accompagna ' + e.accompagna : null].filter(Boolean).join(' · '),
+      href: '#/trasporto?id=' + e.id, azione: { action: 'trasporto-fatto', dati: { id: e.id }, testo: 'Fatto' }, cls: e.data < t ? 'rust' : '' });
+  }
+  const fuori = rifiutiStasera(t);
+  if (fuori.length && !S.eventi.some(e => e.tipo === 'rifiuti' && e.data === t)) {
     const sv = servizioDiTipo('rifiuti');
-    h += sezione('Stasera') + '<div class="row"><span class="dicon">' + ic('trash', 21) + '</span><span class="row-main"><span class="row-title">Porta fuori: ' + esc(r.rifiuti.join(', ')) + '</span>' +
-      '<span class="row-meta">Domani mattina passa la raccolta</span></span><button class="check" data-action="rifiuti-fuori" data-servizio="' + (sv ? sv.id : '') + '" aria-label="Fatto: messo fuori">' + ic('check', 22, 2.6) + '</button></div>';
+    cose.push({ ora: (sv && sv.conf && sv.conf.ora) || '20:00', titolo: 'Portare fuori: ' + fuori.join(', ').toLowerCase(), meta: 'Domani mattina passa la raccolta', azione: { action: 'rifiuti-fuori', dati: { servizio: sv ? sv.id : '' }, testo: 'Fatto' } });
   }
-
-  if (r.farmaci.length) {
-    const fm = servizioDiTipo('farmacia');
-    h += sezione('Farmaci', r.farmaci.length, 'amber') +
-      rigaLink(fm ? '#/servizio/' + fm.id : '#/ospiti', 'pill', plur(r.farmaci.length, 'farmaco da ordinare o controllare', 'farmaci da ordinare o controllare'),
-        r.farmaci.slice(0, 3).map(x => x.f.nome).join(', ') + (r.farmaci.length > 3 ? '…' : ''), 'row-amber');
-  }
-  if (r.guasti.length || r.lavanderia.length) {
-    h += sezione('In sospeso');
-    if (r.guasti.length) { const sv = servizioDiTipo('manutenzioni'); h += rigaLink(sv ? '#/servizio/' + sv.id : '#/servizi', 'tool', plur(r.guasti.length, 'guasto da sistemare', 'guasti da sistemare'), r.guasti.slice(0, 2).map(g => g.cosa).join(', ')); }
-    if (r.lavanderia.length) { const sv = servizioDiTipo('lavanderia'); h += rigaLink(sv ? '#/servizio/' + sv.id : '#/servizi', 'shirt', plur(r.lavanderia.length, 'consegna in lavanderia', 'consegne in lavanderia') + ' da ritirare', 'dal ' + fmt(r.lavanderia[r.lavanderia.length - 1].data)); }
-  }
-
-  if (r.inArrivo.length) h += sezione('In arrivo', r.inArrivo.length) + r.inArrivo.map(v => rigaVoce(v)).join('');
-  if (!urgenti.length && !r.slot.length && !visiteOggi.length && !r.inArrivo.length) h += '<p class="empty" style="margin-top:14px">Niente da fare oggi.</p>';
-
-  h += '<div class="group" style="margin-top:20px">' +
-    '<a class="gi" href="#/scadenze"><span class="dicon">' + ic('cal', 21) + '</span><span class="row-main"><span class="row-title">Tutte le scadenze</span><span class="row-meta">' + plur(r.settimana.length, 'nei prossimi 7 giorni', 'nei prossimi 7 giorni') + '</span></span>' + ic('chev', 20) + '</a>' +
-    '<a class="gi" href="#/diario"><span class="dicon">' + ic('book', 21) + '</span><span class="row-main"><span class="row-title">Cosa è stato fatto</span><span class="row-meta">Il diario di oggi e dei giorni passati</span></span>' + ic('chev', 20) + '</a></div>';
+  const ordinare = farmaciDaControllare().filter(x => (x.s.daRiordinare || x.s.finito) && !x.f.ordinatoIl);
+  if (ordinare.length) cose.push({ titolo: 'Ordinare le medicine', meta: ordinare.slice(0, 3).map(x => x.f.nome).join(', ') + (ordinare.length > 3 ? '…' : ''), azione: { href: '#/ordina', testo: 'Ordina', tipo: 'p' }, cls: 'amber' });
+  const adesso = cose.filter(c => !c.ora || c.ora <= ora);
+  const dopo = cose.filter(c => c.ora && c.ora > ora).sort((a, b) => a.ora.localeCompare(b.ora));
+  const peso = c => (c.cls === 'rust' ? 0 : c.medicine ? 1 : 2);
+  adesso.sort((a, b) => peso(a) - peso(b) || (a.ora || '99').localeCompare(b.ora || '99'));
+  if (adesso.length) adesso[0].cls = adesso[0].cls || 'adesso';
+  return { adesso, dopo, tutte: cose.length };
+}
+function fatteOggi() {
+  const t = oggi();
+  return vociFatto('', '').filter(x => x.data === t).length;
+}
+function vOggi() {
+  const t = oggi();
+  const { adesso, dopo, tutte } = coseDiOggi();
+  const nome = utente() && utente() !== 'Vincenzo' ? ', ' + utente() : '';
+  const destra = '<a class="icon-btn" href="#/impostazioni" aria-label="Impostazioni">' + ic('gear', 24) + '</a>';
+  let h = testata(saluto() + nome, { kicker: fmtLungo(t).replace(/ \d{4}$/, ''), destra });
+  h += effie(tutte ? 'Oggi ci sono <b>' + plur(tutte, 'cosa', 'cose') + '</b> da fare. Quando ne finisci una, tocca il pulsante verde.'
+    : 'Per oggi è <b>tutto fatto</b>. Se arriva qualcosa di nuovo, tocca <b>Aggiungi</b>.');
+  h += bannerMemoria() + bannerBackup() + '<main class="pad">';
+  if (adesso.length) h += sezione('Adesso') + adesso.map(cosaOggi).join('');
+  if (dopo.length) h += sezione('Più tardi') + dopo.map(cosaOggi).join('');
+  const n = fatteOggi();
+  h += '<a class="gia" href="#/fatto" style="margin-top:14px"><span class="tondo">' + ic('check', 24, 2.8) + '</span><b>Già fatto oggi: ' + n + '</b>' + ic('chev', 22) + '</a>';
+  const domani = coseDelGiorno(piuGiorni(t, 1));
+  if (domani.length) h += sezione('Domani') + domani.slice(0, 3).map(c => cosaOggi(Object.assign({}, c, { azione: null }))).join('');
+  h += '<a class="btn btn-sm" style="margin-top:12px" href="#/prossimi">' + ic('cal', 22) + ' I prossimi giorni</a>';
   if (collegato()) h += '<a class="syncline" href="#/impostazioni" data-stato-sync>' + esc(testoStatoSync()) + '</a>';
+  h += bannerProva().replace('mx', '') ;
+  return h + '</main>' + barra('oggi');
+}
+// Le cose di un giorno futuro (senza le medicine di tutti i giorni).
+function coseDelGiorno(d) {
+  const cose = [];
+  for (const v of attive().filter(v => v.prossima === d)) cose.push({ titolo: (ePagamento(v) && !v.domiciliato ? 'Pagare: ' : '') + v.nome, meta: [v.importo != null ? euro(v.importo) : null, (ospite(v.ospiteId) || {}).nome].filter(Boolean).join(' · '), href: '#/voce/' + v.id });
+  for (const v of visitePreviste().filter(v => v.data === d)) cose.push({ ora: v.ora, titolo: 'Visita: ' + (v.tipo || ''), meta: [(ospite(v.ospiteId) || {}).nome, v.accompagna && v.accompagna !== 'Da decidere' ? 'accompagna ' + v.accompagna : null].filter(Boolean).join(' · '), href: '#/visita/' + v.id });
+  for (const e of trasportiPrevisti().filter(e => e.data === d)) cose.push({ ora: e.ora, titolo: 'Uscita: ' + (e.dove || ''), meta: (ospite(e.ospiteId) || {}).nome || '', href: '#/trasporto?id=' + e.id });
+  return cose.sort((a, b) => (a.ora || '00').localeCompare(b.ora || '00'));
+}
+function vProssimi() {
+  let h = testata('I prossimi giorni', { indietro: true, sub: 'Quello che c\'è nelle prossime due settimane' }) + '<main class="pad">';
+  let qualcosa = false;
+  for (let i = 1; i <= 14; i++) {
+    const d = piuGiorni(oggi(), i);
+    const cose = coseDelGiorno(d);
+    if (!cose.length) continue;
+    qualcosa = true;
+    h += '<div class="giorno-testa">' + esc(fmtGiorno(d)) + '</div>' + cose.map(cosaOggi).join('');
+  }
+  if (!qualcosa) h += '<p class="empty">Niente in programma nelle prossime due settimane.</p>';
+  h += '<a class="btn btn-sm" style="margin-top:16px" href="#/scadenze">' + ic('cal', 22) + ' Tutte le scadenze</a>';
   return h + '</main>' + barra('oggi');
 }
 
+azioni['fatto-veloce'] = async el => {
+  const v = voce(el.dataset.id);
+  if (!v) return;
+  const prima = JSON.parse(JSON.stringify(v));
+  const e = { id: uid(), voceId: v.id, servizio: sid(v.servizio), ospiteId: v.ospiteId || null, data: oggi(), ora: oraAdesso(), chi: utente(), tipo: 'fatto', creato: adesso() };
+  await salva('eventi', e);
+  if (v.ric) v.prossima = prossimaDopo(v, oggi()); else { v.attiva = false; v.chiusaIl = oggi(); }
+  await salva('voci', v);
+  dopoModifica();
+  render();
+  avvisa('Fatto: ' + v.nome, async () => { await togli('eventi', e.id); await salva('voci', prima); dopoModifica(); render(); });
+};
 azioni['rifiuti-fuori'] = async el => {
   const r = rifiutiStasera(oggi());
-  await salva('eventi', { id: uid(), tipo: 'rifiuti', servizio: el.dataset.servizio || null, data: oggi(), ora: oraAdesso(), chi: utente(), nota: r.join(', '), creato: adesso() });
+  const e = { id: uid(), tipo: 'rifiuti', servizio: el.dataset.servizio || null, data: oggi(), ora: oraAdesso(), chi: utente(), nota: r.join(', '), creato: adesso() };
+  await salva('eventi', e);
   dopoModifica();
-  avvisa('Segnato: rifiuti fuori');
   render();
+  avvisa('Fatto: rifiuti fuori', async () => { await togli('eventi', e.id); dopoModifica(); render(); });
 };
 
 /* ======================================================== Aggiungi */
 
+function scelta(href, icona, titolo, meta) {
+  return '<a class="scelta" href="' + href + '"><span class="dicon">' + ic(icona, 28) + '</span><span class="row-main"><span class="row-title">' + esc(titolo) + '</span>' +
+    (meta ? '<span class="row-meta">' + esc(meta) + '</span>' : '') + '</span>' + ic('chev', 22) + '</a>';
+}
 function vAggiungi() {
   const f = fileInSospeso;
-  const pag = servizioDiTipo('pagamenti'), spesa = servizioDiTipo('spesa');
-  const gruppi = [
-    ['Ospiti e salute', [
-      ['#/nuova-visita', 'steth', 'Una visita medica', 'Da fare, o già fatta con il referto'],
-      ['#/nuovo-farmaco', 'pill', 'Un farmaco in terapia', 'Orari, dose dalla prescrizione, scorte'],
-      ['#/misura', 'heart', 'Una misura', 'Pressione, glicemia, peso…'],
-      ['#/nuovo-ospite', 'user', 'Un ospite', 'Con la sua cartella']
-    ]],
-    ['Casa e pagamenti', [
-      ['#/avviso-pagamento', 'bolt', 'Un avviso di pagamento', 'Bolletta, assicurazione, commercialista…'],
-      spesa ? ['#/servizio/' + spesa.id, 'cart', 'Una cosa da comprare', 'Va nella lista della spesa'] : null,
-      ['#/guasto', 'tool', 'Un guasto da sistemare', 'Cosa, dove, con una foto'],
-      ['#/trasporto', 'car', 'Un accompagnamento', 'Chi porta chi, dove e quando']
-    ].filter(Boolean)],
-    ['Altro', [
-      ['#/nota', 'note', 'Una nota nel diario', 'Un fatto accaduto, una cosa da ricordare'],
-      ['#/nuovo-doc', 'doc', 'Un documento', 'Foto o PDF: va nell\'archivio'],
-      ['#/nuova-voce', 'cal', 'Una scadenza', 'Una volta o che si ripete (es. revisione estintori)'],
-      ['#/fatto', 'check', 'Una cosa già fatta', 'Anche nei mesi passati: va nel diario']
-    ]]
-  ];
+  let h = testata(f ? 'Cos\'è questo file?' : 'Cosa vuoi aggiungere?', { indietro: true, sub: f ? f.name : '' }) + '<main class="pad">';
   if (f) {
-    gruppi.length = 0;
-    gruppi.push(['Cos\'è questo file?', [
-      ['#/avviso-pagamento', 'bolt', 'Un avviso di pagamento', 'Scadenza e importo, con il file allegato'],
-      ['#/nuovo-doc', 'doc', 'Un documento', 'Va nell\'archivio'],
-      ['#/fatto', 'check', 'La ricevuta di una cosa fatta', 'Va nel diario']
-    ]]);
+    h += scelta('#/avviso-pagamento', 'euro', 'Un pagamento da fare', 'Bolletta, fattura, avviso') + scelta('#/nuovo-doc', 'folder', 'Un documento', 'Referto, contratto, altro') +
+      scelta('#/gia-fatto', 'check', 'La ricevuta di una cosa fatta', '') + '<button class="btn btn-sm" style="margin-top:8px" data-action="scarta-file">Lascia perdere il file</button>';
+  } else {
+    h += scelta('#/avviso-pagamento', 'euro', 'Un pagamento', 'Bolletta, assicurazione, commercialista…') +
+      scelta('#/nuova-voce', 'cal', 'Una cosa da fare', 'Una volta, o che si ripete') +
+      scelta('#/per-ospite', 'users', 'Per un ospite', 'Medicina, visita, misura, documento') +
+      scelta('#/nota', 'note', 'Una nota', 'Un fatto, un appunto') +
+      scelta('#/nuovo-doc', 'camera', 'Una foto o un documento', 'Va nell\'archivio');
+    h += '<a class="btn" style="margin-top:6px" href="#/oggi">Annulla</a>';
   }
-  let h = testata('Aggiungi', { indietro: true, sub: f ? 'Hai portato qui: ' + f.name : 'Cosa vuoi aggiungere?' }) + '<main class="pad">';
-  for (const [titolo, scelte] of gruppi) {
-    h += sezione(titolo) + '<div class="group">' + scelte.map(s => '<a class="gi" href="' + s[0] + '"><span class="dicon">' + ic(s[1], 21) + '</span><span class="row-main"><span class="row-title">' + esc(s[2]) +
-      '</span><span class="row-meta">' + esc(s[3]) + '</span></span>' + ic('chev', 20) + '</a>').join('') + '</div>';
-  }
-  if (f) h += '<button class="btn btn-sm" style="margin-top:12px" data-action="scarta-file">Lascia perdere il file</button>';
-  void pag;
   return h + '</main>' + barra('');
+}
+// Per un ospite: prima chi, poi cosa.
+function vPerOspite(q) {
+  const o = ospite(q.get('o'));
+  if (!o) {
+    let h = testata('Per quale ospite?', { indietro: true }) + '<main class="pad">';
+    h += ospitiAttivi().map(x => '<a class="scelta" href="#/per-ospite?o=' + x.id + '"><span class="avatar" style="width:56px;height:56px;border-radius:28px;font-size:19px">' + esc(iniziali(x.nome)) + '</span><span class="row-main"><span class="row-title">' + esc(x.nome) + '</span></span>' + ic('chev', 22) + '</a>').join('');
+    h += scelta('#/nuovo-ospite', 'plus', 'Un ospite nuovo', '');
+    return h + '</main>' + barra('');
+  }
+  return testata('Per ' + o.nome, { indietro: true, sub: 'Cosa vuoi aggiungere?' }) + '<main class="pad">' +
+    scelta('#/nuovo-farmaco?ospite=' + o.id, 'pill', 'Una medicina', 'Dalla prescrizione del medico') +
+    scelta('#/nuova-visita?ospite=' + o.id, 'steth', 'Una visita', 'Da fare, o già fatta') +
+    scelta('#/misura?ospite=' + o.id, 'heart', 'Una misura', 'Pressione, glicemia, peso…') +
+    scelta('#/nuovo-doc?ospite=' + o.id, 'camera', 'Un documento', 'Referto, impegnativa…') +
+    scelta('#/avviso-pagamento?ospite=' + o.id, 'euro', 'Un pagamento o una scadenza', 'Retta, rinnovo documenti…') +
+    scelta('#/nota?ospite=' + o.id, 'note', 'Una nota', '') + '</main>' + barra('');
 }
 azioni['scarta-file'] = () => { fileInSospeso = null; vai('#/oggi', true); };
 
@@ -1244,7 +1356,7 @@ function vVoce(id) {
     '<a class="btn btn-sm" href="#/nuovo-doc?voce=' + v.id + '">' + ic('camera', 20) + ' Aggiungi un documento</a>';
   const storico = S.eventi.filter(e => e.voceId === v.id).sort(recenti);
   h += sezione('Ultimi 12 mesi') + calendario(storico) +
-    '<a class="btn btn-sm" href="#/fatto?voce=' + v.id + '">' + ic('plus', 20) + ' Aggiungi una volta passata</a>';
+    '<a class="btn btn-sm" href="#/gia-fatto?voce=' + v.id + '">' + ic('plus', 20) + ' Aggiungi una volta passata</a>';
   h += sezione('Storico') + (storico.length ? storico.map(rigaDiarioEvento).join('') : '<p class="empty">Non è ancora stata segnata.</p>');
   h += '<div class="actions"><button class="btn btn-sm" data-action="sospendi-voce" data-id="' + v.id + '">' + (v.attiva === false ? 'Riattiva' : 'Sospendi (non ricordarla più)') + '</button>' +
     '<button class="btn btn-sm btn-danger" data-action="elimina-voce" data-id="' + v.id + '">Elimina</button></div>';
@@ -1260,26 +1372,24 @@ function vFormVoce(q) {
   const pag = v ? ePagamento(v) : (q.get('pag') === '1' || (sv && sv.tipo === 'pagamenti'));
   const cat = v ? categoria(v) : q.get('cat') || (pag ? 'Pagamenti' : sv ? 'Servizi della casa' : q.get('ospite') ? 'Ospiti' : 'Altro');
   const ricSel = v ? chiaveRic(v.ric) : (pag ? '1-anni' : '1-mesi');
-  const titolo = v ? 'Modifica' : pag ? 'Pagamento che si ripete' : 'Nuova scadenza';
-  let h = testata(titolo, { indietro: true, sub: v ? v.nome : pag ? 'Es. assicurazione, quota Confcooperative, commercialista' : 'Te la ricordo io' }) +
+  const titolo = v ? 'Modifica' : pag ? 'Pagamento che si ripete' : 'Una cosa da fare';
+  let h = testata(titolo, { indietro: true, sub: v ? v.nome : pag ? 'Es. assicurazione, quota, commercialista' : 'Te la ricordo io' }) +
     '<main class="pad"><form data-form="voce"' + (v ? ' data-id="' + v.id + '"' : '') + ' novalidate>' +
-    campo('nome', 'Cos\'è?', testo('nome', 'nome', v ? v.nome : (sv && sv.tipo !== 'pagamenti' ? sv.nome : ''), 'maxlength="80" autocomplete="off" placeholder="' + (pag ? 'es. Polizza RC struttura' : 'es. Revisione estintori') + '"'));
-  if (pag) {
-    h += '<div class="field"><span class="lab">Di che tipo?</span>' + chipsRadio('pag', CAT_PAG, v ? (CAT_PAG.includes(v.pag) ? v.pag : 'Altro') : 'Assicurazione') + '</div>' +
-      campo('importo', 'Importo (facoltativo)', testo('importo', 'importo', v && v.importo != null ? numIt(v.importo) : '', 'inputmode="decimal" placeholder="es. 450,00"')) +
-      '<div class="field"><div class="chips"><label><input type="checkbox" name="domiciliato"' + (v && v.domiciliato ? ' checked' : '') + '><span>Si paga da solo (addebito in banca)</span></label></div><span class="hint">Così nessuno lo paga a mano per sbaglio.</span></div>';
-  } else {
-    h += '<div class="field"><label for="f-categoria">Categoria</label>' + selezione('categoria', CATEGORIE, cat) + '</div>' +
-      '<div class="field"><label for="f-servizio">Mostrala anche in un servizio</label>' + selezione('servizio', [['', 'No']].concat(serviziOrdinati().map(s => [s.id, s.nome])), servizioId) + '</div>';
-  }
-  h += '<div class="field"><label for="f-ospite">Riguarda un ospite?</label><select name="ospite" id="f-ospite">' + opzioniOspiti(v ? v.ospiteId : q.get('ospite')) + '</select></div>' +
-    campo('prossima', pag ? 'Prossima scadenza' : 'Quando è la prossima volta?', '<input type="date" id="f-prossima" name="prossima" value="' + esc(v ? v.prossima : '') + '">') +
-    campoRic(ricSel, v && v.ric && ricSel === 'altro' ? v.ric : null) +
-    '<div class="field"><span class="lab">Chi se ne occupa?</span>' + chipsRadio('responsabile', RESPONSABILI, v ? v.responsabile : (utente() === 'Michele' ? 'Michele' : utente() === 'Rita' ? 'Rita' : 'Entrambi')) + '</div>' +
-    '<div class="field"><span class="lab">Quando vuoi l\'avviso?</span>' + chipsRadio('avviso', AVVISI, v ? v.avviso || 0 : (pag ? 7 : 3)) + '</div>' +
-    (pag ? '<input type="hidden" name="chiusura" value="pagato">' : '<div class="field"><span class="lab">Per chiuderla serve</span>' + chipsRadio('chiusura', [['fatto', 'Segnarla fatta'], ['pagato', 'Pagarla']], v ? v.chiusura : 'fatto') + '</div>') +
-    '<div class="field"><label for="f-note">Note (facoltative)</label><textarea id="f-note" name="note" maxlength="1000" placeholder="es. numero del tecnico, codice cliente, IBAN">' + esc(v ? v.note || '' : '') + '</textarea></div>' +
-    bottoniFine() + '</form></main>';
+    campo('nome', 'Cosa?', testo('nome', 'nome', v ? v.nome : (sv && sv.tipo !== 'pagamenti' ? sv.nome : ''), 'maxlength="80" autocomplete="off" placeholder="' + (pag ? 'es. Polizza RC struttura' : 'es. Revisione estintori') + '"'));
+  if (pag) h += '<div class="field"><span class="lab">Di che tipo?</span>' + chipsRadio('pag', CAT_PAG, v ? (CAT_PAG.includes(v.pag) ? v.pag : 'Altro') : 'Assicurazione') + '</div>' +
+    campo('importo', 'Quanto? (se lo sai)', testo('importo', 'importo', v && v.importo != null ? numIt(v.importo) : '', 'inputmode="decimal" placeholder="es. 450,00"'));
+  h += campo('prossima', pag ? 'Quando scade?' : 'Quando?', '<input type="date" id="f-prossima" name="prossima" value="' + esc(v ? v.prossima : oggi()) + '">') +
+    campoRic(ricSel, v && v.ric && ricSel === 'altro' ? v.ric : null);
+  let altre = '';
+  if (pag) altre += '<div class="field"><div class="chips"><label><input type="checkbox" name="domiciliato"' + (v && v.domiciliato ? ' checked' : '') + '><span>Si paga da solo (addebito in banca)</span></label></div><span class="hint">Così nessuno lo paga a mano per sbaglio.</span></div>';
+  else altre += '<div class="field"><label for="f-categoria">Che genere di cosa?</label>' + selezione('categoria', CATEGORIE, cat) + '</div>' +
+    '<div class="field"><label for="f-servizio">Mostrala anche in Casa, nel riquadro</label>' + selezione('servizio', [['', 'Nessuno']].concat(serviziOrdinati().map(x => [x.id, x.nome])), servizioId) + '</div>';
+  altre += '<div class="field"><label for="f-ospite">Riguarda un ospite?</label><select name="ospite" id="f-ospite">' + opzioniOspiti(v ? v.ospiteId : q.get('ospite')) + '</select></div>' +
+    '<div class="field"><span class="lab">Chi se ne occupa?</span>' + chipsRadio('responsabile', RESPONSABILI, v ? v.responsabile : 'Entrambi') + '</div>' +
+    '<div class="field"><span class="lab">Avvisami</span>' + chipsRadio('avviso', AVVISI, v ? v.avviso || 0 : (pag ? 7 : 1)) + '</div>' +
+    (pag ? '' : '<div class="field"><span class="lab">Per chiuderla serve</span>' + chipsRadio('chiusura', [['fatto', 'Segnarla fatta'], ['pagato', 'Pagarla']], v ? v.chiusura : 'fatto') + '</div>') +
+    '<div class="field"><label for="f-note">Note</label><textarea id="f-note" name="note" maxlength="1000" placeholder="es. numero del tecnico, codice cliente, IBAN">' + esc(v ? v.note || '' : '') + '</textarea></div>';
+  h += altreOpzioni(altre) + (pag ? '<input type="hidden" name="chiusura" value="pagato">' : '') + bottoniFine() + '</form></main>';
   return h + barra('');
 }
 moduli.voce = async form => {
@@ -1344,13 +1454,12 @@ function vSegna(q) {
     '<div class="field ' + (avvisi.length ? '' : 'hidden') + '" id="box-conferma"><div class="chips"><label><input type="checkbox" name="conferma"><span>Ho controllato: va segnato lo stesso</span></label></div><p class="err" id="err-conferma"></p></div>';
   h += poi +
     (!v ? campo('cosa', 'Cosa hai fatto? (facoltativo)', testo('cosa', 'cosa', '', 'maxlength="80" placeholder="es. sistemato il cancello"')) : '') +
+    (pagato ? campo('importo', 'Quanto hai pagato?', testo('importo', 'importo', v && v.importo != null ? numIt(v.importo) : '', 'inputmode="decimal" placeholder="es. 184,50"')) : '<input type="hidden" name="importo" value="">') +
     '<div class="field"><span class="lab">Chi?</span>' + chipsRadio('chi', UTENTI, utente()) + '</div>' +
-    campo('data', 'Quando?', '<input type="date" id="f-data" name="data" value="' + oggi() + '" max="' + oggi() + '">') +
-    (pagato ? campo('importo', 'Importo pagato', testo('importo', 'importo', v && v.importo != null ? numIt(v.importo) : '', 'inputmode="decimal" placeholder="es. 184,50"')) +
-      (v && !v.domiciliato ? '<div class="field"><span class="lab">Come?</span>' + chipsRadio('come', ['Bonifico', 'Bollettino', 'Contanti', 'Carta'], 'Bonifico') + '</div>' : '')
-      : '<input type="hidden" name="importo" value="">') +
-    campoFile(pagato ? 'Ricevuta (facoltativa, ma utile)' : 'Foto (facoltativa)') +
-    '<div class="field"><label for="f-nota">Nota (facoltativa)</label><textarea id="f-nota" name="nota" maxlength="500"></textarea></div>' +
+    altreOpzioni(campo('data', 'Quando?', '<input type="date" id="f-data" name="data" value="' + oggi() + '" max="' + oggi() + '">') +
+      (pagato && v && !v.domiciliato ? '<div class="field"><span class="lab">Come?</span>' + chipsRadio('come', ['Bonifico', 'Bollettino', 'Contanti', 'Carta'], 'Bonifico') + '</div>' : '') +
+      campoFile(pagato ? 'Ricevuta' : 'Foto') +
+      '<div class="field"><label for="f-nota">Nota</label><textarea id="f-nota" name="nota" maxlength="500"></textarea></div>', pagato ? 'Data, ricevuta, nota' : 'Data, foto, nota') +
     '<div class="actions"><button class="btn btn-primary" type="submit">' + ic('check', 21, 2.6) + ' Conferma</button><button class="btn" type="button" data-action="indietro">Annulla</button></div></form></main>';
   return h + barra('');
 }
@@ -1393,7 +1502,7 @@ moduli.segna = async form => {
 
 /* --------------------------------------------- una cosa già fatta (passato) */
 
-function vFatto(q) {
+function vGiaFatto(q) {
   const v = q.get('voce') ? voce(q.get('voce')) : null;
   const sel = v ? 'v:' + v.id : q.get('servizio') ? 's:' + q.get('servizio') : (q.get('sel') || '');
   const fatte = parseInt(q.get('fatte'), 10) || 0;
@@ -1436,10 +1545,10 @@ moduli.fatto = async (form, e) => {
   avvisa('Aggiunta al diario');
   if (poi === 'altra') {
     const n = (parseInt(new URLSearchParams(location.hash.split('?')[1] || '').get('fatte'), 10) || 0) + 1;
-    vai('#/fatto?sel=' + encodeURIComponent(sel) + '&fatte=' + n, true);
+    vai('#/gia-fatto?sel=' + encodeURIComponent(sel) + '&fatte=' + n, true);
   } else if (v) vai('#/voce/' + v.id, true);
   else if (servizio(servizioId)) vai('#/servizio/' + servizioId, true);
-  else vai('#/diario', true);
+  else vai('#/fatto', true);
 };
 
 /* ========================================================== Ospiti */
@@ -1482,32 +1591,30 @@ function vOspite(id, sotto) {
     case 'altro': return vOspiteAltro(o);
   }
   const t = oggi();
-  const destra = '<a class="icon-btn" href="#/nuovo-ospite?id=' + o.id + '" aria-label="Modifica dati di ' + esc(o.nome) + '">' + ic('edit', 20) + '</a>';
+  const destra = '<a class="icon-btn" href="#/nuovo-ospite?id=' + o.id + '" aria-label="Modifica i dati di ' + esc(o.nome) + '">' + ic('edit', 22) + '</a>';
   let h = testata(o.nome, { indietro: true, sub: [o.codice, o.nascita ? 'nato/a il ' + fmtLungo(o.nascita).replace(/^\S+ /, '') : null].filter(Boolean).join(' · '), destra }) + '<main class="pad">';
   if (o.attivo === false) h += banner('amber', 'Non è più ospite della casa. I suoi dati restano in archivio.');
-  if (o.note) h += '<div class="box" style="border-color:var(--amberline);background:var(--amberbg)"><div class="hint" style="font-weight:800;color:var(--amber)">DA SAPERE</div><div style="white-space:pre-wrap;margin-top:4px">' + esc(o.note) + '</div></div>';
-
-  // terapia di oggi per questo ospite
+  if (o.note) h += '<div class="box" style="border-color:var(--amberline);background:var(--amberbg)"><div style="font-size:14px;font-weight:800;color:var(--amber);letter-spacing:.04em">DA SAPERE</div><div style="white-space:pre-wrap;margin-top:4px;font-size:17px">' + esc(o.note) + '</div></div>';
   const slots = slotDel(t, o.id);
   const fs = S.farmaci.filter(f => f.ospiteId === o.id && farmacoAttivo(f, t));
-  const prossimoSlot = slots.find(s => s.mancano);
+  const prossimo = slots.find(s => s.mancano);
   const pv = visitePreviste().find(v => v.ospiteId === o.id);
-  const ultimeVis = S.visite.filter(v => v.ospiteId === o.id && v.stato === 'fatta').length;
-  const ultimaMisura = S.parametri.filter(p => p.ospiteId === o.id).sort(recenti)[0];
+  const ultima = S.parametri.filter(p => p.ospiteId === o.id).sort(recenti)[0];
+  const nd = S.documenti.filter(d => d.ospiteId === o.id).length;
+  const riq = (href, icona, titolo, meta, rust) => '<a class="riq ' + (rust ? 'rust' : '') + '" href="' + href + '"><span class="dicon">' + ic(icona, 28) + '</span><b>' + esc(titolo) + '</b><small>' + esc(meta) + '</small></a>';
+  h += '<div class="tiles">' +
+    riq('#/ospite/' + o.id + '/terapia', 'pill', 'Medicine', fs.length ? plur(fs.length, 'medicina', 'medicine') + (prossimo ? ' · da dare alle ' + fmtOra(prossimo.ora) : slots.length ? ' · oggi tutte date' : '') : 'Nessuna inserita', prossimo && prossimo.ora <= oraAdesso()) +
+    riq('#/ospite/' + o.id + '/visite', 'steth', 'Visite', pv ? (pv.tipo || 'Visita') + ' ' + fmt(pv.data) + (pv.ora ? ' alle ' + fmtOra(pv.ora) : '') : 'Nessuna in programma', pv && pv.data <= t) +
+    riq('#/ospite/' + o.id + '/parametri', 'heart', 'Misure', ultima ? parametro(ultima.tipo).nome + ' ' + ultima.valore + ' · ' + fmt(ultima.data) : 'Pressione, glicemia, peso…') +
+    riq('#/ospite/' + o.id + '/documenti', 'folder', 'Documenti', nd ? plur(nd, 'documento', 'documenti') : 'Nessuno') + '</div>';
   const vs = attive().filter(v => v.ospiteId === o.id).sort(perData);
-  const ds = S.documenti.filter(d => d.ospiteId === o.id);
-  const nInfo = (o.info || []).length;
-  const gi = (href, icona, titolo, meta, cls = '') => '<a class="gi" href="' + href + '"><span class="dicon ' + cls + '">' + ic(icona, 21) + '</span><span class="row-main"><span class="row-title">' + esc(titolo) + '</span><span class="row-meta">' + esc(meta) + '</span></span>' + ic('chev', 20) + '</a>';
-  h += '<div class="group" style="margin-top:4px">' +
-    gi('#/ospite/' + o.id + '/terapia', 'pill', 'Terapia', fs.length ? plur(fs.length, 'farmaco', 'farmaci') + (prossimoSlot ? ' · da dare alle ' + fmtOra(prossimoSlot.ora) : slots.length ? ' · oggi tutto segnato' : '') : 'Nessun farmaco inserito', 'plum') +
-    gi('#/ospite/' + o.id + '/visite', 'steth', 'Visite mediche', (pv ? 'Prossima: ' + (pv.tipo || 'visita') + ' ' + fmt(pv.data) : 'Nessuna in programma') + (ultimeVis ? ' · ' + ultimeVis + ' in archivio' : '')) +
-    gi('#/ospite/' + o.id + '/parametri', 'heart', 'Parametri', ultimaMisura ? parametro(ultimaMisura.tipo).nome + ' ' + ultimaMisura.valore + ' (' + fmt(ultimaMisura.data) + ')' : 'Pressione, glicemia, peso…') +
-    gi('#/ospite/' + o.id + '/scadenze', 'cal', 'Scadenze e pagamenti', vs.length ? plur(vs.length, 'aperta', 'aperte') + ' · prossima ' + fmt(vs[0].prossima) : 'Nessuna aperta', vs.some(v => stato(v) === 'ritardo') ? 'rust' : '') +
-    gi('#/ospite/' + o.id + '/documenti', 'folder', 'Documenti', ds.length ? plur(ds.length, 'documento', 'documenti') : 'Nessuno') +
-    gi('#/ospite/' + o.id + '/altro', 'note', 'Altro', (nInfo ? plur(nInfo, 'informazione', 'informazioni') + ' · ' : '') + 'contatti, note, necessità') +
-    gi('#/diario?ospite=' + o.id, 'book', 'Diario di ' + o.nome.split(' ')[0], 'Tutto quello che è successo') +
-    '</div>';
-  if (slots.length) h += sezione('Terapia di oggi') + slots.map(s => rigaSlot(s, { ospite: o.id })).join('');
+  const note = S.eventi.filter(e => e.tipo === 'nota' && e.ospiteId === o.id).sort(recenti);
+  const gi = (href, icona, titolo, meta) => '<a class="gi" href="' + href + '">' + ic(icona, 24) + '<span class="row-main"><span class="row-title">' + esc(titolo) + '</span><span class="row-meta">' + esc(meta) + '</span></span>' + ic('chev', 20) + '</a>';
+  h += '<div class="group" style="margin-top:6px">' +
+    gi('#/ospite/' + o.id + '/scadenze', 'euro', 'Pagamenti e scadenze', vs.length ? plur(vs.length, 'aperta', 'aperte') + ' · prossima ' + fmt(vs[0].prossima) : 'Rette, rinnovi, documenti da rifare') +
+    gi('#/note?ospite=' + o.id, 'note', 'Note su ' + o.nome.split(' ')[0], note.length ? 'Ultima: ' + fmt(note[0].data) + (note[0].chi ? ', ' + note[0].chi : '') : 'Nessuna nota') +
+    gi('#/ospite/' + o.id + '/altro', 'users', 'Contatti e informazioni', (o.info || []).length ? (o.info || []).map(x => x.k).slice(0, 3).join(' · ') : (o.medico ? 'Medico: ' + o.medico : 'Familiari, telefono, abitudini')) +
+    gi('#/fatto?ospite=' + o.id, 'check', 'Cosa è stato fatto', 'Medicine, visite, misure, giorno per giorno') + '</div>';
   return h + '</main>' + barra('ospiti');
 }
 
@@ -1532,14 +1639,11 @@ function vOspiteDocumenti(o) {
 }
 function vOspiteAltro(o) {
   const info = (o.info || []).concat([{ k: '', v: '' }, { k: '', v: '' }]);
-  let h = testata('Altro', { indietro: true, sub: o.nome }) + '<main class="pad">';
-  h += '<form class="box" data-form="ospite-info" data-id="' + o.id + '" novalidate><h3>Informazioni utili</h3><p class="hint" style="margin:0">Scrivi quello che serve: familiare di riferimento, telefono, taglia, abitudini, necessità. Per togliere una riga, svuotala.</p>' +
+  let h = testata('Contatti e informazioni', { indietro: true, sub: o.nome }) + '<main class="pad">';
+  h += '<form class="box" data-form="ospite-info" data-id="' + o.id + '" novalidate><p class="hint" style="margin:0">A sinistra cosa, a destra il valore: familiare, telefono, taglia, abitudini, necessità. Per togliere una riga, svuotala.</p>' +
     info.map((x, i) => '<div class="two" style="margin-top:10px"><input type="text" name="k' + i + '" value="' + esc(x.k) + '" placeholder="es. Familiare" aria-label="Voce ' + (i + 1) + '" style="flex:0 0 38%"><input type="text" name="v' + i + '" value="' + esc(x.v) + '" placeholder="es. Anna (figlia) 333 1234567" aria-label="Valore ' + (i + 1) + '"></div>').join('') +
     '<input type="hidden" name="n" value="' + info.length + '"><div class="actions" style="margin-top:14px"><button class="btn btn-primary btn-sm" type="submit">Salva</button></div></form>';
-  const note = S.eventi.filter(e => e.tipo === 'nota' && e.ospiteId === o.id).sort(recenti).slice(0, 10);
-  h += sezione('Note', note.length, '', '<a class="destra" href="#/nota?ospite=' + o.id + '">+ Scrivi</a>') +
-    (note.length ? note.map(rigaDiarioEvento).join('') : '<p class="empty">Nessuna nota. Le note finiscono anche nel Diario.</p>');
-  if (note.length >= 10) h += '<a class="btn btn-sm" href="#/diario?ospite=' + o.id + '&f=note">Tutte le note</a>';
+  if (o.medico) h += '<p class="hint" style="margin:4px 2px">Medico di base: <b>' + esc(o.medico) + '</b> (si cambia con la matita in alto nella scheda)</p>';
   return h + '</main>' + barra('ospiti');
 }
 moduli['ospite-info'] = async form => {
@@ -1637,16 +1741,16 @@ function vOspiteTerapia(o) {
   const attivi = fs.filter(f => farmacoAttivo(f, t) && f.giorni !== 'bisogno').sort(perNome);
   const bisogno = fs.filter(f => farmacoAttivo(f, t) && f.giorni === 'bisogno').sort(perNome);
   const altri = fs.filter(f => !farmacoAttivo(f, t)).sort(perNome);
-  let h = testata('Terapia', { indietro: true, sub: o.nome }) + '<main class="pad">';
+  let h = testata('Medicine', { indietro: true, sub: o.nome }) + '<main class="pad">';
   h += banner('amber', 'Dosi e orari si copiano dalla prescrizione del medico: l\'app non li calcola e non li cambia.');
   const slots = slotDel(t, o.id);
   if (slots.length) h += sezione('Oggi') + slots.map(s => rigaSlot(s, { ospite: o.id })).join('');
-  h += sezione('Farmaci in terapia', attivi.length) + (attivi.length ? attivi.map(f => rigaFarmaco(f, { ospite: false })).join('') : '<p class="empty">Nessun farmaco a orario.</p>');
+  h += sezione('Medicine a orario', attivi.length) + (attivi.length ? attivi.map(f => rigaFarmaco(f, { ospite: false })).join('') : '<p class="empty">Nessun farmaco a orario.</p>');
   if (bisogno.length) {
     h += sezione('Al bisogno', bisogno.length) + bisogno.map(f => '<div class="row"><a class="row-main" href="#/farmaco/' + f.id + '"><span class="row-title">' + esc(f.nome) + '</span><span class="row-meta">' + esc((f.dose || '') + (f.note ? ' · ' + f.note : '')) + '</span></a>' +
       '<button class="btn btn-sm" style="width:auto" data-action="dato-bisogno" data-f="' + f.id + '">Dato adesso</button></div>').join('');
   }
-  h += '<a class="btn btn-primary" style="margin-top:10px" href="#/nuovo-farmaco?ospite=' + o.id + '">' + ic('plus', 21) + ' Aggiungi un farmaco</a>';
+  h += '<a class="btn btn-primary" style="margin-top:10px" href="#/nuovo-farmaco?ospite=' + o.id + '">' + ic('plus', 21) + ' Aggiungi una medicina</a>';
   h += '<a class="btn btn-sm" href="#/registro-terapia?ospite=' + o.id + '">' + ic('book', 20) + ' Registro: quando è stata data</a>';
   if (altri.length) h += sezione('Sospesi o finiti', altri.length) + altri.map(f => rigaFarmaco(f, { ospite: false })).join('');
   return h + '</main>' + barra('ospiti');
@@ -1700,10 +1804,10 @@ function vFormFarmaco(q) {
   const giorniTipo = f && f.giorni === 'bisogno' ? 'bisogno' : f && Array.isArray(f.giorni) ? 'alcuni' : 'tutti';
   const orari = f && IN_TERAPIA(f) ? f.orari : [];
   const tuttiOrari = [...new Set(ORARI_COMUNI.concat(orari))].sort();
-  let h = testata(f ? 'Modifica farmaco' : 'Nuovo farmaco', { indietro: true, sub: ospite(f ? f.ospiteId : q.get('ospite')) ? ospite(f ? f.ospiteId : q.get('ospite')).nome : '' }) +
-    '<main class="pad">' + banner('amber', 'Ricopia tutto dalla prescrizione. L\'app ricorda gli orari e conta le scorte: le dosi le decide solo il medico.') +
+  let h = testata(f ? 'Modifica medicina' : 'Nuova medicina', { indietro: true, sub: ospite(f ? f.ospiteId : q.get('ospite')) ? ospite(f ? f.ospiteId : q.get('ospite')).nome : '' }) +
+    '<main class="pad">' + banner('amber', 'Copia dalla prescrizione. L\'app ricorda gli orari e conta le scorte: le dosi le decide solo il medico.') +
     '<form data-form="farmaco"' + (f ? ' data-id="' + f.id + '"' : '') + ' novalidate>' +
-    campo('nome', 'Nome del farmaco', testo('nome', 'nome', f ? f.nome : '', 'maxlength="80" autocomplete="off" placeholder="es. Cardioaspirina 100 mg"')) +
+    campo('nome', 'Nome della medicina', testo('nome', 'nome', f ? f.nome : '', 'maxlength="80" autocomplete="off" placeholder="es. Cardioaspirina 100 mg"')) +
     '<div class="field"><label for="f-ospite">Per quale ospite?</label><select name="ospite" id="f-ospite">' + opzioniOspiti(f ? f.ospiteId : q.get('ospite'), '— scegli —') + '</select><p class="err" id="err-ospite"></p></div>' +
     campo('dose', 'Dose, come è scritta nella prescrizione', testo('dose', 'dose', f ? f.dose || '' : '', 'maxlength="120" placeholder="es. 1 compressa dopo colazione"')) +
     '<div class="field"><span class="lab">Quando si prende?</span>' + chipsRadio('giorni_tipo', [['tutti', 'Tutti i giorni'], ['alcuni', 'Solo alcuni giorni'], ['bisogno', 'Al bisogno']], giorniTipo) +
@@ -1713,15 +1817,14 @@ function vFormFarmaco(q) {
     '<div class="inline" style="margin-top:4px"><span class="lbl">Altro orario</span><input type="time" name="ora_extra" aria-label="Altro orario"></div><p class="err" id="err-ora"></p></div>' +
     '<div class="field"><label for="f-qta">Quante ' + esc(f ? f.unita || 'unità' : 'unità') + ' ogni volta?</label><div class="inline"><input type="number" id="f-qta" name="qta" min="0" step="any" inputmode="decimal" value="' + esc(f && f.qta != null ? f.qta : 1) + '">' +
     selezione('unita', UNITA_FARMACO, f ? f.unita : 'compresse') + '</div><span class="hint">Serve a contare le scorte: ogni volta che segni "Dato" si tolgono dalla scorta.</span><p class="err" id="err-qta"></p></div></div>' +
-    '<div class="two"><div class="field"><label for="f-dal">Dal</label><input type="date" id="f-dal" name="dal" value="' + esc(f ? f.dal || '' : oggi()) + '"></div>' +
-    '<div class="field"><label for="f-al">Fino al (se c\'è)</label><input type="date" id="f-al" name="al" value="' + esc(f ? f.al || '' : '') + '"></div></div>' +
-    campo('medico', 'Prescritto da (facoltativo)', testo('medico', 'medico', f ? f.medico || '' : '', 'maxlength="80" placeholder="es. Dott. Rossi, cardiologo"')) +
-    sezione('Scorte') +
-    campo('incasa', 'Quante ce ne sono adesso in casa?', '<input type="number" id="f-incasa" name="inCasa" min="0" step="any" inputmode="decimal" value="' + esc(f ? s.rimaste : '') + '">') +
-    campo('confezione', 'Quante in una confezione? (facoltativo)', '<input type="number" id="f-confezione" name="confezione" min="0" step="any" inputmode="decimal" value="' + esc(f && f.confezione ? f.confezione : '') + '">', 'Così quando arriva dalla farmacia basta scrivere quante confezioni.') +
-    campo('soglia', 'Avvisami quando restano (giorni)', '<input type="number" id="f-soglia" name="soglia" min="0" max="90" inputmode="numeric" value="' + esc(f ? (f.soglia == null ? 7 : f.soglia) : 7) + '">', 'Il tempo per chiedere la ricetta e ordinare.') +
-    campo('scadenza', 'Scadenza della confezione (facoltativa)', '<input type="date" id="f-scadenza" name="scadenza" value="' + esc(f ? f.scadenza || '' : '') + '">') +
-    campo('note', 'Note (facoltative)', '<textarea id="f-note" name="note" maxlength="500" placeholder="es. a stomaco pieno, sciogliere in acqua">' + esc(f ? f.note || '' : '') + '</textarea>') +
+    campo('incasa', 'Quante ce ne sono adesso in casa?', '<input type="number" id="f-incasa" name="inCasa" min="0" step="any" inputmode="decimal" value="' + esc(f ? s.rimaste : '') + '">', 'Serve per avvisarti prima che finiscano.') +
+    altreOpzioni('<div class="two"><div class="field"><label for="f-dal">Dal</label><input type="date" id="f-dal" name="dal" value="' + esc(f ? f.dal || '' : oggi()) + '"></div>' +
+      '<div class="field"><label for="f-al">Fino al (se c\'è)</label><input type="date" id="f-al" name="al" value="' + esc(f ? f.al || '' : '') + '"></div></div>' +
+      campo('medico', 'Prescritto da', testo('medico', 'medico', f ? f.medico || '' : '', 'maxlength="80" placeholder="es. Dott. Rossi, cardiologo"')) +
+      campo('confezione', 'Quante in una confezione?', '<input type="number" id="f-confezione" name="confezione" min="0" step="any" inputmode="decimal" value="' + esc(f && f.confezione ? f.confezione : '') + '">', 'Così quando arriva dalla farmacia basta scrivere quante confezioni.') +
+      campo('soglia', 'Avvisami quando restano (giorni)', '<input type="number" id="f-soglia" name="soglia" min="0" max="90" inputmode="numeric" value="' + esc(f ? (f.soglia == null ? 7 : f.soglia) : 7) + '">', 'Il tempo per chiedere la ricetta e ordinare.') +
+      campo('scadenza', 'Scadenza della confezione', '<input type="date" id="f-scadenza" name="scadenza" value="' + esc(f ? f.scadenza || '' : '') + '">') +
+      campo('note', 'Note', '<textarea id="f-note" name="note" maxlength="500" placeholder="es. a stomaco pieno, sciogliere in acqua">' + esc(f ? f.note || '' : '') + '</textarea>'), 'Periodo, medico, confezione, scadenza') +
     bottoniFine() + '</form></main>';
   return h + barra('ospiti');
 }
@@ -1832,7 +1935,7 @@ function vGiro(data, hhmm, q) {
   const nav = '<div class="two" style="margin-bottom:4px">' +
     (prec ? '<a class="btn btn-sm" href="#/giro/' + data + '/' + prec.ora.replace(':', '') + '">' + ic('back', 18) + ' ' + fmtOra(prec.ora) + '</a>' : '<span></span>') +
     (succ ? '<a class="btn btn-sm" href="#/giro/' + data + '/' + succ.ora.replace(':', '') + '">' + fmtOra(succ.ora) + ' ' + ic('chev', 18) + '</a>' : '<span></span>') + '</div>';
-  let h = testata('Terapia delle ' + fmtOra(ora), { indietro: true, sub: fmtGiorno(data) + (filtro && ospite(filtro) ? ' · ' + ospite(filtro).nome : '') }) + '<main class="pad">';
+  let h = testata('Medicine delle ' + fmtOra(ora), { indietro: true, sub: fmtGiorno(data) + (filtro && ospite(filtro) ? ' · ' + ospite(filtro).nome : '') }) + '<main class="pad">';
   if (!filtro) h += nav;
   if (!s) return h + '<p class="empty">A quest\'ora non c\'è niente da dare.</p></main>' + barra('oggi');
   if (!s.mancano) h += banner('green', 'Tutto segnato per le ' + fmtOra(ora) + '.', 'check');
@@ -2022,9 +2125,9 @@ function vFormVisita(q) {
     campo('dove', 'Dove', testo('dove', 'dove', v ? v.dove || '' : '', 'maxlength="100" placeholder="es. Ospedale di Tricase, ambulatorio 3"'));
   if (giaFatta) h += campo('esito', 'Com\'è andata?', '<textarea id="f-esito" name="esito" maxlength="2000" placeholder="Cosa ha detto il medico, cosa cambia"></textarea>') + campoFile('Referto (facoltativo)');
   else h += '<div class="field"><span class="lab">Chi accompagna?</span>' + chipsRadio('accompagna', ['Rita', 'Michele', 'Un familiare', 'Nessuno', 'Da decidere'], v ? v.accompagna || 'Da decidere' : 'Da decidere') + '</div>' +
-    campo('portare', 'Da portare (facoltativo)', testo('portare', 'portare', v ? v.portare || '' : 'Impegnativa, tessera sanitaria', 'maxlength="160"')) +
-    '<div class="field"><span class="lab">Ricordamelo</span>' + chipsRadio('avviso', [[0, 'Il giorno stesso'], [1, 'Il giorno prima'], [3, '3 giorni prima'], [7, 'Una settimana prima']], v ? v.avviso == null ? 1 : v.avviso : 1) + '</div>' +
-    campo('note', 'Note (facoltative)', '<textarea id="f-note" name="note" maxlength="1000" placeholder="es. a digiuno, portare le analisi precedenti">' + esc(v ? v.note || '' : '') + '</textarea>');
+    altreOpzioni(campo('portare', 'Da portare', testo('portare', 'portare', v ? v.portare || '' : 'Impegnativa, tessera sanitaria', 'maxlength="160"')) +
+      '<div class="field"><span class="lab">Ricordamelo</span>' + chipsRadio('avviso', [[0, 'Il giorno stesso'], [1, 'Il giorno prima'], [3, '3 giorni prima'], [7, 'Una settimana prima']], v ? v.avviso == null ? 1 : v.avviso : 1) + '</div>' +
+      campo('note', 'Note', '<textarea id="f-note" name="note" maxlength="1000" placeholder="es. a digiuno, portare le analisi precedenti">' + esc(v ? v.note || '' : '') + '</textarea>'), 'Cosa portare, avviso, note');
   h += bottoniFine() + '</form></main>';
   return h + barra('ospiti');
 }
@@ -2149,9 +2252,9 @@ function vMisura(q) {
     '<div class="field"><span class="lab">Cosa hai misurato?</span>' + chipsRadio('tipo_par', PARAMETRI.map(x => [x.k, x.nome]).concat([['altro', 'Altro']]), noto ? tipo : 'altro') +
     '<div id="box-altro-par" class="' + (noto ? 'hidden' : '') + '"><input type="text" name="altro_par" maxlength="40" value="' + esc(noto ? '' : tipo) + '" placeholder="es. Circonferenza vita" aria-label="Cosa hai misurato"></div></div>' +
     '<div class="field"><label for="f-valore">Valore <span id="unita-par" class="muted">' + esc(p.u) + '</span></label><input type="text" id="f-valore" name="valore" inputmode="decimal" placeholder="' + esc(p.ph) + '" autocomplete="off"><p class="err" id="err-valore"></p></div>' +
-    '<div class="two"><div class="field"><label for="f-data">Giorno</label><input type="date" id="f-data" name="data" value="' + oggi() + '" max="' + oggi() + '"></div>' +
-    '<div class="field"><label for="f-ora">Ora</label><input type="time" id="f-ora" name="ora" value="' + oraAdesso() + '"></div></div>' +
-    campo('nota', 'Nota (facoltativa)', testo('nota', 'nota', '', 'maxlength="200" placeholder="es. a digiuno, dopo pranzo"')) +
+    altreOpzioni('<div class="two"><div class="field"><label for="f-data">Giorno</label><input type="date" id="f-data" name="data" value="' + oggi() + '" max="' + oggi() + '"></div>' +
+      '<div class="field"><label for="f-ora">Ora</label><input type="time" id="f-ora" name="ora" value="' + oraAdesso() + '"></div></div>' +
+      campo('nota', 'Nota', testo('nota', 'nota', '', 'maxlength="200" placeholder="es. a digiuno, dopo pranzo"')), 'Un altro giorno, una nota') +
     bottoniFine() + '</form></main>' + barra('ospiti');
 }
 moduli.misura = async form => {
@@ -2226,21 +2329,26 @@ azioni['elimina-misura'] = async el => {
 
 function vServizi(q) {
   const mod = q.get('modifica') === '1';
-  const destra = '<a class="txt-btn ' + (mod ? 'on' : '') + '" href="#/servizi' + (mod ? '' : '?modifica=1') + '">' + (mod ? 'Fine' : 'Modifica') + '</a>';
-  let h = testata('Servizi', { sub: mod ? 'Tocca un servizio per rinominarlo. − per toglierlo.' : 'Le cose di casa, ognuna con il suo spazio', destra }) + '<main class="pad"><div class="tiles">';
+  const destra = mod ? '<a class="txt-btn on" href="#/casa">Fine</a>' : '';
+  let h = testata('Casa', { sub: mod ? 'Tocca un riquadro per rinominarlo, − per toglierlo, le frecce per spostarlo.' : 'Le cose di tutti i giorni', destra }) + '<main class="pad"><div class="tiles">';
   const lista = serviziOrdinati();
   h += lista.map((sv, i) => {
     const info = riassuntoServizio(sv);
-    const ctl = mod ? '<span class="ctl">' + (i > 0 ? '<button data-action="srv-su" data-id="' + sv.id + '" aria-label="Sposta prima">' + ic('up', 18) + '</button>' : '') +
+    if (!mod) return '<a class="riq ' + (info.urgente ? 'rust' : '') + '" href="#/servizio/' + sv.id + '"><span class="dicon">' + ic(sv.icona || 'grid', 28) + '</span><b>' + esc(sv.nome) + '</b><small>' + esc(info.testo) + '</small></a>';
+    const ctl = '<span class="ctl">' + (i > 0 ? '<button data-action="srv-su" data-id="' + sv.id + '" aria-label="Sposta prima">' + ic('up', 18) + '</button>' : '') +
       (i < lista.length - 1 ? '<button data-action="srv-giu" data-id="' + sv.id + '" aria-label="Sposta dopo">' + ic('down', 18) + '</button>' : '') +
-      '<button class="meno" data-action="srv-togli" data-id="' + sv.id + '" aria-label="Togli ' + esc(sv.nome) + '">' + ic('minus', 18, 3) + '</button></span>' : '';
-    return '<a class="tile ' + (mod ? 'mod ' : '') + (info.urgente && !mod ? 'rust' : '') + '" href="' + (mod ? '#/servizio-imp?id=' + sv.id : '#/servizio/' + sv.id) + '">' + ctl +
-      '<span class="dicon">' + ic(sv.icona || 'grid', 22) + '</span><b>' + esc(sv.nome) + '</b><small>' + esc(info.testo) + '</small></a>';
+      '<button class="meno" data-action="srv-togli" data-id="' + sv.id + '" aria-label="Togli ' + esc(sv.nome) + '">' + ic('minus', 18, 3) + '</button></span>';
+    return '<a class="tile mod" href="#/servizio-imp?id=' + sv.id + '">' + ctl + '<b>' + esc(sv.nome) + '</b><small>' + esc(info.testo) + '</small></a>';
   }).join('');
-  if (mod) h += '<a class="tile nuovo" href="#/servizio-imp">' + ic('plus', 26) + 'Nuovo servizio</a>';
+  if (mod) h += '<a class="tile nuovo" href="#/servizio-imp">' + ic('plus', 26) + 'Aggiungi un riquadro</a>';
   h += '</div>';
-  if (!mod) h += '<a class="btn btn-sm" style="margin-top:12px" href="#/diario?f=servizi">' + ic('book', 20) + ' Cosa è stato fatto</a>';
-  return h + '</main>' + barra('servizi');
+  if (!mod) {
+    h += '<div class="group" style="margin-top:10px">' +
+      '<a class="gi" href="#/archivio?vista=casa">' + ic('folder', 24) + '<span class="row-main"><span class="row-title">Documenti della casa</span><span class="row-meta">Contratti, polizze, ricevute</span></span>' + ic('chev', 20) + '</a>' +
+      '<a class="gi" href="#/scadenze">' + ic('cal', 24) + '<span class="row-main"><span class="row-title">Tutte le scadenze</span><span class="row-meta">Quello che ha una data, in ordine</span></span>' + ic('chev', 20) + '</a></div>' +
+      '<a class="btn btn-sm" style="margin-top:12px" href="#/casa?modifica=1">' + ic('edit', 20) + ' Cambia l\'elenco</a>';
+  }
+  return h + '</main>' + barra('casa');
 }
 function riassuntoServizio(sv) {
   const voci = vociServizio(sv.id);
@@ -2300,14 +2408,14 @@ azioni['srv-togli'] = async el => {
 function vServizioImp(q) {
   const sv = q.get('id') ? servizio(q.get('id')) : null;
   const icone = '<div class="chips">' + ICONE_SERVIZIO.map(i => '<label><input type="radio" name="icona" value="' + i + '"' + ((sv ? sv.icona : 'grid') === i ? ' checked' : '') + '><span aria-label="' + i + '">' + ic(i, 22) + '</span></label>').join('') + '</div>';
-  let h = testata(sv ? 'Modifica servizio' : 'Nuovo servizio', { indietro: true }) + '<main class="pad"><form data-form="servizio-imp"' + (sv ? ' data-id="' + sv.id + '"' : '') + ' novalidate>' +
+  let h = testata(sv ? 'Modifica riquadro' : 'Nuovo riquadro', { indietro: true }) + '<main class="pad"><form data-form="servizio-imp"' + (sv ? ' data-id="' + sv.id + '"' : '') + ' novalidate>' +
     campo('nome', 'Nome', testo('nome', 'nome', sv ? sv.nome : '', 'maxlength="40" placeholder="es. Giardino"'));
   if (!sv) h += '<div class="field"><span class="lab">Come funziona?</span><div class="group">' + TIPI_SERVIZIO.map(([k, nome, desc], i) =>
     '<label class="gi"><input type="radio" name="tipo" value="' + k + '"' + (k === 'semplice' ? ' checked' : '') + ' style="width:22px;height:22px;flex:none"><span class="row-main"><span class="row-title">' + esc(nome) + '</span><span class="row-meta">' + esc(desc) + '</span></span></label>').join('') + '</div></div>';
   else h += '<p class="hint" style="margin:14px 2px 0">Tipo: <b>' + esc((TIPI_SERVIZIO.find(t => t[0] === sv.tipo) || [, 'Semplice'])[1]) + '</b></p>';
   h += '<div class="field"><span class="lab">Icona</span>' + icone + '</div>' + bottoniFine() +
     (sv ? '<div class="actions"><button class="btn btn-sm btn-danger" type="button" data-action="srv-togli" data-id="' + sv.id + '">Togli questo servizio</button></div>' : '') + '</form></main>';
-  return h + barra('servizi');
+  return h + barra('casa');
 }
 moduli['servizio-imp'] = async form => {
   const fd = new FormData(form);
@@ -2320,8 +2428,8 @@ moduli['servizio-imp'] = async form => {
     nome, icona: String(fd.get('icona') || (base ? base.icona : 'grid'))
   });
   await salva('servizi', sv);
-  avvisa(vecchio ? 'Servizio aggiornato' : 'Servizio aggiunto');
-  vai(vecchio ? '#/servizi?modifica=1' : '#/servizio/' + sv.id, true);
+  avvisa(vecchio ? 'Aggiornato' : 'Aggiunto');
+  vai(vecchio ? '#/casa?modifica=1' : '#/servizio/' + sv.id, true);
 };
 
 /* elenchi modificabili (capi della lavanderia, zone delle pulizie) */
@@ -2334,7 +2442,7 @@ function vElenco(svId, campoK) {
     voci.map(v => rigaElenco(v)).join('') + '</div>' +
     '<div class="two" style="margin-top:12px"><input type="text" id="f-nuovo" placeholder="' + esc(NOMI_ELENCHI[campoK][1]) + '" maxlength="40" aria-label="Nuova voce"><button class="btn btn-sm" type="button" data-action="el-aggiungi" style="flex:none;width:auto">' + ic('plus', 20) + ' Aggiungi</button></div>' +
     bottoniFine() + '</form></main>';
-  return h + barra('servizi');
+  return h + barra('casa');
 }
 function rigaElenco(v) {
   return '<div class="gi" style="cursor:default"><input type="text" name="voce" value="' + esc(v) + '" maxlength="40" aria-label="Nome" style="flex:1;min-height:46px">' +
@@ -2371,11 +2479,11 @@ function vServizio(id, q) {
   return f(sv, q);
 }
 function testaServizio(sv, sub) {
-  return testata(sv.nome, { indietro: true, sub, destra: '<a class="icon-btn" href="#/servizio-imp?id=' + sv.id + '" aria-label="Modifica servizio">' + ic('edit', 20) + '</a>' });
+  return testata(sv.nome, { indietro: true, sub, destra: '<a class="icon-btn" href="#/servizio-imp?id=' + sv.id + '" aria-label="Modifica">' + ic('edit', 20) + '</a>' });
 }
 function storicoServizio(sv, n = 8, filtro) {
   const ev = S.eventi.filter(e => sid(e.servizio) === sv.id && (!filtro || filtro(e))).sort(recenti);
-  return sezione('Fatto di recente', null, '', ev.length > n ? '<a class="destra" href="#/diario?servizio=' + sv.id + '">Tutto</a>' : '') +
+  return sezione('Fatto di recente', null, '', ev.length > n ? '<a class="destra" href="#/fatto?servizio=' + sv.id + '">Tutto</a>' : '') +
     (ev.length ? ev.slice(0, n).map(rigaDiarioEvento).join('') : '<p class="empty">Ancora niente.</p>');
 }
 function scadenzeServizio(sv, testoNuova = 'Ricordamelo regolarmente') {
@@ -2390,8 +2498,8 @@ function vSemplice(sv) {
   let h = testaServizio(sv) + '<main class="pad">' +
     '<a class="btn btn-primary" href="#/segna?servizio=' + sv.id + '">' + ic('check', 21, 2.6) + ' Segna fatto adesso</a>' +
     scadenzeServizio(sv) + sezione('Ultimi 12 mesi') + calendario(tutti) +
-    '<a class="btn btn-sm" href="#/fatto?servizio=' + sv.id + '">' + ic('plus', 20) + ' Aggiungi una volta passata</a>' + storicoServizio(sv);
-  return h + '</main>' + barra('servizi');
+    '<a class="btn btn-sm" href="#/gia-fatto?servizio=' + sv.id + '">' + ic('plus', 20) + ' Aggiungi una volta passata</a>' + storicoServizio(sv);
+  return h + '</main>' + barra('casa');
 }
 
 /* ---------- pagamenti */
@@ -2414,27 +2522,27 @@ function vPagamenti(sv, q) {
   if (dopo.length) h += sezione('Più avanti', dopo.length) + dopo.map(v => rigaVoce(v)).join('');
   if (dom.length) h += sezione('Si pagano da soli', dom.length) + '<p class="hint" style="margin:0 2px">Addebito in banca: non vanno pagati a mano. Basta controllare che l\'addebito ci sia.</p>' + dom.map(v => rigaVoce(v)).join('');
   const pagati = S.eventi.filter(e => e.tipo === 'pagato').sort(recenti);
-  h += sezione('Pagati di recente', null, '', '<a class="destra" href="#/diario?f=pagamenti">Tutti</a>') + (pagati.length ? pagati.slice(0, 8).map(rigaDiarioEvento).join('') : '<p class="empty">Ancora nessuno.</p>');
-  h += '<a class="btn btn-sm" href="#/fatto?servizio=' + sv.id + '">' + ic('plus', 20) + ' Aggiungi un pagamento già fatto</a>';
-  return h + '</main>' + barra('servizi');
+  h += sezione('Pagati di recente', null, '', '<a class="destra" href="#/fatto?f=pagamenti">Tutti</a>') + (pagati.length ? pagati.slice(0, 8).map(rigaDiarioEvento).join('') : '<p class="empty">Ancora nessuno.</p>');
+  h += '<a class="btn btn-sm" href="#/gia-fatto?servizio=' + sv.id + '">' + ic('plus', 20) + ' Aggiungi un pagamento già fatto</a>';
+  return h + '</main>' + barra('casa');
 }
 function vAvvisoPagamento(q) {
   const sv = servizioDiTipo('pagamenti');
-  return testata('Avviso di pagamento', { indietro: true, sub: 'Copia i dati dal foglio: a ricordartelo ci pensa l\'app.' }) +
+  return testata('Un pagamento da fare', { indietro: true, sub: 'Copia i dati dal foglio: a ricordarlo ci pensa l\'app.' }) +
     '<main class="pad"><form data-form="avviso-pagamento"' + (q.get('ospite') ? ' data-ospite="' + esc(q.get('ospite')) + '"' : '') + ' novalidate>' +
     '<div class="field"><span class="lab">Di cosa?</span>' + chipsRadio('pag', CAT_PAG, 'Luce') +
     '<div id="box-altro-pag" class="hidden"><input type="text" name="altro" maxlength="60" placeholder="es. Condominio" aria-label="Di cosa è il pagamento"></div></div>' +
-    campo('chi_emette', 'Da chi? (facoltativo)', testo('chi_emette', 'emittente', '', 'maxlength="60" placeholder="es. Enel, Generali, Studio Bianchi"')) +
-    campo('scadenza', 'Scadenza scritta sul foglio', '<input type="date" id="f-scadenza" name="scadenza">') +
-    campo('importo', 'Importo', testo('importo', 'importo', '', 'inputmode="decimal" placeholder="es. 184,50"'), 'Aiuta a riconoscerlo se ne arrivano due insieme, ed evita di pagarlo due volte.') +
-    '<div class="field"><label for="f-ospite">Riguarda un ospite? (facoltativo)</label><select name="ospite" id="f-ospite">' + opzioniOspiti(q.get('ospite') || '') + '</select></div>' +
-    '<div class="field"><div class="chips"><label><input type="checkbox" name="domiciliato"><span>Si paga da solo (addebito in banca)</span></label></div></div>' +
-    '<div class="field"><span class="lab">Chi lo paga?</span>' + chipsRadio('responsabile', RESPONSABILI, utente() === 'Rita' ? 'Rita' : 'Michele') + '</div>' +
-    '<div class="field"><span class="lab">Avvisami</span>' + chipsRadio('avviso', AVVISI.slice(0, 4), 3) + '</div>' +
-    campoFile('Foto del foglio (consigliata)') +
+    campo('scadenza', 'Quando scade?', '<input type="date" id="f-scadenza" name="scadenza">', 'È scritta sul foglio.') +
+    campo('importo', 'Quanto?', testo('importo', 'importo', '', 'inputmode="decimal" placeholder="es. 184,50"')) +
+    campoFile('Fotografa il foglio (consigliato)') +
+    altreOpzioni(campo('chi_emette', 'Da chi arriva?', testo('chi_emette', 'emittente', '', 'maxlength="60" placeholder="es. Enel, Generali, Studio Bianchi"')) +
+      '<div class="field"><label for="f-ospite">Riguarda un ospite?</label><select name="ospite" id="f-ospite">' + opzioniOspiti(q.get('ospite') || '') + '</select></div>' +
+      '<div class="field"><div class="chips"><label><input type="checkbox" name="domiciliato"><span>Si paga da solo (addebito in banca)</span></label></div></div>' +
+      '<div class="field"><span class="lab">Chi lo paga?</span>' + chipsRadio('responsabile', RESPONSABILI, 'Entrambi') + '</div>' +
+      '<div class="field"><span class="lab">Avvisami</span>' + chipsRadio('avviso', AVVISI.slice(0, 4), 3) + '</div>') +
     '<div id="box-gia" class="hidden"></div>' +
     '<input type="hidden" name="servizio" value="' + esc(sv ? sv.id : '') + '">' +
-    bottoniFine('Salva: te lo ricordo io') + '</form></main>' + barra('servizi');
+    bottoniFine('Salva: te lo ricordo io') + '</form></main>' + barra('casa');
 }
 moduli['avviso-pagamento'] = async form => {
   const fd = new FormData(form);
@@ -2486,7 +2594,7 @@ function vSpesa(sv) {
   if (presi.length) h += sezione('Già nel carrello', presi.length, 'green') + presi.map(riga).join('') +
     '<a class="btn btn-primary" href="#/spesa-fatta?servizio=' + sv.id + '">' + ic('check', 21, 2.6) + ' Spesa fatta</a>';
   h += scadenzeServizio(sv, 'Spesa fissa (es. ogni settimana)') + storicoServizio(sv, 6);
-  return h + '</main>' + barra('servizi');
+  return h + '</main>' + barra('casa');
 }
 moduli['lista-add'] = async form => {
   const fd = new FormData(form);
@@ -2523,7 +2631,7 @@ function vSpesaFatta() {
     campo('importo', 'Quanto avete speso? (facoltativo)', testo('importo', 'importo', '', 'inputmode="decimal" placeholder="es. 86,40"')) +
     campoFile('Scontrino (facoltativo)') +
     campo('nota', 'Nota (facoltativa)', testo('nota', 'nota', '', 'maxlength="200"')) +
-    bottoniFine('Salva') + '</form></main>' + barra('servizi');
+    bottoniFine('Salva') + '</form></main>' + barra('casa');
 }
 moduli['spesa-fatta'] = async form => {
   const fd = new FormData(form);
@@ -2550,7 +2658,7 @@ function vLavanderia(sv) {
     '<button class="btn btn-sm" style="width:auto" data-action="lav-rientrato" data-id="' + e.id + '">Rientrato</button></div>').join('') : '<p class="empty">Tutto rientrato.</p>');
   h += '<a class="btn btn-sm" href="#/elenco/' + sv.id + '/capi">' + ic('edit', 20) + ' Modifica l\'elenco dei capi</a>';
   h += scadenzeServizio(sv, 'Ritiro fisso (es. ogni martedì)') + storicoServizio(sv);
-  return h + '</main>' + barra('servizi');
+  return h + '</main>' + barra('casa');
 }
 function descCapi(e) {
   const c = (e.capi || []).filter(x => x.n > 0).map(x => x.n + ' ' + x.c.toLowerCase());
@@ -2568,7 +2676,7 @@ function vLavanderiaConsegna(q) {
     '<div class="field"><label for="f-ospite">Di chi?</label><select name="ospite" id="f-ospite">' + opzioniOspiti('', 'Della casa') + '</select></div>' +
     '<div class="field"><span class="lab">Dove?</span>' + chipsRadio('dove', [['fuori', 'Lavanderia esterna'], ['casa', 'Lavatrice di casa']], 'fuori') + '<span class="hint">Se va in lavanderia esterna, resta "fuori" finché non segni che è rientrato.</span></div>' +
     campo('nota', 'Nota (facoltativa)', testo('nota', 'nota', '', 'maxlength="200"')) +
-    bottoniFine('Salva') + '</form></main>' + barra('servizi');
+    bottoniFine('Salva') + '</form></main>' + barra('casa');
 }
 moduli.lavanderia = async form => {
   const fd = new FormData(form);
@@ -2611,7 +2719,7 @@ function vPulizie(sv) {
   }).join('');
   h += '<a class="btn btn-sm" href="#/elenco/' + sv.id + '/zone">' + ic('edit', 20) + ' Modifica stanze e zone</a>';
   h += scadenzeServizio(sv, 'Pulizia periodica (es. vetri ogni mese)') + storicoServizio(sv);
-  return h + '</main>' + barra('servizi');
+  return h + '</main>' + barra('casa');
 }
 azioni['pulizia-fatta'] = async el => {
   const e = { id: uid(), tipo: 'pulizia', servizio: el.dataset.servizio, zona: el.dataset.zona, data: oggi(), ora: oraAdesso(), chi: utente(), creato: adesso() };
@@ -2633,7 +2741,7 @@ function vRifiuti(sv) {
   h += sezione('Quando passa la raccolta') + '<div class="settimana">' + ORDINE_SETTIMANA.map(g => '<div class="g ' + (g === new Date().getDay() ? 'oggi' : '') + '"><b>' + GIORNI_BREVI[g] + '</b>' + (cal[g] || []).map(t => '<span>' + esc(t) + '</span>').join('') + '</div>').join('') + '</div>';
   h += '<a class="btn btn-sm" href="#/rifiuti-calendario">' + ic('edit', 20) + ' Modifica il calendario</a>';
   h += storicoServizio(sv, 6);
-  return h + '</main>' + barra('servizi');
+  return h + '</main>' + barra('casa');
 }
 function vRifiutiCalendario() {
   const sv = servizioDiTipo('rifiuti');
@@ -2643,7 +2751,7 @@ function vRifiutiCalendario() {
   return testata('Calendario della raccolta', { indietro: true, sub: 'Per ogni giorno, cosa passa la mattina' }) + '<main class="pad"><form data-form="rifiuti-cal" data-id="' + sv.id + '" novalidate>' +
     ORDINE_SETTIMANA.map(g => '<div class="field"><span class="lab">' + esc(GIORNI_L[g][0].toUpperCase() + GIORNI_L[g].slice(1)) + '</span>' + chipsCheck('g' + g, tipi, cal[g] || []) + '</div>').join('') +
     campo('ora', 'A che ora l\'avviso, la sera prima?', '<input type="time" id="f-ora" name="ora" value="' + esc((sv.conf && sv.conf.ora) || '20:00') + '">') +
-    bottoniFine() + '</form></main>' + barra('servizi');
+    bottoniFine() + '</form></main>' + barra('casa');
 }
 moduli['rifiuti-cal'] = async form => {
   const sv = servizio(form.dataset.id);
@@ -2666,7 +2774,7 @@ function vManutenzioni(sv) {
   h += sezione('Da sistemare', aperti.length, aperti.length ? 'amber' : '') + (aperti.length ? aperti.map(rigaGuasto).join('') : '<p class="empty">Niente da sistemare.</p>');
   h += scadenzeServizio(sv, 'Controllo periodico (caldaia, estintori…)');
   h += storicoServizio(sv, 8, e => e.tipo !== 'guasto' || e.stato === 'risolto');
-  return h + '</main>' + barra('servizi');
+  return h + '</main>' + barra('casa');
 }
 const STATI_GUASTO = { aperto: 'Da sistemare', chiamato: 'Chiamato il tecnico', risolto: 'Risolto' };
 function rigaGuasto(e) {
@@ -2689,7 +2797,7 @@ function vGuasto(q) {
     campoFile('Foto (facoltativa)') + bottoniFine() +
     (e ? '<div class="actions"><button type="button" class="btn btn-sm btn-danger" data-action="elimina-evento" data-id="' + e.id + '">Elimina</button></div>' : '') + '</form>';
   if (docs.length) h += sezione('Foto e documenti') + docs.map(rigaDoc).join('');
-  return h + '</main>' + barra('servizi');
+  return h + '</main>' + barra('casa');
 }
 moduli.guasto = async form => {
   const fd = new FormData(form);
@@ -2706,7 +2814,7 @@ moduli.guasto = async form => {
   await salvaFileDelModulo(form, { nome: 'Guasto: ' + cosa, tipo: 'Altro', eventoId: e.id, data: oggi() });
   dopoModifica();
   avvisa(statoG === 'risolto' ? 'Risolto!' : vecchio ? 'Aggiornato' : 'Guasto segnalato');
-  vai(form.dataset.servizio ? '#/servizio/' + form.dataset.servizio : '#/servizi', true);
+  vai(form.dataset.servizio ? '#/servizio/' + form.dataset.servizio : '#/casa', true);
 };
 azioni['elimina-evento'] = async el => {
   const e = evento(el.dataset.id);
@@ -2731,7 +2839,7 @@ function vTrasporti(sv) {
   h += '<a class="btn btn-primary" href="#/trasporto?servizio=' + sv.id + '">' + ic('plus', 21) + ' Nuovo accompagnamento</a>';
   h += sezione('In programma', p.length) + (p.length ? p.map(x => x.tipo === 'visita' ? rigaVisita(x.v) : rigaTrasporto(x.e)).join('') : '<p class="empty">Le visite con "chi accompagna" compaiono qui da sole.</p>');
   h += scadenzeServizio(sv, 'Scadenze del mezzo (bollo, revisione, assicurazione)') + storicoServizio(sv, 8, e => e.tipo !== 'trasporto' || e.fatto);
-  return h + '</main>' + barra('servizi');
+  return h + '</main>' + barra('casa');
 }
 function vTrasporto(q) {
   const e = q.get('id') ? evento(q.get('id')) : null;
@@ -2746,7 +2854,7 @@ function vTrasporto(q) {
     '<div class="field"><span class="lab">Chi accompagna?</span>' + chipsRadio('accompagna', ['Rita', 'Michele', 'Da decidere'], e ? e.accompagna : 'Da decidere') + '</div>' +
     '<div class="field"><span class="lab">Con cosa?</span>' + chipsRadio('mezzo', ['Pulmino', 'Auto', 'Ambulanza', 'Mezzi pubblici', 'A piedi'], e ? e.mezzo : 'Pulmino') + '</div>' +
     campo('nota', 'Note (facoltative)', testo('nota', 'nota', e ? e.nota || '' : '', 'maxlength="200"')) + bottoniFine() +
-    (e ? '<div class="actions"><button type="button" class="btn btn-sm btn-danger" data-action="elimina-evento" data-id="' + e.id + '">Elimina</button></div>' : '') + '</form></main>' + barra('servizi');
+    (e ? '<div class="actions"><button type="button" class="btn btn-sm btn-danger" data-action="elimina-evento" data-id="' + e.id + '">Elimina</button></div>' : '') + '</form></main>' + barra('casa');
 }
 moduli.trasporto = async form => {
   const fd = new FormData(form);
@@ -2796,7 +2904,7 @@ function vFarmacia(sv) {
   h += perOsp.length ? perOsp.map(([o, fs]) => '<div class="giorno-testa" style="text-transform:none">' + esc(o.nome) + '</div>' + fs.map(f => rigaFarmaco(f, { ospite: false })).join('')).join('') : '<p class="empty">Nessun farmaco inserito: si aggiungono dalla cartella di ogni ospite.</p>';
   h += '<a class="btn btn-sm" style="margin-top:12px" href="#/farmacia-conf">' + ic('gear', 20) + ' Numero della farmacia</a>';
   h += storicoServizio(sv, 6);
-  return h + '</main>' + barra('servizi');
+  return h + '</main>' + barra('casa');
 }
 function vFarmaciaConf() {
   const sv = servizioDiTipo('farmacia');
@@ -2806,7 +2914,7 @@ function vFarmaciaConf() {
     campo('nomef', 'Nome della farmacia (facoltativo)', testo('nomef', 'nome', conf.nome || '', 'maxlength="60" placeholder="es. Farmacia Centrale"')) +
     campo('tel', 'Numero WhatsApp della farmacia', '<input type="tel" id="f-tel" name="telefono" value="' + esc(conf.telefono || '') + '" placeholder="es. 333 1234567">') +
     '<div class="field"><span class="lab">Nel messaggio, gli ospiti come si chiamano?</span>' + chipsRadio('nomi', [['iniziali', 'Solo le iniziali'], ['completi', 'Nome e cognome'], ['nessuno', 'Non scriverli']], conf.nomi || 'iniziali') +
-    '<span class="hint">Il messaggio passa da WhatsApp: con le iniziali si dice il meno possibile.</span></div>' + bottoniFine() + '</form></main>' + barra('servizi');
+    '<span class="hint">Il messaggio passa da WhatsApp: con le iniziali si dice il meno possibile.</span></div>' + bottoniFine() + '</form></main>' + barra('casa');
 }
 moduli['farmacia-conf'] = async form => {
   const sv = servizio(form.dataset.id);
@@ -2832,7 +2940,7 @@ function vOrdina() {
   const ctrl = new Set(farmaciDaControllare().filter(x => (x.s.daRiordinare || x.s.finito) && !x.f.ordinatoIl).map(x => x.f.id));
   const tutti = S.farmaci.filter(f => farmacoAttivo(f, oggi())).sort((a, b) => (ctrl.has(b.id) - ctrl.has(a.id)) || perNome(a, b));
   let h = testata('Ordina su WhatsApp', { indietro: true, sub: (sv.conf && sv.conf.nome) || 'Farmacia' }) + '<main class="pad">';
-  if (!(sv.conf && sv.conf.telefono)) return h + banner('amber', 'Prima inserisci il numero della farmacia.') + '<a class="btn btn-primary" href="#/farmacia-conf">Inserisci il numero</a></main>' + barra('servizi');
+  if (!(sv.conf && sv.conf.telefono)) return h + banner('amber', 'Prima inserisci il numero della farmacia.') + '<a class="btn btn-primary" href="#/farmacia-conf">Inserisci il numero</a></main>' + barra('casa');
   h += '<form data-form="ordina" novalidate><div class="field"><span class="lab">Cosa ordinare?</span><div class="group">' + tutti.map(f => {
     const o = ospite(f.ospiteId);
     return '<label class="gi"><input type="checkbox" name="f" value="' + f.id + '"' + (ctrl.has(f.id) ? ' checked' : '') + ' style="width:24px;height:24px;flex:none"><span class="row-main"><span class="row-title">' + esc(f.nome) + '</span><span class="row-meta">' + esc((o ? o.nome + ' · ' : '') + (ctrl.has(f.id) ? 'da ordinare' : 'scorta per ' + plur(scorta(f).giorni || 0, 'giorno', 'giorni'))) + '</span></span>' +
@@ -2840,7 +2948,7 @@ function vOrdina() {
   }).join('') + '</div><span class="hint">Il numero a destra sono le confezioni.</span><p class="err" id="err-f"></p></div>' +
     campo('nota', 'Altro da scrivere (facoltativo)', testo('nota', 'nota', '', 'maxlength="200" placeholder="es. passiamo a ritirare domani mattina"')) +
     '<div class="actions"><button class="btn btn-primary" type="submit">' + ic('chat', 21) + ' Apri WhatsApp con il messaggio</button><button class="btn" type="button" data-action="indietro">Annulla</button></div></form>';
-  return h + '</main>' + barra('servizi');
+  return h + '</main>' + barra('casa');
 }
 moduli.ordina = async form => {
   const sv = servizioDiTipo('farmacia');
@@ -2863,7 +2971,7 @@ moduli.ordina = async form => {
   vai('#/servizio/' + sv.id, true);
 };
 
-/* ========================================================== Diario */
+/* ================================================ Fatto e Note */
 
 function testoEvento(e) {
   const v = e.voceId ? voce(e.voceId) : null;
@@ -2897,10 +3005,11 @@ function rigaDiarioEvento(e) {
   return rigaDiario(Object.assign(t, { ora: e.ora, meta: (giorniTra(e.data, oggi()) ? fmt(e.data) + ' · ' : '') + t.meta }));
 }
 
-function vociDiario(filtroOspite, filtroServizio) {
+// Solo le cose fatte (le note stanno nella loro sezione).
+function vociFatto(filtroOspite, filtroServizio) {
   const out = [];
   for (const e of S.eventi) {
-    if (e.tipo === 'trasporto' && !e.fatto) continue;
+    if (e.tipo === 'nota' || (e.tipo === 'trasporto' && !e.fatto) || (e.tipo === 'guasto' && e.stato !== 'risolto')) continue;
     if (filtroOspite && e.ospiteId !== filtroOspite) continue;
     if (filtroServizio && sid(e.servizio) !== filtroServizio) continue;
     out.push(Object.assign(testoEvento(e), { data: e.data, ora: e.ora, ord: (e.data || '') + (e.ora || '') + (e.creato || '') }));
@@ -2924,7 +3033,7 @@ function vociDiario(filtroOspite, filtroServizio) {
     const nd = xs.filter(x => x.esito === 'nondato');
     const chi = [...new Set(xs.map(x => x.chi).filter(Boolean))].join(', ');
     const nomi = nd.map(x => ((farmaco(x.farmacoId) || {}).nome || '') + (filtroOspite ? '' : ' a ' + ((ospite(x.ospiteId) || {}).nome || '')) + ' (' + (x.motivo || '').toLowerCase() + ')');
-    out.push({ icona: 'pill', cls: nd.length ? 'amber' : 'plum', titolo: 'Terapia delle ' + fmtOra(ora) + ': ' + plur(xs.length - nd.length, 'farmaco dato', 'farmaci dati') + (nd.length ? ', ' + nd.length + ' non ' + (nd.length === 1 ? 'dato' : 'dati') : ''),
+    out.push({ icona: 'pill', cls: nd.length ? 'amber' : 'plum', titolo: 'Medicine delle ' + fmtOra(ora) + ': ' + plur(xs.length - nd.length, 'data', 'date') + (nd.length ? ', ' + nd.length + ' non ' + (nd.length === 1 ? 'data' : 'date') : ''),
       meta: (nomi.length ? nomi.join(', ') + ' · ' : '') + (chi ? 'segnato da ' + chi : ''), extra: xs.map(x => (farmaco(x.farmacoId) || {}).nome + ' ' + ((ospite(x.ospiteId) || {}).nome || '')).join(' '),
       f: 'terapia', data: d, ora, ord: d + ora, href: '#/giro/' + d + '/' + ora.replace(':', '') + (filtroOspite ? '?ospite=' + filtroOspite : '') });
   }
@@ -2941,44 +3050,64 @@ function vociDiario(filtroOspite, filtroServizio) {
   return out;
 }
 
-const FILTRI_DIARIO = [['', 'Tutto'], ['note', 'Note'], ['terapia', 'Terapia'], ['salute', 'Visite e misure'], ['pagamenti', 'Pagamenti'], ['servizi', 'Casa']];
-function vDiario(q) {
-  const f = q.get('f') || '';
+const FILTRI_FATTO = [['', 'Tutto'], ['terapia', 'Medicine'], ['salute', 'Visite e misure'], ['pagamenti', 'Pagamenti'], ['servizi', 'Casa']];
+function vStorico(q) {
+  const f = q.get('f') === 'casa' ? 'servizi' : q.get('f') || '';
   const filtroOspite = q.get('ospite') || '';
   const filtroServizio = q.get('servizio') || '';
   const o = ospite(filtroOspite), sv = servizio(filtroServizio);
-  const base = '#/diario?' + (filtroOspite ? 'ospite=' + filtroOspite + '&' : '') + (filtroServizio ? 'servizio=' + filtroServizio + '&' : '');
-  let items = vociDiario(filtroOspite, sv ? sv.id : '').filter(x => !f || x.f === f).filter(x => x.data && x.data <= piuGiorni(oggi(), 1));
+  const base = '#/fatto?' + (filtroOspite ? 'ospite=' + filtroOspite + '&' : '') + (filtroServizio ? 'servizio=' + filtroServizio + '&' : '');
+  let items = vociFatto(filtroOspite, sv ? sv.id : '').filter(x => !f || x.f === f).filter(x => x.data && x.data <= oggi());
   items.sort((a, b) => (b.ord || '').localeCompare(a.ord || ''));
   const troppi = items.length > 1500;
   items = items.slice(0, 1500);
-  const destra = '<a class="icon-btn primary" href="#/nota' + (filtroOspite ? '?ospite=' + filtroOspite : '') + '" aria-label="Scrivi una nota">' + ic('plus') + '</a>';
-  let h = testata(o ? 'Diario di ' + o.nome : sv ? sv.nome + ': diario' : 'Diario', { sub: 'Cosa è stato fatto e cosa è successo', destra, indietro: !!(o || sv) }) + '<main class="pad">';
-  h += '<a class="btn btn-primary" href="#/nota' + (filtroOspite ? '?ospite=' + filtroOspite : '') + '">' + ic('edit', 21) + ' Scrivi nel diario</a>';
-  h += ricercaBox('Cerca: una parola, un nome, una cosa');
-  if (!sv) h += '<div class="seg">' + FILTRI_DIARIO.map(([k, l]) => '<a class="' + (k === f ? 'on' : '') + '" href="' + base + (k ? 'f=' + k : '') + '">' + l + '</a>').join('') + '</div>';
+  let h = testata(o ? 'Fatto per ' + o.nome : sv ? 'Fatto: ' + sv.nome : 'Fatto', { sub: 'Cosa è stato fatto, giorno per giorno', indietro: !!(o || sv) }) + '<main class="pad">';
+  h += ricercaBox('Cerca: lenzuola, luce, un nome…');
+  if (!sv) h += '<div class="seg">' + FILTRI_FATTO.map(([k, l]) => '<a class="' + (k === f ? 'on' : '') + '" href="' + base + (k ? 'f=' + k : '') + '">' + l + '</a>').join('') + '</div>';
   let giorno = '', n = 0;
   for (const it of items) {
     if (it.data !== giorno) { if (giorno) h += '</div>'; giorno = it.data; n++; h += '<div data-gruppo="g' + n + '"><div class="giorno-testa">' + esc(fmtGiorno(giorno)) + '</div>'; }
     h += rigaDiario(it, 'g' + n);
   }
   if (giorno) h += '</div>';
-  if (!items.length) h += '<p class="empty">Ancora niente qui. Quando segnate qualcosa, compare nel diario.</p>';
+  if (!items.length) h += '<p class="empty">Ancora niente. Quando segnate qualcosa come fatto, compare qui.</p>';
   h += '<p class="empty hidden" id="nessun-risultato">Nessun risultato. Prova con un\'altra parola.</p>';
   if (troppi) h += '<p class="hint">Sono mostrate le 1500 cose più recenti.</p>';
-  return h + '</main>' + barra('diario');
+  h += '<a class="btn btn-sm" style="margin-top:14px" href="#/gia-fatto">' + ic('plus', 20) + ' Aggiungi una cosa fatta nei giorni passati</a>';
+  return h + '</main>' + barra(o || sv ? '' : 'fatto');
+}
+
+function vNote(q) {
+  const filtro = q.get('ospite') || '';
+  const o = ospite(filtro);
+  const note = S.eventi.filter(e => e.tipo === 'nota' && (!filtro || e.ospiteId === filtro)).sort(recenti);
+  let h = testata(o ? 'Note su ' + o.nome : 'Note', { sub: 'Appunti, fatti, cose da ricordare', indietro: !!o }) + '<main class="pad">';
+  h += '<a class="btn btn-primary" href="#/nota' + (filtro ? '?ospite=' + filtro : '') + '">' + ic('plus', 22) + ' Scrivi una nota</a>';
+  if (note.length > 4) h += ricercaBox('Cerca nelle note');
+  if (!o) {
+    const conNote = ospitiAttivi().filter(x => S.eventi.some(e => e.tipo === 'nota' && e.ospiteId === x.id));
+    if (conNote.length) h += '<div class="seg"><a class="on" href="#/note">Tutte</a>' + conNote.map(x => '<a href="#/note?ospite=' + x.id + '">' + esc(x.nome.split(' ')[0]) + '</a>').join('') + '</div>';
+  }
+  h += note.length ? note.map(e => {
+    const os = ospite(e.ospiteId);
+    return '<a class="nota-card" href="#/nota?id=' + e.id + '" data-cerca="' + esc(semplifica(e.testo + ' ' + (os ? os.nome : '') + ' ' + (e.chi || ''))) + '">' +
+      (os && !o ? '<span class="tag plum" style="margin-bottom:6px">' + esc(os.nome) + '</span>' : '') +
+      '<div class="testo">' + esc(e.testo) + '</div><div class="chi">' + esc((e.chi || '—') + ' · ' + fmtGiorno(e.data).toLowerCase() + (e.ora ? ' alle ' + fmtOra(e.ora) : '')) + '</div></a>';
+  }).join('') : '<p class="empty">Nessuna nota. Scrivi qui le cose da ricordare o da far sapere agli altri.</p>';
+  h += '<p class="empty hidden" id="nessun-risultato">Nessuna nota trovata.</p>';
+  return h + '</main>' + barra(o ? '' : 'note');
 }
 
 function vNota(q) {
   const e = q.get('id') ? evento(q.get('id')) : null;
   if (q.get('id') && !e) return nonTrovato();
-  return testata(e ? 'Nota' : 'Scrivi nel diario', { indietro: true, sub: e ? 'Scritta da ' + (e.chi || '—') + ' · ' + fmtGiorno(e.data) : 'Un fatto accaduto, una cosa da ricordare' }) +
+  return testata(e ? 'Nota' : 'Scrivi una nota', { indietro: true, sub: e ? 'Scritta da ' + (e.chi || '—') + ' · ' + fmtGiorno(e.data) : 'Un fatto accaduto, una cosa da ricordare' }) +
     '<main class="pad"><form data-form="nota"' + (e ? ' data-id="' + e.id + '"' : '') + ' novalidate>' +
     campo('testo', 'Cosa vuoi scrivere?', '<textarea id="f-testo" name="testo" maxlength="4000" style="min-height:160px" placeholder="es. Giovanni oggi ha mangiato poco; ha chiamato la figlia di Maria">' + esc(e ? e.testo : '') + '</textarea>') +
     '<div class="field"><label for="f-ospite">Riguarda un ospite? (facoltativo)</label><select name="ospite" id="f-ospite">' + opzioniOspiti(e ? e.ospiteId : q.get('ospite') || '') + '</select></div>' +
-    '<div class="two"><div class="field"><label for="f-data">Giorno</label><input type="date" id="f-data" name="data" value="' + esc(e ? e.data : oggi()) + '" max="' + oggi() + '"></div>' +
-    '<div class="field"><label for="f-ora">Ora</label><input type="time" id="f-ora" name="ora" value="' + esc(e ? e.ora || '' : oraAdesso()) + '"></div></div>' +
-    bottoniFine() + (e ? '<div class="actions"><button type="button" class="btn btn-sm btn-danger" data-action="elimina-evento" data-id="' + e.id + '">Elimina la nota</button></div>' : '') + '</form></main>' + barra('diario');
+    altreOpzioni('<div class="two"><div class="field"><label for="f-data">Giorno</label><input type="date" id="f-data" name="data" value="' + esc(e ? e.data : oggi()) + '" max="' + oggi() + '"></div>' +
+    '<div class="field"><label for="f-ora">Ora</label><input type="time" id="f-ora" name="ora" value="' + esc(e ? e.ora || '' : oraAdesso()) + '"></div></div>', 'Un altro giorno o un\'altra ora') +
+    bottoniFine() + (e ? '<div class="actions"><button type="button" class="btn btn-sm btn-danger" data-action="elimina-evento" data-id="' + e.id + '">Elimina la nota</button></div>' : '') + '</form></main>' + barra('note');
 }
 moduli.nota = async form => {
   const fd = new FormData(form);
@@ -2991,7 +3120,7 @@ moduli.nota = async form => {
   });
   if (vecchia && vecchia.testo !== t) e.modificataDa = utente();
   await salva('eventi', e);
-  avvisa(vecchia ? 'Nota aggiornata' : 'Scritto nel diario');
+  avvisa(vecchia ? 'Nota aggiornata' : 'Nota salvata');
   indietro();
 };
 
@@ -3011,13 +3140,13 @@ function vArchivio(q) {
       const n = S.documenti.filter(d => d.ospiteId === o.id).length;
       return '<a class="row" href="#/ospite/' + o.id + '/documenti"><span class="avatar">' + esc(iniziali(o.nome)) + '</span><span class="row-main"><span class="row-title">' + esc(o.nome) + '</span><span class="row-meta">' + plur(n, 'documento', 'documenti') + '</span></span>' + ic('chev', 20) + '</a>';
     }).join('');
-    return h + '</main>' + barra('archivio');
+    return h + '</main>' + barra('casa');
   }
   const lista = ordina(vista === 'smistare' ? daSmistare : vista === 'casa' ? S.documenti.filter(d => !d.ospiteId) : S.documenti);
   h += ricercaBox('Cerca un documento');
   h += lista.length ? lista.map(rigaDoc).join('') : '<p class="empty">' + (vista === 'smistare' ? 'Niente da smistare.' : 'Ancora nessun documento.') + '</p>';
   h += '<p class="empty hidden" id="nessun-risultato">Nessun documento trovato.</p>';
-  return h + '</main>' + barra('archivio');
+  return h + '</main>' + barra('casa');
 }
 
 function vDoc(id) {
@@ -3052,7 +3181,7 @@ function vDoc(id) {
     '<div class="field"><label for="f-ospite">Ospite</label><select name="ospite" id="f-ospite">' + opzioniOspiti(d.ospiteId, '— nessuno (della casa) —', true) + '</select></div>' +
     '<div class="actions" style="margin-top:12px"><button class="btn btn-sm btn-primary" type="submit">Salva</button></div></form>' +
     '<div class="actions"><button class="btn btn-sm btn-danger" data-action="elimina-doc" data-id="' + d.id + '">Elimina documento</button></div>';
-  return h + '</main>' + barra('archivio');
+  return h + '</main>' + barra('casa');
 }
 
 function vFormDoc(q) {
@@ -3069,11 +3198,12 @@ function vFormDoc(q) {
     '<label class="btn">' + ic('doc', 21) + ' Scegli file<input type="file" name="file" accept="image/*,application/pdf"></label></div>' +
     '<span class="hint" data-nomefile>Nessun file scelto. Dal PC puoi anche trascinarlo qui.</span><p class="err" id="err-file"></p></div>' +
     campo('nome', 'Nome', testo('nome', 'nome', '', 'maxlength="80" placeholder="es. Referto emocromo" autocomplete="off"')) +
-    '<div class="field"><label for="f-tipo">Tipo</label>' + selezione('tipo', TIPI_DOC, vis ? 'Referto' : v && ePagamento(v) ? 'Ricevuta' : osp ? 'Referto' : 'Altro') + '</div>' +
     '<div class="field"><label for="f-ospite">Di quale ospite?</label><select name="ospite" id="f-ospite">' + opzioniOspiti(osp || (v ? v.ospiteId : vis ? vis.ospiteId : ''), '— nessuno (della casa) —') + '</select></div>' +
-    '<div class="field"><label for="f-data">Data del documento</label><input type="date" id="f-data" name="data" value="' + (vis ? vis.data : oggi()) + '"></div>' +
-    '<div class="field"><div class="chips"><label><input type="checkbox" name="smistare"><span>Lo sistemo dopo (va tra "da smistare")</span></label></div></div>' +
-    bottoniFine('Salva nell\'archivio') + '</form></main>' + barra('archivio');
+    altreOpzioni(
+  '<div class="field"><label for="f-tipo">Tipo</label>' + selezione('tipo', TIPI_DOC, vis ? 'Referto' : v && ePagamento(v) ? 'Ricevuta' : osp ? 'Referto' : 'Altro') + '</div>' +
+  '<div class="field"><label for="f-data">Data del documento</label><input type="date" id="f-data" name="data" value="' + (vis ? vis.data : oggi()) + '"></div>' +
+    '<div class="field"><div class="chips"><label><input type="checkbox" name="smistare"><span>Lo sistemo dopo (va tra "da smistare")</span></label></div></div>', 'Tipo, data, sistemarlo dopo') +
+    bottoniFine('Salva nell\'archivio') + '</form></main>' + barra('casa');
 }
 moduli.doc = async form => {
   const fd = new FormData(form);
@@ -3124,18 +3254,20 @@ function vImpostazioni() {
   h += '<div class="box"><h3>Notifiche</h3><p class="hint" style="margin:0 0 10px">Su questo dispositivo: <b>' + esc(statoNotifiche()) + '</b>. ' +
     (collegato() ? 'Arrivano agli orari della terapia, la mattina e la sera prima dei rifiuti.' : 'Senza sincronizzazione il riepilogo arriva quando decide il telefono; collegando il dispositivo arriva all\'orario giusto.') + '</p>' +
     '<div class="two"><button class="btn btn-sm" data-action="attiva-notifiche">Attiva</button><button class="btn btn-sm" data-action="prova-notifica">Prova</button></div></div>';
-  h += '<div class="box"><h3>PIN dell\'app</h3>';
-  if (!pinOk) h += '<p class="hint" style="margin:0">Il PIN funziona solo quando l\'app è aperta dal suo indirizzo sicuro (https).</p>';
-  else if (S.kv.pin) h += '<p class="hint" style="margin:0 0 10px">Il PIN è attivo: l\'app lo chiede all\'apertura e dopo 5 minuti in background.</p><button class="btn btn-sm" data-action="togli-pin">Togli il PIN</button>';
-  else h += '<p class="hint" style="margin:0 0 6px">Impedisce a chi prende il telefono di aprire l\'app. La protezione principale resta il blocco schermo del telefono.</p>' +
+  let altre = '';
+  altre += '<div class="box"><h3>PIN dell\'app</h3>';
+  if (!pinOk) altre += '<p class="hint" style="margin:0">Il PIN funziona solo quando l\'app è aperta dal suo indirizzo sicuro (https).</p>';
+  else if (S.kv.pin) altre += '<p class="hint" style="margin:0 0 10px">Il PIN è attivo: l\'app lo chiede all\'apertura e dopo 5 minuti in background.</p><button class="btn btn-sm" data-action="togli-pin">Togli il PIN</button>';
+  else altre += '<p class="hint" style="margin:0 0 6px">Impedisce a chi prende il telefono di aprire l\'app. La protezione principale resta il blocco schermo del telefono.</p>' +
     '<form data-form="imposta-pin" novalidate>' + campo('nuovopin', 'Nuovo PIN (da 4 a 8 cifre)', '<input type="password" id="f-nuovopin" name="pin" inputmode="numeric" autocomplete="off">') +
     '<div class="actions" style="margin-top:10px"><button class="btn btn-sm btn-primary" type="submit">Attiva il PIN</button></div></form>';
-  h += '</div>';
-  h += '<div class="box"><h3>Copia di sicurezza</h3><p class="hint" style="margin:0 0 10px">Ultima copia: <b>' + esc(S.kv.ultimoBackup ? fmtLungo(S.kv.ultimoBackup) : 'mai') + '</b>. Il file finisce nella cartella Download: tienine una copia sul PC della comunità.</p>' +
+  altre += '</div>';
+  altre += '<div class="box"><h3>Copia di sicurezza</h3><p class="hint" style="margin:0 0 10px">Ultima copia: <b>' + esc(S.kv.ultimoBackup ? fmtLungo(S.kv.ultimoBackup) : 'mai') + '</b>. Il file finisce nella cartella Download: tienine una copia sul PC della comunità.</p>' +
     '<div class="actions" style="margin-top:0"><button class="btn btn-sm btn-primary" data-action="esporta">Salva una copia</button>' +
     '<label class="btn btn-sm" style="position:relative;overflow:hidden">Ripristina da una copia<input type="file" name="importa" accept="application/json,.json" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label></div></div>';
-  if (!collegato()) h += '<div class="box"><h3>Dati di esempio</h3><p class="hint" style="margin:0 0 10px">Ospiti, terapie, scadenze inventate, per provare.</p><button class="btn btn-sm" data-action="carica-esempio">Carica dati di esempio</button></div>';
-  h += '<div class="box"><h3>Cancella tutto</h3><p class="hint" style="margin:0 0 10px">Toglie tutti i dati da questo telefono. Prima salva una copia.</p><button class="btn btn-sm btn-danger" data-action="cancella-tutto">Cancella tutti i dati</button></div>';
+  if (!collegato()) altre += '<div class="box"><h3>Dati di esempio</h3><p class="hint" style="margin:0 0 10px">Ospiti, terapie, scadenze inventate, per provare.</p><button class="btn btn-sm" data-action="carica-esempio">Carica dati di esempio</button></div>';
+  altre += '<div class="box"><h3>Cancella tutto</h3><p class="hint" style="margin:0 0 10px">Toglie tutti i dati da questo telefono. Prima salva una copia.</p><button class="btn btn-sm btn-danger" data-action="cancella-tutto">Cancella tutti i dati</button></div>';
+  h += altreOpzioni('<div style="display:flex;flex-direction:column;gap:9px">' + altre + '</div>', 'Altre impostazioni: PIN, copia di sicurezza, dati di prova');
   h += '<div style="text-align:center;margin:16px 0 4px">' + effieSvg(44) + '</div><p class="hint" style="text-align:center;margin:0 0 10px">Kenosis · versione ' + VERSIONE + '<br>' +
     (collegato() ? 'I dati sono su questo dispositivo e, cifrati, nello spazio condiviso.' : 'I dati restano solo su questo dispositivo.') + '</p>';
   return h + '</main>' + barra('oggi');
@@ -3763,7 +3895,11 @@ const VISTE = {
   esito: p => vEsitoVisita(p[1]),
   misura: (p, q) => vMisura(q),
   parametro: p => vParametro(p[1], p[2]),
+  casa: (p, q) => vServizi(q),
   servizi: (p, q) => vServizi(q),
+  prossimi: () => vProssimi(),
+  'per-ospite': (p, q) => vPerOspite(q),
+  note: (p, q) => vNote(q),
   servizio: (p, q) => vServizio(p[1], q),
   'servizio-imp': (p, q) => vServizioImp(q),
   elenco: p => vElenco(p[1], p[2]),
@@ -3779,14 +3915,15 @@ const VISTE = {
   voce: p => vVoce(p[1]),
   'nuova-voce': (p, q) => vFormVoce(q),
   segna: (p, q) => vSegna(q),
-  fatto: (p, q) => vFatto(q),
-  diario: (p, q) => vDiario(q),
+  fatto: (p, q) => vStorico(q),
+  'gia-fatto': (p, q) => vGiaFatto(q),
+  diario: (p, q) => vStorico(q),
   nota: (p, q) => vNota(q),
   archivio: (p, q) => vArchivio(q),
   doc: p => vDoc(p[1]),
   'nuovo-doc': (p, q) => vFormDoc(q)
 };
-const PRINCIPALI = ['', 'oggi', 'ospiti', 'ospite', 'servizi', 'servizio', 'diario', 'archivio', 'scadenze', 'farmaco', 'visita', 'voce'];
+const PRINCIPALI = ['', 'oggi', 'ospiti', 'ospite', 'casa', 'servizi', 'servizio', 'fatto', 'archivio', 'scadenze', 'farmaco', 'visita', 'voce', 'prossimi'];
 
 let ultimaRotta = '';
 let formSporco = false;   // qualcuno sta scrivendo: non ridisegnare sotto le dita

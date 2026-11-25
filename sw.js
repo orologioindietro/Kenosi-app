@@ -4,7 +4,7 @@
       dal servizio online arriva solo un "campanello" vuoto, all'ora giusta.
       Senza sincronizzazione, Chrome lo sveglia una o due volte al giorno. */
 
-const CACHE = 'kenosis-v4';
+const CACHE = 'kenosis-v5';
 const FILE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', e => {
@@ -79,7 +79,7 @@ async function mostra(db, lista, mostrati) {
   // il più importante prima: terapia, poi solleciti, poi il resto
   const peso = { t: 0, s: 1, v: 2, m: 3, r: 4 };
   lista.sort((x, y) => (peso[x.x] ?? 9) - (peso[y.x] ?? 9));
-  const titolo = lista[0].x === 't' || lista[0].x === 's' ? 'Kenosis · Terapia' : 'Kenosis';
+  const titolo = lista[0].x === 't' || lista[0].x === 's' ? 'Kenosis · Medicine' : 'Kenosis';
   const corpo = lista.map(m => m.testo).join('\n');
   await self.registration.showNotification(titolo, {
     body: corpo, icon: 'icon-192.png', badge: 'icon-192.png', tag: 'kenosis-' + lista[0].x, renotify: true,
