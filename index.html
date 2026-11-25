@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#F5F1EA">
+<meta name="theme-color" content="#F6F2EA">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Kenosis">
 <title>Kenosis</title>
@@ -13,18 +13,20 @@
 <style>
 /* ---------- tema: tutti i colori sono qui, per cambiarli basta questo blocco ---------- */
 :root{
-  --ground:#F5F1EA; --card:#FFFFFF; --ink:#1F2523; --ink2:#5E655F; --line:#E4DED3; --line2:#EEE9E0; --btnline:#CEC5B6;
-  --green:#245A52; --greenbg:#E2EEEA; --greenink:#1B463F; --greenline:#C3DCD4;
-  --rust:#AE4524; --rustbg:#FCEFE9; --rustline:#F1D2C4; --rustink:#7A3A22;
-  --amber:#6B4708; --amberbg:#FBF1DE; --amberline:#ECDAB3;
-  --plum:#5A3A6B; --plumbg:#F0E8F4;
-  --effie:#D07A50; --effie2:#F3CFB1; --acqua:#5DA9CF;
+  /* colori di kasakenosis.it (gli stessi di Effie): legno, crema, acqua */
+  --ground:#F6F2EA; --card:#FFFDF9; --ink:#2B1B0B; --ink2:#7A6A58; --line:#E6DCCD; --line2:#F0E8DC; --btnline:#D9C9B5;
+  --green:#4A2C0C; --greenbg:#E4F3FB; --greenink:#155E86; --greenline:#CFE7F5;
+  --acqua:#2F9FD8;
+  --ok:#2F7D4F; --okbg:#E5F4EA; --okline:#BFE3CC;
+  --rust:#B5531C; --rustbg:#FDF0E7; --rustline:#F2D3BE; --rustink:#7E3A14;
+  --amber:#6E5212; --amberbg:#FFF8E6; --amberline:#F2E2B8;
+  --plum:#7A4A1C; --plumbg:#F3E6D6;
   --col:600px; --r:16px;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--ground);color:var(--ink);font:17px/1.42 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
-a{color:var(--green)}
+a{color:var(--greenink)}
 button{font:inherit;color:inherit}
 #app{max-width:var(--col);margin:0 auto;min-height:100vh;padding-bottom:calc(160px + env(safe-area-inset-bottom))}
 body.grande #app,body.grande nav.bottom .in,body.grande .fab,body.grande #toast{zoom:1.14}
@@ -47,31 +49,31 @@ body.grande #app,body.grande nav.bottom .in,body.grande .fab,body.grande #toast{
 .sec h2{margin:0;font-size:14px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--ink2)}
 .sec.rust h2{color:var(--rust)}
 .sec.amber h2{color:var(--amber)}
-.sec.green h2{color:var(--green)}
+.sec.green h2{color:var(--ok)}
 .sec .destra{margin-left:auto;font-size:15px;font-weight:700;text-decoration:none}
 .badge{font-size:12px;font-weight:800;border-radius:10px;padding:2px 8px;background:var(--ink2);color:#fff}
 .badge.rust{background:var(--rust)}
 .badge.amber{background:var(--amber)}
-.badge.green{background:var(--green)}
+.badge.green{background:var(--ok)}
 
 /* righe */
 .row{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);min-height:66px;text-decoration:none;color:inherit;width:100%;text-align:left;font:inherit}
 button.row{cursor:pointer}
 .row-rust{background:var(--rustbg);border-color:var(--rustline)}
 .row-amber{background:var(--amberbg);border-color:var(--amberline)}
-.row-ok{background:var(--greenbg);border-color:var(--greenline)}
+.row-ok{background:var(--okbg);border-color:var(--okline)}
 .row-done{opacity:.72}
 .row-main{flex:1;min-width:0;text-decoration:none;color:inherit;display:block}
 .row-title{display:block;font-size:17px;font-weight:650;line-height:1.28;color:var(--ink);overflow-wrap:anywhere}
 .row-meta{display:block;font-size:14px;color:var(--ink2);margin-top:3px;line-height:1.35}
 .row-rust .row-meta{color:var(--rustink)}
 .row-amber .row-meta{color:var(--amber)}
-.row-ok .row-meta{color:var(--greenink)}
+.row-ok .row-meta{color:var(--ok)}
 .row-when{font-size:14px;font-weight:700;color:var(--ink2);flex:none;text-align:right;max-width:38%}
 .t-rust{color:var(--rust)!important}
 .t-green{color:var(--green)!important}
 .check{width:48px;height:48px;flex:none;border-radius:24px;border:1.5px solid var(--btnline);background:var(--card);color:var(--green);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0;text-decoration:none}
-.check.on{background:var(--green);border-color:var(--green);color:#fff}
+.check.on{background:var(--ok);border-color:var(--ok);color:#fff}
 .avatar{width:46px;height:46px;flex:none;border-radius:23px;background:var(--plumbg);color:var(--plum);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800}
 .dicon{width:42px;height:42px;flex:none;border-radius:12px;background:var(--greenbg);color:var(--greenink);display:flex;align-items:center;justify-content:center}
 .dicon.rust{background:var(--rustbg);color:var(--rust)}
@@ -111,13 +113,13 @@ button.row{cursor:pointer}
 .chips input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;width:100%;height:100%}
 .chips span{display:inline-flex;align-items:center;min-height:48px;padding:0 15px;border-radius:12px;border:1px solid var(--btnline);background:var(--card);font-size:16px;font-weight:650}
 .chips input:checked+span{background:var(--ink);border-color:var(--ink);color:#fff}
-.chips input:focus-visible+span{outline:3px solid var(--green);outline-offset:2px}
+.chips input:focus-visible+span{outline:3px solid var(--acqua);outline-offset:2px}
 .field{display:flex;flex-direction:column;gap:8px;margin-top:18px}
 .field>label,.field>.lab{font-size:16px;font-weight:750;color:var(--ink)}
 .hint{font-size:14px;color:var(--ink2);line-height:1.45}
 input[type=text],input[type=number],input[type=date],input[type=time],input[type=password],input[type=search],input[type=tel],select,textarea{font:inherit;font-size:17px;padding:12px 13px;border:1px solid var(--btnline);border-radius:12px;background:var(--card);color:var(--ink);width:100%;min-height:52px}
 textarea{min-height:96px;resize:vertical}
-input:focus,select:focus,textarea:focus{outline:3px solid var(--greenline);border-color:var(--green)}
+input:focus,select:focus,textarea:focus{outline:3px solid var(--greenline);border-color:var(--acqua)}
 .inline{display:flex;gap:8px;align-items:center}
 .inline>*{flex:1}
 .inline .lbl{flex:none;font-size:16px;font-weight:650}
@@ -164,7 +166,7 @@ input:focus,select:focus,textarea:focus{outline:3px solid var(--greenline);borde
 .banner svg{flex:none;margin-top:2px}
 .banner.amber{background:var(--amberbg);border-color:var(--amberline);color:var(--amber)}
 .banner.rust{background:var(--rustbg);border-color:var(--rustline);color:var(--rustink)}
-.banner.green{background:var(--greenbg);border-color:var(--greenline);color:var(--greenink)}
+.banner.green{background:var(--okbg);border-color:var(--okline);color:var(--ok)}
 .banner a{color:inherit;font-weight:800}
 .mx{margin:0 16px 8px}
 .empty{font-size:16px;color:var(--ink2);margin:4px 2px 6px}
@@ -173,15 +175,29 @@ input:focus,select:focus,textarea:focus{outline:3px solid var(--greenline);borde
 .syncline{display:block;text-align:center;font-size:14px;color:var(--ink2);margin:16px 0 2px;text-decoration:none}
 .docimg{width:100%;border-radius:14px;border:1px solid var(--line);background:#fff;display:block}
 
-/* Effie */
-.effie{display:flex;align-items:flex-end;gap:10px;margin:2px 16px 6px}
-.effie svg{flex:none}
-.bolla{position:relative;flex:1;background:var(--card);border:1px solid var(--line);border-radius:18px 18px 18px 6px;padding:12px 15px;font-size:16px;line-height:1.45}
+/* Effie (stessi movimenti del sito) */
+.effie{display:flex;align-items:flex-end;gap:8px;margin:2px 16px 6px}
+.ef-tocca{border:0;background:none;padding:0;cursor:pointer;flex:none;filter:drop-shadow(0 5px 9px rgba(60,35,10,.22))}
+.ef{display:inline-block;flex:none}
+.ef-svg{width:100%;height:100%;display:block;overflow:visible}
+.ef-svg *{transform-box:fill-box}
+.ef-svg .ef-all{transform-origin:50% 100%;animation:efRespira 3.2s ease-in-out infinite}
+.ef-svg .ef-tilt{transform-origin:50% 85%}
+.ef-svg .ef-eyes{transform-origin:50% 50%;animation:efOcchi 4.6s infinite}
+.ef-svg .ef-sad,.ef-svg .ef-closed,.ef-svg .ef-z,.ef-svg .ef-splash,.ef-svg .ef-yawn,.ef-svg .ef-water,.ef-svg .ef-tear{opacity:0}
+.ef.saluta .ef-all{animation:efDimena .9s ease-in-out 1}
+.ef.saluta .ef-splash{animation:efSpruzzo .9s ease-out 1}
+@keyframes efRespira{0%,100%{transform:scale(1,1)}50%{transform:scale(1.025,.975)}}
+@keyframes efOcchi{0%,93%,100%{transform:scaleY(1)}95.5%{transform:scaleY(.1)}}
+@keyframes efDimena{0%{transform:rotate(0)}20%{transform:rotate(-9deg) scale(1.06,.95)}40%{transform:rotate(8deg) scale(.97,1.05)}60%{transform:rotate(-5deg) translateY(-6px)}80%{transform:rotate(3deg)}100%{transform:rotate(0)}}
+@keyframes efSpruzzo{0%{opacity:0;transform:scale(.4)}35%{opacity:1}100%{opacity:0;transform:scale(1.3)}}
+@media (prefers-reduced-motion:reduce){.ef *{animation:none!important}}
+.bolla{position:relative;flex:1;background:var(--card);border:1px solid var(--line);border-radius:18px 18px 18px 6px;padding:12px 15px;font-size:16px;line-height:1.45;box-shadow:0 6px 18px rgba(60,35,10,.08)}
 .bolla b{font-weight:800}
 
 /* terapia */
 .dose{display:flex;flex-direction:column;gap:10px;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
-.dose.ok{background:var(--greenbg);border-color:var(--greenline)}
+.dose.ok{background:var(--okbg);border-color:var(--okline)}
 .dose.no{background:var(--amberbg);border-color:var(--amberline)}
 .dose .testa{display:flex;gap:10px;align-items:flex-start}
 .dose .nome{font-size:18px;font-weight:750}
@@ -198,7 +214,7 @@ input:focus,select:focus,textarea:focus{outline:3px solid var(--greenline);borde
 .grafico svg{display:block;width:100%;height:auto}
 
 /* barra in basso */
-nav.bottom{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 4px calc(8px + env(safe-area-inset-bottom));z-index:5}
+nav.bottom{position:fixed;left:0;right:0;bottom:0;background:rgba(255,253,249,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 4px calc(8px + env(safe-area-inset-bottom));z-index:5}
 nav.bottom .in{display:flex;width:100%;max-width:var(--col)}
 nav.bottom a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--ink2);text-decoration:none;font-size:12.5px;font-weight:700;min-height:54px}
 nav.bottom a.on{color:var(--green)}
@@ -207,11 +223,11 @@ nav.bottom a.on{color:var(--green)}
 #toast button{background:#fff;color:var(--ink);border:0;border-radius:11px;font-weight:800;padding:0 14px;min-height:40px;cursor:pointer}
 #toast button.hidden{display:none}
 .lockwrap{min-height:80vh;display:flex;flex-direction:column;justify-content:center}
-body.drag::after{content:"Lascia qui il file";position:fixed;inset:12px;border:3px dashed var(--green);border-radius:20px;background:rgba(226,238,234,.94);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--greenink);z-index:20;pointer-events:none}
+body.drag::after{content:"Lascia qui il file";position:fixed;inset:12px;border:3px dashed var(--acqua);border-radius:20px;background:rgba(228,243,251,.94);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--greenink);z-index:20;pointer-events:none}
 .cal12{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
 .cal12 .m{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 2px;text-align:center;font-size:13px;color:var(--ink2)}
 .cal12 .m b{display:block;font-size:16px;color:var(--ink);margin-top:1px}
-.cal12 .m.si{background:var(--greenbg);border-color:var(--greenline);color:var(--greenink)}
+.cal12 .m.si{background:var(--okbg);border-color:var(--okline);color:var(--ok)}
 @media (min-width:900px){.cal12{grid-template-columns:repeat(12,minmax(0,1fr))}}
 .settimana{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
 .settimana .g{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 2px;text-align:center;font-size:12px;min-height:84px}
@@ -830,23 +846,38 @@ function bannerMemoria() {
   return persistente ? '' : '<div class="banner rust mx">' + ic('info', 19) + '<div>Questo browser non permette di salvare i dati: quello che inserisci sparisce quando chiudi la pagina.</div></div>';
 }
 
-// Effie, la brocchetta di Kenosis.
+// Effie, la brocchetta di Kenosis: lo stesso disegno del sito kasakenosis.it,
+// vestita secondo la stagione e le feste, con le stesse regole del sito.
+const EFFIE_SVG = '<svg class="ef-svg" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><defs><linearGradient id="__ID__J" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a8723c"></stop><stop offset=".55" stop-color="#7a4a1c"></stop><stop offset="1" stop-color="#4a2c0c"></stop></linearGradient><linearGradient id="__ID__W" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fd0f5"></stop><stop offset="1" stop-color="#2f9fd8"></stop></linearGradient></defs><ellipse cx="100" cy="190" rx="58" ry="7" fill="#2f9fd8" opacity=".16"></ellipse><g class="ef-all"><g class="ef-tilt"><g transform="rotate(-14 100 110)"><path d="M150 80 C178 78 182 118 156 128" fill="none" stroke="#5e3713" stroke-width="11" stroke-linecap="round"></path><path d="M72 46 h56 l-6 22 c34 10 50 40 46 70 c-5 38-36 54-68 54 s-63-16-68-54 c-4-30 12-60 46-70 z" fill="url(#__ID__J)"></path><ellipse cx="100" cy="46" rx="32" ry="9" fill="#5e3713"></ellipse><ellipse cx="100" cy="44" rx="25" ry="5.5" fill="#2b1708"></ellipse><path d="M58 104 c4-20 18-32 34-36" fill="none" stroke="#e8c79b" stroke-width="7" stroke-linecap="round" opacity=".55"></path><path class="ef-tear" d="M80 133c-3 5-3 8 0 9 3-1 3-4 0-9z" fill="#7fd0f5"></path><path class="ef-tear t2" d="M114 133c-3 5-3 8 0 9 3-1 3-4 0-9z" fill="#7fd0f5"></path><g class="ef-eyes"><ellipse cx="84" cy="120" rx="8" ry="10" fill="#2b1708"></ellipse><ellipse cx="118" cy="120" rx="8" ry="10" fill="#2b1708"></ellipse><circle cx="87" cy="116" r="3" fill="#fff"></circle><circle cx="121" cy="116" r="3" fill="#fff"></circle></g><path class="ef-closed" d="M76 122 q8 6 16 0 M110 122 q8 6 16 0" fill="none" stroke="#2b1708" stroke-width="4.5" stroke-linecap="round"></path><path class="ef-smile" d="M88 142 q13 12 26 0" fill="none" stroke="#2b1708" stroke-width="5" stroke-linecap="round"></path><ellipse class="ef-yawn" cx="101" cy="147" rx="7" ry="9" fill="#2b1708"></ellipse><path class="ef-sad" d="M90 150 q11 -9 22 0" fill="none" stroke="#2b1708" stroke-width="5" stroke-linecap="round"></path><ellipse cx="70" cy="138" rx="8" ry="5" fill="#f08a6b" opacity=".45"></ellipse><ellipse cx="132" cy="138" rx="8" ry="5" fill="#f08a6b" opacity=".45"></ellipse><g class="ef-acc">__ACC__</g></g><g class="ef-water"><path d="M60 50 C42 50 26 60 21 82" fill="none" stroke="url(#__ID__W)" stroke-width="8" stroke-linecap="round"></path><circle class="ef-d1" cx="20" cy="95" r="5.5" fill="#2f9fd8"></circle><circle class="ef-d2" cx="19" cy="109" r="3.5" fill="#7fd0f5"></circle></g></g><g class="ef-splash"><circle cx="40" cy="60" r="6" fill="#7fd0f5"></circle><circle cx="166" cy="56" r="5" fill="#2f9fd8"></circle><circle cx="178" cy="96" r="4" fill="#7fd0f5"></circle><circle cx="24" cy="128" r="4" fill="#2f9fd8"></circle><circle cx="100" cy="14" r="5" fill="#7fd0f5"></circle></g></g><g class="ef-z" fill="#2f9fd8" font-family="Segoe UI,Arial,sans-serif" font-weight="700"><text x="146" y="44" font-size="26">z</text><text x="168" y="22" font-size="18">z</text></g></svg>';
+const EFFIE_ACCESSORI = {"natale": "<g class=\"acc cap\"><path d=\"M64 40 Q86 -6 120 2 Q132 4 138 40 Z\" fill=\"#d62828\"/><rect x=\"58\" y=\"34\" width=\"84\" height=\"12\" rx=\"6\" fill=\"#fff\"/><circle cx=\"122\" cy=\"2\" r=\"8\" fill=\"#fff\"/></g>", "pasqua": "<g class=\"acc\" transform=\"translate(134 38)\"><circle cx=\"0\" cy=\"-9\" r=\"6\" fill=\"#ff9ec4\"/><circle cx=\"9\" cy=\"-2\" r=\"6\" fill=\"#ff9ec4\"/><circle cx=\"5\" cy=\"8\" r=\"6\" fill=\"#ff9ec4\"/><circle cx=\"-6\" cy=\"7\" r=\"6\" fill=\"#ff9ec4\"/><circle cx=\"-9\" cy=\"-3\" r=\"6\" fill=\"#ff9ec4\"/><circle r=\"5\" fill=\"#f7c948\"/></g>", "estate": "<g class=\"acc\"><rect x=\"68\" y=\"110\" width=\"30\" height=\"20\" rx=\"8\" fill=\"#1b1b1b\"/><rect x=\"104\" y=\"110\" width=\"30\" height=\"20\" rx=\"8\" fill=\"#1b1b1b\"/><rect x=\"96\" y=\"116\" width=\"10\" height=\"4\" fill=\"#1b1b1b\"/><rect x=\"73\" y=\"113\" width=\"9\" height=\"4\" rx=\"2\" fill=\"#fff\" opacity=\".5\"/></g>", "autunno": "<g class=\"acc\" transform=\"translate(132 36) rotate(20)\"><path d=\"M0 14 C-2 6-12 4-14-6 C-6-4-4-10 0-18 C4-10 6-4 14-6 C12 4 2 6 0 14 Z\" fill=\"#e07b24\"/><path d=\"M0 14 V-12 M0 2 L-7-4 M0 2 L7-4\" stroke=\"#a4501a\" stroke-width=\"1.6\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M0 14 l-2 7\" stroke=\"#7a4a1c\" stroke-width=\"2\" stroke-linecap=\"round\"/></g>", "inverno": "<g class=\"acc\"><path d=\"M73 60 Q100 74 127 60 L125 73 Q100 86 75 73 Z\" fill=\"#c0392b\"/><path d=\"M78 64 Q100 75 122 64\" stroke=\"#fff\" stroke-width=\"2.5\" fill=\"none\" stroke-dasharray=\"5 4\" opacity=\".8\"/><path d=\"M110 74 L116 104 L127 101 L119 72 Z\" fill=\"#c0392b\"/><path d=\"M113 86 L123 83 M115 94 L125 91\" stroke=\"#fff\" stroke-width=\"2.5\" opacity=\".8\"/><path d=\"M116 104 l-1 5 M120 103 l0 5 M124 102 l1 5\" stroke=\"#c0392b\" stroke-width=\"2\" stroke-linecap=\"round\"/></g>", "primavera": "<g class=\"acc\" transform=\"translate(134 38)\"><g fill=\"#fff\" stroke=\"#efd5e0\"><circle cx=\"0\" cy=\"-9\" r=\"6\"/><circle cx=\"9\" cy=\"-2\" r=\"6\"/><circle cx=\"5\" cy=\"8\" r=\"6\"/><circle cx=\"-6\" cy=\"7\" r=\"6\"/><circle cx=\"-9\" cy=\"-3\" r=\"6\"/></g><circle r=\"5\" fill=\"#f7c948\"/></g>"};
+function pasquaDi(y) {
+  const t = y % 19, a = Math.floor(y / 100), i = y % 100, o = Math.floor(a / 4), n = a % 4, r = Math.floor((a + 8) / 25);
+  const l = (19 * t + a - o - Math.floor((a - r + 1) / 3) + 15) % 30, s = (32 + 2 * n + 2 * Math.floor(i / 4) - l - i % 4) % 7, c = Math.floor((t + 11 * l + 22 * s) / 451);
+  return new Date(y, Math.floor((l + s - 7 * c + 114) / 31) - 1, (l + s - 7 * c + 114) % 31 + 1);
+}
+function vestitoEffie(d = new Date()) {
+  const m = d.getMonth() + 1, g = d.getDate();
+  if (m === 12 || (m === 1 && g <= 6)) return 'natale';
+  const n = (d - pasquaDi(d.getFullYear())) / 864e5;
+  if (n > -8 && n < 2) return 'pasqua';
+  if (m === 7 || m === 8) return 'estate';
+  const k = 100 * m + g;
+  return k >= 321 && k < 621 ? 'primavera' : k >= 621 && k < 923 ? 'estate' : k >= 923 && k < 1201 ? 'autunno' : 'inverno';
+}
+let effieN = 0;
 function effieSvg(size = 64) {
-  return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 64 64" aria-hidden="true">' +
-    '<path d="M45.5 23c7 0 10 4 9.5 9.5S50 41 45 41" fill="none" stroke="var(--effie)" stroke-width="4.5" stroke-linecap="round"/>' +
-    '<path d="M22 12h16v6c8 4 12 11 12 19 0 11-9 19-20 19S10 48 10 37c0-8 4-15 12-19z" fill="var(--effie)"/>' +
-    '<path d="M20 9.5L11.5 8c-1.7-.2-1.9 2-.5 2.6L20 14.5z" fill="var(--effie)"/>' +
-    '<rect x="18.5" y="8.5" width="23" height="5.5" rx="2.75" fill="var(--effie)"/>' +
-    '<rect x="21" y="53.5" width="18" height="4.5" rx="2.25" fill="#B9653F"/>' +
-    '<ellipse cx="30" cy="40" rx="11.5" ry="11" fill="var(--effie2)"/>' +
-    '<circle cx="25.8" cy="37" r="2.4" fill="#2B2B2B"/><circle cx="34.2" cy="37" r="2.4" fill="#2B2B2B"/>' +
-    '<circle cx="26.5" cy="36.2" r=".8" fill="#fff"/><circle cx="34.9" cy="36.2" r=".8" fill="#fff"/>' +
-    '<path d="M26.3 42.5c2.2 2.4 5.2 2.4 7.4 0" fill="none" stroke="#2B2B2B" stroke-width="2" stroke-linecap="round"/>' +
-    '<circle cx="22.3" cy="41.8" r="1.9" fill="#E9A07C" opacity=".85"/><circle cx="37.7" cy="41.8" r="1.9" fill="#E9A07C" opacity=".85"/></svg>';
+  const id = 'ef' + (++effieN);
+  return '<span class="ef" style="width:' + size + 'px;height:' + size + 'px">' +
+    EFFIE_SVG.replace(/__ID__/g, id).replace('__ACC__', EFFIE_ACCESSORI[vestitoEffie()] || '') + '</span>';
 }
 function effie(testoHtml) {
-  return '<div class="effie">' + effieSvg(62) + '<div class="bolla">' + testoHtml + '</div></div>';
+  return '<div class="effie"><button class="ef-tocca" data-action="effie" aria-label="Effie">' + effieSvg(70) + '</button><div class="bolla">' + testoHtml + '</div></div>';
 }
+azioni.effie = el => {
+  const e = el.querySelector('.ef');
+  e.classList.remove('saluta'); void e.offsetWidth; e.classList.add('saluta');
+  setTimeout(() => e.classList.remove('saluta'), 1000);
+};
 
 function rigaVoce(v, opz = {}) {
   const st = stato(v);
@@ -2179,7 +2210,7 @@ function vParametro(ospiteId, tipo) {
     const vals = ultimi.map(valoriParametro);
     const serie = p.doppio ? [{ nome: 'Massima', punti: ultimi.map((x, i) => ({ d: x.data, y: vals[i][0] })).filter(z => z.y != null) }, { nome: 'Minima', punti: ultimi.map((x, i) => ({ d: x.data, y: vals[i][1] })).filter(z => z.y != null) }]
       : [{ nome: p.nome, punti: ultimi.map((x, i) => ({ d: x.data, y: vals[i][0] })).filter(z => z.y != null) }];
-    h += grafico(serie.filter(s => s.punti.length >= 2), ['#245A52', '#D07A50']);
+    h += grafico(serie.filter(s => s.punti.length >= 2), ['#4A2C0C', '#2F9FD8']);
   }
   h += sezione('Tutte le misure', m.length) + (m.length ? '<div class="group">' + [...m].reverse().map(x => '<div class="gi" style="cursor:default"><span class="row-main"><span class="row-title">' + esc(x.valore + ' ' + p.u) + '</span><span class="row-meta">' +
     esc(fmtGiorno(x.data) + (x.ora ? ' alle ' + fmtOra(x.ora) : '') + (x.chi ? ' · ' + x.chi : '') + (x.nota ? ' · ' + x.nota : '')) + '</span></span><button class="icon-btn" data-action="elimina-misura" data-id="' + x.id + '" aria-label="Elimina misura">' + ic('x', 18) + '</button></div>').join('') + '</div>' : '<p class="empty">Ancora nessuna misura.</p>');

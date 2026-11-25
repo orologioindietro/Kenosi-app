@@ -4,7 +4,7 @@
       dal servizio online arriva solo un "campanello" vuoto, all'ora giusta.
       Senza sincronizzazione, Chrome lo sveglia una o due volte al giorno. */
 
-const CACHE = 'kenosis-v3';
+const CACHE = 'kenosis-v4';
 const FILE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', e => {
