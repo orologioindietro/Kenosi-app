@@ -1597,7 +1597,7 @@ function vPerOspite(q) {
   const o = ospite(q.get('o'));
   if (!o) {
     let h = testata('Per quale ospite?', { indietro: true }) + '<main class="pad">';
-    h += ospitiAttivi().map(x => '<a class="scelta" href="#/per-ospite?o=' + x.id + '"><span class="avatar" style="width:56px;height:56px;border-radius:28px;font-size:19px">' + esc(iniziali(x.nome)) + '</span><span class="row-main"><span class="row-title">' + esc(x.nome) + '</span></span>' + ic('chev', 22) + '</a>').join('');
+    h += ospitiAttivi().map(x => '<a class="scelta" href="#/per-ospite?o=' + x.id + '">' + avatar(x, 56) + '<span class="row-main"><span class="row-title">' + esc(x.nome) + '</span></span>' + ic('chev', 22) + '</a>').join('');
     h += scelta('#/nuovo-ospite', 'plus', 'Un ospite nuovo', '');
     return h + '</main>' + barra('');
   }
@@ -3749,7 +3749,7 @@ function vArchivio(q) {
   if (vista === 'ospiti') {
     h += ospitiAttivi().map(o => {
       const n = S.documenti.filter(d => d.ospiteId === o.id).length;
-      return '<a class="row" href="#/ospite/' + o.id + '/documenti"><span class="avatar">' + esc(iniziali(o.nome)) + '</span><span class="row-main"><span class="row-title">' + esc(o.nome) + '</span><span class="row-meta">' + plur(n, 'documento', 'documenti') + '</span></span>' + ic('chev', 20) + '</a>';
+      return '<a class="row" href="#/ospite/' + o.id + '/documenti">' + avatar(o) + '<span class="row-main"><span class="row-title">' + esc(o.nome) + '</span><span class="row-meta">' + plur(n, 'documento', 'documenti') + '</span></span>' + ic('chev', 20) + '</a>';
     }).join('');
     return h + '</main>' + barra('casa');
   }
