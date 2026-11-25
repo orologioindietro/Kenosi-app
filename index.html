@@ -273,6 +273,43 @@ body.drag::after{content:"Lascia qui il file";position:fixed;inset:12px;border:3
 .settimana .g.oggi{border-color:var(--green);border-width:2px}
 .settimana .g span{display:block;background:var(--greenbg);color:var(--greenink);border-radius:6px;margin:3px 3px 0;padding:2px 0;font-weight:700;font-size:11px}
 .giorno-testa{font-size:15px;font-weight:800;color:var(--ink2);margin:18px 2px 0;text-transform:capitalize}
+
+/* 0.5 — pulsante verde = "segna fatto", marrone = "apri" */
+.btn-ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn-danger-pieno{background:var(--rust);border-color:var(--rust);color:#fff}
+/* finestre di domanda (al posto di OK/Annulla del browser) */
+.velo{position:fixed;inset:0;background:rgba(43,27,11,.45);z-index:30;display:flex;align-items:flex-end;justify-content:center;padding:12px 12px calc(12px + env(safe-area-inset-bottom))}
+@media (min-width:700px){.velo{align-items:center}}
+.finestra{background:var(--card);border-radius:22px;width:100%;max-width:480px;max-height:calc(100vh - 24px);overflow:auto;padding:22px 18px 16px;box-shadow:0 18px 48px rgba(43,27,11,.3)}
+.finestra h2{margin:0 0 8px;font-size:22px;line-height:1.25}
+.fin-testo{font-size:17px;line-height:1.45}
+.fin-testo p{margin:0 0 8px}
+.fin-testo ul{margin:4px 0 8px;padding-left:22px}
+.fin-testo .att{display:block;margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--rustbg);color:var(--rustink);font-weight:700}
+.fin-bottoni{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.fin-ic{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:var(--greenbg);color:var(--greenink);margin-bottom:12px}
+.fin-ic.rust{background:var(--rustbg);color:var(--rust)}
+.fin-ic.amber{background:var(--amberbg);color:var(--amber)}
+body.con-velo{overflow:hidden}
+/* foto degli ospiti */
+.avatar{overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.foto-ospite{display:flex;align-items:center;gap:14px;margin:0 2px 4px}
+.foto-anteprima{display:flex;align-items:center;gap:12px}
+/* barra in basso: Aggiungi al centro, mai sopra i pulsanti */
+nav.bottom a.agg{color:var(--green)}
+nav.bottom a.agg .tondo{width:44px;height:44px;border-radius:22px;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;margin-top:-6px;box-shadow:0 4px 12px rgba(74,44,12,.28)}
+nav.bottom a.agg span{margin-top:-2px}
+/* consegne tra operatori */
+.consegna{padding:14px;background:var(--amberbg);border:1px solid var(--amberline);border-radius:18px;display:flex;flex-direction:column;gap:8px}
+.consegna .c-testa{font-size:14px;font-weight:800;color:var(--amber);letter-spacing:.02em}
+.consegna .c-testo{font-size:17px;line-height:1.45;white-space:pre-wrap}
+.consegna .c-rie{font-size:15px;line-height:1.45;color:var(--ink2);white-space:pre-wrap}
+.da-sapere{padding:10px 12px;border-radius:12px;background:var(--amberbg);border:1px solid var(--amberline);color:var(--amber);font-weight:700;font-size:15px;white-space:pre-wrap;margin:6px 2px 0}
+.dose .quanto b{color:var(--ink);font-size:17px}
+.dose .esito small{display:block;font-weight:600;color:var(--ink2);margin-top:2px}
+.storia{display:flex;flex-direction:column;gap:0}
+.altre-domani{display:block;text-align:center;font-weight:700;padding:10px;text-decoration:none}
 </style>
 </head>
 <body>
@@ -287,7 +324,7 @@ const moduli = {};   // gestori dei moduli (data-form)
 const azioni = {};   // gestori dei pulsanti (data-action)
 
 
-const VERSIONE = '0.4 (prova)';
+const VERSIONE = '0.5 (prova)';
 const UTENTI = ['Rita', 'Michele', 'Vincenzo'];
 const RESPONSABILI = ['Rita', 'Michele', 'Entrambi'];
 const CATEGORIE = ['Pagamenti', 'Servizi della casa', 'Salute ospiti', 'Personale', 'Autorizzazioni e certificati', 'Ospiti', 'Altro'];
@@ -303,6 +340,11 @@ const RICORRENZE = [
 const AVVISI = [[0, 'Il giorno stesso'], [1, '1 giorno prima'], [3, '3 giorni prima'], [7, '1 settimana prima'], [30, '1 mese prima']];
 const CAT_PAG = ['Luce', 'Gas', 'Acqua', 'Telefono e internet', 'Rifiuti (TARI)', 'Assicurazione', 'Commercialista', 'Confcooperative', 'Stipendi e contributi', 'Tasse', 'Affitto', 'Altro'];
 const MOTIVI_NONDATO = ['Rifiutato', 'Fuori casa', 'Ricoverato', 'Sospeso dal medico', 'Finito, da ricomprare', 'Altro'];
+// Valori fuori da questi limiti sono quasi sempre errori di battitura: l'app chiede di ricontrollare.
+const LIMITI_MISURE = { glicemia: [20, 600], peso: [20, 250], saturazione: [50, 100], temperatura: [33, 43], battito: [25, 220] };
+const LIMITI_PRESSIONE = [[60, 260], [30, 160]];
+// Oltre questi minuti di distanza dall'orario, prima di segnare "Dato" l'app chiede cosa è successo.
+const FINESTRA_DOSE = 60;
 const TIPI_VISITA = ['Medico di base', 'Esami del sangue', 'Cardiologo', 'Diabetologo', 'Psichiatra', 'Neurologo', 'Dentista', 'Oculista', 'Fisioterapia', 'Altro'];
 const PARAMETRI = [
   { k: 'pressione', nome: 'Pressione', u: 'mmHg', ph: 'es. 130/80', doppio: true },
@@ -410,9 +452,14 @@ function dataValida(s) { return /^\d{4}-\d{2}-\d{2}$/.test(String(s || '')) && !
 function oraValida(s) { return /^([01]\d|2[0-3]):[0-5]\d$/.test(String(s || '')); }
 function oggi() { return iso(new Date()); }
 function oraAdesso() { const d = new Date(); return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+// Giorno e ora LOCALI di un momento salvato in formato ISO (che è in ora UTC).
+function giornoDi(t) { if (!t) return ''; const d = new Date(t); return isNaN(d) ? String(t).slice(0, 10) : iso(d); }
+function oraDi(t) { const d = new Date(t); return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+function minuti(o) { const [h, m] = String(o || '00:00').split(':').map(Number); return h * 60 + m; }
 function piuGiorni(s, n) { const d = aData(s); d.setDate(d.getDate() + n); return iso(d); }
-function piuMesi(s, n) {
-  const d = aData(s); const giorno = d.getDate(); d.setDate(1); d.setMonth(d.getMonth() + n);
+// giornoFisso: il giorno del mese da rispettare (una scadenza del 31 resta al 31, non scivola al 28).
+function piuMesi(s, n, giornoFisso) {
+  const d = aData(s); const giorno = giornoFisso || d.getDate(); d.setDate(1); d.setMonth(d.getMonth() + n);
   const ultimo = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
   d.setDate(Math.min(giorno, ultimo)); return iso(d);
 }
@@ -434,6 +481,8 @@ function fmt(s) {
   const d = aData(s);
   return d.getDate() + ' ' + MESI[d.getMonth()] + (d.getFullYear() !== new Date().getFullYear() ? ' ' + d.getFullYear() : '');
 }
+// Data senza "oggi" o "ieri": per le frasi come "dal 25 nov" ("dal oggi" non si dice).
+function fmtD(s) { if (!s) return '—'; const d = aData(s); return d.getDate() + ' ' + MESI[d.getMonth()] + (d.getFullYear() !== new Date().getFullYear() ? ' ' + d.getFullYear() : ''); }
 function fmtLungo(s) { const d = aData(s); return GIORNI_L[d.getDay()] + ' ' + d.getDate() + ' ' + MESI_L[d.getMonth()] + ' ' + d.getFullYear(); }
 function fmtGiorno(s) {
   const n = giorniTra(oggi(), s);
@@ -454,16 +503,25 @@ function plur(n, uno, tanti) { return n + ' ' + (n === 1 ? uno : tanti); }
 function semplifica(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
 function saluto() { const h = new Date().getHours(); return h < 13 ? 'Buongiorno' : h < 18 ? 'Buon pomeriggio' : 'Buonasera'; }
 
-function prossimaData(s, ric) {
+function prossimaData(s, ric, giornoFisso) {
   if (!ric) return null;
   const n = Math.max(1, parseInt(ric.ogni, 10) || 1);
   switch (ric.unita) {
     case 'giorni': return piuGiorni(s, n);
     case 'settimane': return piuGiorni(s, 7 * n);
-    case 'mesi': return piuMesi(s, n);
-    case 'anni': return piuMesi(s, 12 * n);
+    case 'mesi': return piuMesi(s, n, giornoFisso);
+    case 'anni': return piuMesi(s, 12 * n, giornoFisso);
   }
   return null;
+}
+// Il giorno del mese a cui "ancorare" una scadenza mensile o annuale.
+function ancoraDi(prossima, ric) { return ric && (ric.unita === 'mesi' || ric.unita === 'anni') && dataValida(prossima) ? aData(prossima).getDate() : null; }
+// Metà del periodo di una scadenza che si ripete (max 45 giorni): serve a non confondere
+// il pagamento di questo mese con quello del mese scorso.
+function finestraVoce(v) {
+  if (!v || !v.ric) return 45;
+  const g = { giorni: 1, settimane: 7, mesi: 30, anni: 365 }[v.ric.unita] || 30;
+  return Math.max(1, Math.min(45, Math.floor(g * (Number(v.ric.ogni) || 1) / 2)));
 }
 function descRic(ric) {
   if (!ric) return 'Una volta sola';
@@ -537,6 +595,7 @@ let bloccato = false;
 
 async function carica() {
   for (const s of STORES_CONDIVISI) { S[s] = await DB.all(s); delete CACHE[s]; }
+  delete CACHE.scorte;
   S.kv = {};
   (await DB.all('kv')).forEach(x => { S.kv[x.id] = x.v; });
   await semina();
@@ -566,6 +625,7 @@ async function salva(store, obj, opz = {}) {
   }
   await DB.put(store, obj);
   delete CACHE[store];
+  if (store === 'farmaci' || store === 'somministrazioni' || store === 'ospiti') delete CACHE.scorte;
   const i = S[store].findIndex(x => x.id === obj.id);
   if (i >= 0) S[store][i] = obj; else S[store].push(obj);
   if (!opz.remoto) await mettiInCoda(store, obj.id, false);
@@ -573,6 +633,7 @@ async function salva(store, obj, opz = {}) {
 async function togli(store, id, opz = {}) {
   await DB.del(store, id);
   delete CACHE[store];
+  if (store === 'farmaci' || store === 'somministrazioni' || store === 'ospiti') delete CACHE.scorte;
   S[store] = S[store].filter(x => x.id !== id);
   if (!opz.remoto) await mettiInCoda(store, id, true);
 }
@@ -625,9 +686,9 @@ function stato(v) {
 }
 function attive() { return S.voci.filter(v => v.attiva !== false && v.prossima); }
 function prossimaDopo(v, dataFatto) {
-  let n = prossimaData(v.prossima, v.ric);
+  let n = prossimaData(v.prossima, v.ric, v.ancora);
   let giri = 0;
-  while (n && n <= dataFatto && giri++ < 1000) n = prossimaData(n, v.ric);
+  while (n && n <= dataFatto && giri++ < 1000) n = prossimaData(n, v.ric, v.ancora);
   return n;
 }
 function mieVoci() {
@@ -640,12 +701,15 @@ const vociServizio = id => attive().filter(v => sid(v.servizio) === id).sort(per
 function controlliPagamento(v, importo, data) {
   const avvisi = [];
   if (!v) return avvisi;
-  if (v.domiciliato) avvisi.push('Questo si paga da solo con l\'addebito in banca: non va pagato a mano.');
+  // (un addebito in banca si segna con "Controllato": niente avviso, è l'azione giusta)
   if (v.attiva === false) avvisi.push('Risulta già chiuso' + (v.chiusaIl ? ' il ' + fmtLungo(v.chiusaIl) : '') + '.');
   const finestra = e => Math.abs(giorniTra(e.data, data)) <= 45;
   const stessi = S.eventi.filter(e => e.tipo === 'pagato' && finestra(e));
-  const proprio = stessi.find(e => e.voceId === v.id);
-  if (proprio) avvisi.push('Risulta già pagato il ' + fmtLungo(proprio.data) + (proprio.chi ? ' da ' + proprio.chi : '') + (proprio.importo != null ? ' (' + euro(proprio.importo) + ')' : '') + '.');
+  // Stessa scadenza già pagata? Per quelle che si ripetono conta solo il periodo in corso,
+  // così il pagamento del mese scorso non fa scattare l'avviso ogni mese.
+  const proprio = S.eventi.find(e => e.tipo === 'pagato' && e.voceId === v.id &&
+    (e.scadenza ? e.scadenza === v.prossima : Math.abs(giorniTra(e.data, data)) <= finestraVoce(v)));
+  if (proprio) avvisi.push('Risulta già ' + (v.domiciliato ? 'controllato' : 'pagato') + ' il ' + fmtLungo(proprio.data) + (proprio.chi ? ' da ' + proprio.chi : '') + (proprio.importo != null ? ' (' + euro(proprio.importo) + ')' : '') + '.');
   if (importo != null) {
     const simile = stessi.find(e => e.voceId !== v.id && e.importo != null && Math.abs(e.importo - importo) < 0.01 &&
       ((e.voceId && voce(e.voceId) && (voce(e.voceId).pag || voce(e.voceId).nome) === (v.pag || v.nome)) || (e.nota && semplifica(e.nota).includes(semplifica(v.pag || v.nome)))));
@@ -662,41 +726,110 @@ function giaInserito(pag, importo, scadenza) {
 /* ================================================= terapia */
 
 const IN_TERAPIA = f => Array.isArray(f.orari);
+// I campi che fanno la terapia: se cambiano, la versione precedente resta nella storia del farmaco.
+const CAMPI_TERAPIA = ['dose', 'giorni', 'orari', 'qta', 'unita', 'dal', 'al', 'maxGiorno', 'oreTra'];
+// Un periodo {dal, al} vale dal giorno "dal" incluso al giorno "al" escluso (al vuoto = ancora in corso).
+const inPeriodi = (lista, d) => Array.isArray(lista) && lista.some(p => p && p.dal && p.dal <= d && (!p.al || d < p.al));
+// La terapia com'era in un certo giorno. Ogni modifica lascia la versione precedente in f.storia
+// (valida fino al giorno "fino", escluso): così il registro dei giorni passati non cambia più.
+function versioneAl(f, d) {
+  if (Array.isArray(f.storia)) for (const v of f.storia) if (v && v.fino && d < v.fino) return v;
+  return f;
+}
+function inizioVersione(f, v) { return v === f ? (f.versioneDa || f.creato) : (v.versioneDa || f.creato); }
+function ospiteAttivo(o, d) {
+  if (!o) return true;
+  if (o.attivo === false && (!o.usciteIl || d >= o.usciteIl)) return false;
+  return !inPeriodi(o.fuori, d);
+}
 function farmacoAttivo(f, d) {
-  const o = ospite(f.ospiteId);
-  if (f.sospeso || (o && o.attivo === false)) return false;
-  if (f.dal && f.dal > d) return false;
-  if (f.al && f.al < d) return false;
+  if (f.sospeso && (!f.sospesoIl || d >= f.sospesoIl)) return false;   // senza data (versioni vecchie): da sempre
+  if (inPeriodi(f.pause, d)) return false;
+  if (!ospiteAttivo(ospite(f.ospiteId), d)) return false;
+  const v = versioneAl(f, d);
+  if (v.dal && v.dal > d) return false;
+  if (v.al && v.al < d) return false;
   return true;
 }
 function programmato(f, d) {
-  if (!IN_TERAPIA(f) || f.giorni === 'bisogno' || !f.orari.length || !farmacoAttivo(f, d)) return false;
-  if (Array.isArray(f.giorni)) return f.giorni.includes(aData(d).getDay());
+  const v = versioneAl(f, d);
+  if (!Array.isArray(v.orari) || v.giorni === 'bisogno' || !v.orari.length || !farmacoAttivo(f, d)) return false;
+  if (Array.isArray(v.giorni)) return v.giorni.includes(aData(d).getDay());
+  return true;
+}
+// Una dose è "prevista" solo da quando il farmaco (o quella versione della terapia) è nell'app:
+// niente dosi "mancanti" nei giorni in cui nessuno l'aveva ancora inserito.
+function dosePrevista(f, v, d, ora) {
+  const inizio = inizioVersione(f, v);
+  if (!inizio) return true;
+  const g = giornoDi(inizio);
+  if (d < g) return false;
+  if (d === g && minuti(ora) < minuti(oraDi(inizio)) - FINESTRA_DOSE) return false;
   return true;
 }
 function smId(f, d, ora) { return 'sm' + f.id + d.replace(/-/g, '') + ora.replace(':', ''); }
-function indiceSomm() {
-  if (!CACHE.somministrazioni) CACHE.somministrazioni = new Map(S.somministrazioni.map(x => [x.id, x]));
+// Indici delle somministrazioni (per id, per giorno, per farmaco): si ricalcolano solo quando cambiano.
+function sommIndice() {
+  if (!CACHE.somministrazioni) {
+    const perId = new Map(), perGiorno = new Map(), perFarmaco = new Map();
+    for (const x of S.somministrazioni) {
+      perId.set(x.id, x);
+      if (!perGiorno.has(x.data)) perGiorno.set(x.data, []);
+      perGiorno.get(x.data).push(x);
+      if (!perFarmaco.has(x.farmacoId)) perFarmaco.set(x.farmacoId, []);
+      perFarmaco.get(x.farmacoId).push(x);
+    }
+    CACHE.somministrazioni = { perId, perGiorno, perFarmaco };
+  }
   return CACHE.somministrazioni;
 }
-// Tutte le dosi previste in un giorno, raggruppate per orario.
+function indiceSomm() { return sommIndice().perId; }
+const sommDelGiorno = d => sommIndice().perGiorno.get(d) || [];
+const sommDelFarmaco = id => sommIndice().perFarmaco.get(id) || [];
+// Un farmaco eliminato che compare ancora in una registrazione: si mostra con i dati salvati allora.
+function farmacoDaRegistrazione(x) {
+  return farmaco(x.farmacoId) || { id: x.farmacoId, nome: x.nome || 'Farmaco eliminato', ospiteId: x.ospiteId, dose: x.dose || null, qta: x.qta, unita: x.unita, orari: [], eliminato: true };
+}
+// Tutte le dosi di un giorno, raggruppate per orario: quelle previste dalla terapia di quel giorno
+// più quelle già segnate, che restano visibili anche se dopo la terapia è cambiata.
 function slotDel(d, ospiteId) {
   const mappa = new Map();
+  const metti = (ora, f) => { if (!mappa.has(ora)) mappa.set(ora, new Map()); if (!mappa.get(ora).has(f.id)) mappa.get(ora).set(f.id, f); };
   for (const f of S.farmaci) {
     if (ospiteId && f.ospiteId !== ospiteId) continue;
     if (!programmato(f, d)) continue;
-    for (const ora of f.orari) {
-      if (!mappa.has(ora)) mappa.set(ora, []);
-      mappa.get(ora).push(f);
-    }
+    const v = versioneAl(f, d);
+    for (const ora of v.orari) if (dosePrevista(f, v, d, ora)) metti(ora, f);
+  }
+  for (const x of sommDelGiorno(d)) {
+    if (x.bisogno || !x.ora) continue;
+    if (ospiteId && x.ospiteId !== ospiteId) continue;
+    metti(x.ora, farmacoDaRegistrazione(x));
   }
   const idx = indiceSomm();
   return [...mappa.keys()].sort().map(ora => {
-    const dosi = mappa.get(ora).map(f => ({ f, sm: idx.get(smId(f, d, ora)) || null }));
+    const dosi = [...mappa.get(ora).values()].map(f => {
+      let sm = idx.get(smId(f, d, ora)) || null;
+      if (sm && ospiteId && sm.ospiteId && sm.ospiteId !== ospiteId) sm = null;
+      return { f, sm };
+    });
     const dati = dosi.filter(x => x.sm && x.sm.esito === 'dato').length;
     const nonDati = dosi.filter(x => x.sm && x.sm.esito === 'nondato').length;
     return { data: d, ora, dosi, dati, nonDati, mancano: dosi.length - dati - nonDati };
   });
+}
+// Dosi dei giorni scorsi rimaste senza esito: non devono sparire dalla vista di chi arriva dopo.
+function dosiDaChiarire(giorni = 3) {
+  const out = [];
+  for (let i = 1; i <= giorni; i++) for (const s of slotDel(piuGiorni(oggi(), -i))) if (s.mancano) out.push(s);
+  return out;
+}
+// Minuti di ritardo (positivi) o di anticipo (negativi) rispetto all'orario, per oggi.
+const scartoMinuti = ora => minuti(oraAdesso()) - minuti(ora);
+function descRitardo(min) {
+  if (min < 60) return 'in ritardo di ' + min + ' min';
+  const h = Math.floor(min / 60), m = min % 60;
+  return 'in ritardo di ' + plur(h, 'ora', 'ore') + (m >= 10 ? ' e ' + m + ' min' : '');
 }
 function descGiorni(f) {
   if (f.giorni === 'bisogno') return 'Al bisogno';
@@ -706,6 +839,18 @@ function descGiorni(f) {
 function descOrari(f) {
   if (f.giorni === 'bisogno') return 'Al bisogno';
   return (f.orari || []).map(fmtOra).join(' · ') + (Array.isArray(f.giorni) ? ' (' + descGiorni(f) + ')' : '');
+}
+// Quanto si dà ogni volta, in numeri: è lo stesso numero che toglie le medicine dalla scorta.
+function quantoOgniVolta(f) { return f.qta != null ? quantita(f.qta, f.unita) : ''; }
+// La terapia in una riga, da leggere accanto alla prescrizione.
+function descTerapia(v) {
+  if (v.giorni === 'bisogno') {
+    const lim = [v.maxGiorno ? 'massimo ' + plur(Number(v.maxGiorno), 'volta', 'volte') + ' al giorno' : null, v.oreTra ? 'almeno ' + plur(Number(v.oreTra), 'ora', 'ore') + ' tra una e l\'altra' : null].filter(Boolean).join(', ');
+    return 'Al bisogno: ' + quantoOgniVolta(v) + (lim ? ' · ' + lim : '') + (v.dose ? ' — «' + v.dose + '»' : '');
+  }
+  const orari = (v.orari || []).map(fmtOra);
+  return quantoOgniVolta(v) + ' alle ' + (orari.length > 1 ? orari.slice(0, -1).join(', ') + ' e ' + orari[orari.length - 1] : orari.join('')) +
+    ' · ' + descGiorni(v).toLowerCase() + (v.dal ? ' · dal ' + fmtD(v.dal) : '') + (v.al ? ' al ' + fmtD(v.al) : '') + (v.dose ? ' — «' + v.dose + '»' : '');
 }
 function usoAlGiorno(f) {
   if (!IN_TERAPIA(f)) return Number(f.alGiorno) || 0;
@@ -717,11 +862,14 @@ function usoAlGiorno(f) {
 // Scorta: dall'ultima conta tolgo le dosi segnate come date (stima per i vecchi farmaci).
 function scorta(f, rif) {
   rif = rif || oggi();
+  const chiave = f.id + '|' + rif;
+  if (!CACHE.scorte) CACHE.scorte = new Map();
+  if (CACHE.scorte.has(chiave)) return CACHE.scorte.get(chiave);
   let rimaste;
   const base = Number(f.inCasa) || 0;
   if (IN_TERAPIA(f)) {
     const da = f.contatoQuando || (f.contatoIl ? f.contatoIl + 'T00:00:00.000Z' : '');
-    const usate = S.somministrazioni.filter(x => x.farmacoId === f.id && x.esito === 'dato' && (x.quando || '') >= da)
+    const usate = sommDelFarmaco(f.id).filter(x => x.esito === 'dato' && (x.quando || '') >= da)
       .reduce((a, x) => a + (Number(x.qta) || 0), 0);
     rimaste = base - usate;
     // per i giorni futuri, aggiungo il consumo previsto
@@ -740,12 +888,26 @@ function scorta(f, rif) {
   }
   const soglia = f.soglia == null ? 7 : Number(f.soglia);
   const attivo = farmacoAttivo(f, rif);
-  return { rimaste, giorni, scad, uso, daRiordinare: attivo && giorni !== null && giorni <= soglia, finito: attivo && rimaste <= 0 && uso > 0 };
+  // Al bisogno non c'è un consumo fisso: si avvisa quando ne restano poche (almeno due giorni al massimo).
+  const bisogno = f.giorni === 'bisogno';
+  const minimo = bisogno ? Math.max(2, (Number(f.maxGiorno) || 1) * (Number(f.qta) || 1) * 2) : null;
+  const res = { rimaste, giorni, scad, uso, bisogno, minimo,
+    daRiordinare: attivo && (bisogno ? rimaste <= minimo : giorni !== null && giorni <= soglia),
+    finito: attivo && rimaste <= 0 && (uso > 0 || bisogno) };
+  CACHE.scorte.set(chiave, res);
+  return res;
 }
-const stimaFarmaco = scorta;
+function descScorta(f, s) {
+  s = s || scorta(f);
+  if (s.bisogno) return s.rimaste <= 0 ? 'finito' : 'restano ' + quantita(s.rimaste, f.unita);
+  if (s.giorni === null) return '';
+  return s.giorni <= 0 ? 'scorta finita' : 'scorta per ' + plur(s.giorni, 'giorno', 'giorni');
+}
 function farmaciDaControllare() {
   return S.farmaci.filter(f => farmacoAttivo(f, oggi())).map(f => ({ f, s: scorta(f) })).filter(x => x.s.daRiordinare || x.s.scad === 'scaduto' || x.s.scad === '30');
 }
+// Ordinati da più di 4 giorni e non ancora segnati come arrivati.
+const ordiniInRitardo = () => S.farmaci.filter(f => f.ordinatoIl && farmacoAttivo(f, oggi()) && giorniTra(f.ordinatoIl, oggi()) > 4);
 
 /* ================================================= visite e parametri */
 
@@ -772,44 +934,9 @@ const lavanderiaFuori = () => S.eventi.filter(e => e.tipo === 'lavanderia' && e.
 const guastiAperti = () => S.eventi.filter(e => e.tipo === 'guasto' && e.stato !== 'risolto').sort(recenti);
 const trasportiPrevisti = () => S.eventi.filter(e => e.tipo === 'trasporto' && !e.fatto).sort((a, b) => (a.data + (a.ora || '')).localeCompare(b.data + (b.ora || '')));
 
-/* ================================================= riepilogo di oggi */
-
-function riepilogo() {
-  const t = oggi();
-  const att = attive().sort(perData);
-  return {
-    ritardo: att.filter(v => v.prossima < t),
-    diOggi: att.filter(v => v.prossima === t),
-    inArrivo: att.filter(v => { const n = giorniTra(t, v.prossima); return n > 0 && n <= Math.max(v.avviso || 0, 1); }),
-    settimana: att.filter(v => { const n = giorniTra(t, v.prossima); return n > 0 && n <= 7; }),
-    farmaci: farmaciDaControllare(),
-    visite: visitePreviste().filter(v => giorniTra(t, v.data) <= Math.max(1, v.avviso || 0)),
-    trasporti: trasportiPrevisti().filter(e => e.data <= piuGiorni(t, 1)),
-    slot: slotDel(t),
-    rifiuti: rifiutiStasera(t),
-    rifiutiFatto: S.eventi.some(e => e.tipo === 'rifiuti' && e.data === t),
-    lavanderia: lavanderiaFuori(),
-    guasti: guastiAperti()
-  };
-}
-function fraseEffie(r) {
-  const pezzi = [];
-  const mancano = r.slot.filter(s => s.mancano);
-  if (mancano.length) pezzi.push('terapia alle ' + mancano.map(s => fmtOra(s.ora)).join(', ').replace(/, ([^,]*)$/, ' e $1'));
-  const scad = r.ritardo.length + r.diOggi.length;
-  if (scad) pezzi.push(plur(scad, 'cosa da fare', 'cose da fare') + (r.ritardo.length ? ' (' + r.ritardo.length + ' in ritardo)' : ''));
-  const vis = r.visite.filter(v => v.data === oggi()).length;
-  if (vis) pezzi.push(plur(vis, 'visita', 'visite'));
-  if (r.rifiuti.length && !r.rifiutiFatto) pezzi.push('stasera fuori ' + r.rifiuti.join(', ').toLowerCase());
-  if (r.farmaci.length) pezzi.push(plur(r.farmaci.length, 'farmaco da ordinare', 'farmaci da ordinare'));
-  const nome = utente() && utente() !== 'Vincenzo' ? ' ' + utente() : '';
-  if (!pezzi.length) return '<b>' + saluto() + nome + '!</b> Per oggi è tutto in ordine.';
-  return '<b>' + saluto() + nome + '.</b> Oggi: ' + esc(pezzi.join(' · ')) + '.';
-}
-
 /* ================================================= momenti per gli avvisi */
 // Quando far suonare il telefono nei prossimi giorni. Al servizio arrivano solo
-// data, ora e una lettera; il testo resta sul telefono.
+// data, ora e una lettera; il testo resta sul telefono (e non contiene nomi).
 
 function momenti(giorni = 14) {
   const out = [];
@@ -818,6 +945,7 @@ function momenti(giorni = 14) {
   const c = S.kv.sync || {};
   const oraMattino = c.ora || '08:30';
   const mie = mieVoci();
+  const previste = visitePreviste();
   const aggiungi = (d, ora, x, testo, k) => {
     if (d === t0 && ora <= ora0) return;
     out.push({ t: d + 'T' + ora, x, testo, k: k || null });
@@ -826,10 +954,11 @@ function momenti(giorni = 14) {
     const d = piuGiorni(t0, i);
     const scad = mie.filter(v => giorniTra(d, v.prossima) <= 0).length;
     const avvisi = mie.filter(v => { const n = giorniTra(d, v.prossima); return n > 0 && n <= (v.avviso || 0); }).length;
-    const vis = visitePreviste().filter(v => v.data === d).length;
-    const visArrivo = visitePreviste().filter(v => { const n = giorniTra(d, v.data); return n > 0 && n <= Math.max(1, v.avviso || 0); }).length;
+    const vis = previste.filter(v => v.data === d).length;
+    const visArrivo = previste.filter(v => { const n = giorniTra(d, v.data); return n > 0 && n <= Math.max(1, v.avviso || 0); }).length;
     const slots = slotDel(d);
     const pezzi = [];
+    if (i === 0) { const ch = dosiDaChiarire().length; if (ch) pezzi.push(plur(ch, 'medicina dei giorni scorsi da chiarire', 'medicine dei giorni scorsi da chiarire')); }
     if (scad) pezzi.push(plur(scad, 'cosa da fare', 'cose da fare'));
     if (avvisi) pezzi.push(plur(avvisi, 'scadenza in arrivo', 'scadenze in arrivo'));
     if (vis) pezzi.push(plur(vis, 'visita', 'visite'));
@@ -838,17 +967,19 @@ function momenti(giorni = 14) {
     if (pezzi.length) aggiungi(d, oraMattino, 'm', 'Oggi: ' + pezzi.join(' · '));
     for (const s of slots) {
       if (!s.mancano) continue;   // già tutto segnato
-      aggiungi(d, s.ora, 't', 'Medicine delle ' + fmtOra(s.ora) + ': ' + plur(s.dosi.length, 'medicina', 'medicine') + ' da dare');
+      aggiungi(d, s.ora, 't', 'Medicine delle ' + fmtOra(s.ora) + ': ' + plur(s.mancano, 'medicina', 'medicine') + ' da dare');
       const dopo = piuMinuti(d, s.ora, 30);
       aggiungi(dopo.data, dopo.ora, 's', 'Medicine delle ' + fmtOra(s.ora) + ': qualcosa non è ancora segnato', d + 'T' + s.ora);
     }
     const fuori = rifiutiStasera(d);
     const sv = servizioDiTipo('rifiuti');
     if (fuori.length && sv) aggiungi(d, (sv.conf && sv.conf.ora) || '20:00', 'r', 'Stasera porta fuori: ' + fuori.join(', ').toLowerCase());
-    for (const v of visitePreviste().filter(v => v.data === d && v.ora)) {
+    for (const v of previste.filter(v => v.data === d && v.ora)) {
       const p = piuMinuti(d, v.ora, -60);
       aggiungi(p.data, p.ora, 'v', 'Tra un\'ora c\'è una visita');
     }
+    // la sera prima di una visita a digiuno, un promemoria apposta
+    if (previste.some(v => v.data === piuGiorni(d, 1) && /digiun/i.test((v.portare || '') + ' ' + (v.note || '')))) aggiungi(d, '20:00', 'v', 'Domani c\'è una visita a digiuno');
     for (const e of trasportiPrevisti().filter(e => e.data === d && e.ora)) {
       const p = piuMinuti(d, e.ora, -60);
       aggiungi(p.data, p.ora, 'v', 'Tra un\'ora c\'è un accompagnamento');
@@ -869,13 +1000,30 @@ function testata(titolo, opz = {}) {
 function sezione(titolo, n, cls = '', destra = '') {
   return '<div class="sec ' + cls + '"><h2>' + esc(titolo) + '</h2>' + (n ? '<span class="badge ' + cls + '">' + n + '</span>' : '') + destra + '</div>';
 }
+// Quattro sezioni e, al centro, "Aggiungi": fisso nella barra, non galleggia sopra i pulsanti.
 function barra(attiva) {
-  const voci = [['oggi', 'Oggi', 'home', '#/oggi'], ['ospiti', 'Ospiti', 'users', '#/ospiti'], ['casa', 'Casa', 'casa', '#/casa'],
-    ['fatto', 'Fatto', 'check', '#/fatto'], ['note', 'Note', 'note', '#/note']];
-  return '<nav class="bottom" aria-label="Sezioni principali"><div class="in">' + voci.map(v =>
-    '<a href="' + v[3] + '" class="' + (v[0] === attiva ? 'on' : '') + '"' + (v[0] === attiva ? ' aria-current="page"' : '') + '>' + ic(v[2], 24) + '<span>' + v[1] + '</span></a>'
-  ).join('') + '</div></nav>';
+  attiva = { fatto: 'diario', note: 'diario' }[attiva] || attiva;
+  const voci = [['oggi', 'Oggi', 'home', '#/oggi'], ['ospiti', 'Ospiti', 'users', '#/ospiti'], ['aggiungi', 'Aggiungi', 'plus', '#/aggiungi'],
+    ['casa', 'Casa', 'casa', '#/casa'], ['diario', 'Diario', 'book', '#/fatto']];
+  return '<nav class="bottom" aria-label="Sezioni principali"><div class="in">' + voci.map(v => {
+    const on = v[0] === attiva;
+    const icona = v[0] === 'aggiungi' ? '<span class="tondo">' + ic('plus', 24, 2.6) + '</span>' : ic(v[2], 24);
+    return '<a href="' + v[3] + '" class="' + (on ? 'on' : '') + (v[0] === 'aggiungi' ? ' agg' : '') + '"' + (on ? ' aria-current="page"' : '') + '>' + icona + '<span>' + v[1] + '</span></a>';
+  }).join('') + '</div></nav>';
 }
+const suIPhone = () => /iPhone|iPad|iPod/.test(navigator.userAgent);
+const installata = () => !!(navigator.standalone || (window.matchMedia && matchMedia('(display-mode: standalone)').matches));
+// Gli avvisi delle medicine funzionano davvero su questo telefono?
+function bannerNotifiche() {
+  if (!S.farmaci.length) return '';
+  if (suIPhone() && !installata()) return '<div class="banner amber mx">' + ic('info', 19) + '<div><b>Su iPhone gli avvisi arrivano solo se Kenosis è nella schermata Home.</b> Tocca Condividi, poi «Aggiungi alla schermata Home», e apri l\'app da lì.</div></div>';
+  if (!('Notification' in window)) return '';
+  if (Notification.permission === 'denied') return '<div class="banner rust mx">' + ic('warn', 19) + '<div><b>Gli avvisi delle medicine sono bloccati su questo telefono.</b> Vanno riattivati dalle impostazioni del telefono (Notifiche).</div></div>';
+  if (Notification.permission !== 'granted') return '<div class="banner rust mx">' + ic('warn', 19) + '<div><b>Gli avvisi delle medicine sono spenti su questo telefono.</b><div style="margin-top:8px"><button class="txt-btn" style="min-height:44px" data-action="attiva-notifiche">Accendili</button></div></div></div>';
+  return '';
+}
+// In cima a Oggi al massimo un avviso alla volta: il più importante.
+function bannerUnico() { return bannerMemoria() || bannerNotifiche() || bannerBackup(); }
 function banner(cls, testo, icona = 'info') { return '<div class="banner ' + cls + '">' + ic(icona, 19) + '<div>' + testo + '</div></div>'; }
 function bannerProva() {
   return '<div class="banner amber mx">' + ic('info', 19) + '<div><b>Versione di prova.</b> Usa solo dati inventati finché l\'app non è definitiva.</div></div>';
@@ -885,7 +1033,7 @@ function bannerBackup() {
   const u = S.kv.ultimoBackup;
   if (u && giorniTra(u, oggi()) <= 7) return '';
   const testo = u ? 'L\'ultima copia di sicurezza è di ' + giorniTra(u, oggi()) + ' giorni fa.' : 'Non hai ancora fatto una copia di sicurezza.';
-  return '<div class="banner rust mx">' + ic('info', 19) + '<div>' + testo + ' <a href="#/impostazioni">Falla adesso</a></div></div>';
+  return '<div class="banner rust mx">' + ic('info', 19) + '<div>' + testo + '<div style="margin-top:8px"><button class="txt-btn" style="min-height:44px" data-action="esporta">Falla adesso</button></div></div></div>';
 }
 function bannerMemoria() {
   return persistente ? '' : '<div class="banner rust mx">' + ic('info', 19) + '<div>Questo browser non permette di salvare i dati: quello che inserisci sparisce quando chiudi la pagina.</div></div>';
@@ -945,11 +1093,11 @@ function rigaFarmaco(f, opz = {}) {
   const parti = [];
   if (opz.orari !== false && IN_TERAPIA(f)) parti.push(descOrari(f));
   if (f.sospeso) parti.push('sospeso');
-  else if (s.giorni !== null) parti.push(s.giorni <= 0 ? 'scorta finita' : 'scorta per ' + plur(s.giorni, 'giorno', 'giorni'));
+  else if (descScorta(f, s)) parti.push(descScorta(f, s));
   if (s.scad === 'scaduto') parti.push('confezione scaduta');
   else if (s.scad) parti.push('scade ' + fmt(f.scadenza));
   if (f.ordinatoIl && !f.sospeso) parti.push('ordinato ' + fmt(f.ordinatoIl));
-  const urgente = s.scad === 'scaduto' || s.finito || (s.daRiordinare && s.giorni !== null && s.giorni <= 2);
+  const urgente = s.scad === 'scaduto' || s.finito || (s.daRiordinare && (s.bisogno || (s.giorni !== null && s.giorni <= 2)));
   const attenzione = s.daRiordinare || s.scad === '30';
   return '<a class="row ' + (f.sospeso ? 'row-done' : urgente ? 'row-rust' : attenzione ? 'row-amber' : '') + '" href="#/farmaco/' + f.id + '">' +
     '<span class="dicon plum">' + ic('pill', 21) + '</span>' +
@@ -974,17 +1122,23 @@ function rigaVisita(v, opz = {}) {
     '<span class="row-when">' + esc(quando) + '</span></a>';
 }
 function rigaSlot(s, opz = {}) {
-  const adessoOra = oraAdesso();
   const oggiG = s.data === oggi();
-  const passato = s.data < oggi() || (oggiG && s.ora <= adessoOra);
+  const ritardo = s.data < oggi() ? Infinity : oggiG ? scartoMinuti(s.ora) : -1;
   const finito = !s.mancano;
-  const cls = finito ? 'row-ok' : passato ? 'row-rust' : '';
+  const inRitardo = !finito && ritardo > 30;
+  const cls = finito ? 'row-ok' : inRitardo ? 'row-rust' : '';
   const meta = finito ? 'Tutto segnato' + (s.nonDati ? ' · ' + s.nonDati + ' non date' : '')
-    : (s.dati ? s.dati + ' date · ' : '') + plur(s.mancano, 'da dare', 'da dare') + (opz.ospite ? '' : '');
+    : (s.dati ? s.dati + ' date · ' : '') + plur(s.mancano, 'da dare', 'da dare') + (inRitardo && oggiG ? ' · ' + descRitardo(ritardo) : '');
+  const passato = inRitardo;
   return '<a class="row ' + cls + '" href="#/giro/' + s.data + '/' + s.ora.replace(':', '') + (opz.ospite ? '?ospite=' + opz.ospite : '') + '">' +
     '<span class="dicon ' + (finito ? '' : passato ? 'rust' : 'plum') + '">' + ic(finito ? 'check' : 'clock', 21) + '</span>' +
     '<span class="row-main"><span class="row-title">Medicine delle ' + fmtOra(s.ora) + '</span><span class="row-meta">' + esc(meta) + '</span></span>' +
     '<span class="row-when">' + plur(s.dosi.length, 'farmaco', 'farmaci') + '</span>' + ic('chev', 20) + '</a>';
+}
+// La foto dell'ospite, se c'è, altrimenti le iniziali: nel giro delle medicine aiuta a non sbagliare persona.
+function avatar(o, size) {
+  const st = size ? ' style="width:' + size + 'px;height:' + size + 'px;border-radius:' + (size / 2) + 'px;font-size:' + Math.round(size * 0.36) + 'px"' : '';
+  return '<span class="avatar"' + st + '>' + (o && o.foto ? '<img src="' + esc(o.foto) + '" alt="">' : esc(iniziali(o ? o.nome : '?'))) + '</span>';
 }
 function rigaLink(href, icona, titolo, meta, cls = '') {
   return '<a class="row ' + cls + '" href="' + href + '"><span class="dicon">' + ic(icona, 21) + '</span><span class="row-main"><span class="row-title">' + esc(titolo) + '</span>' +
@@ -1085,20 +1239,85 @@ function errore(id, msg) {
   else if (el) el.scrollIntoView({ block: 'center' });
 }
 
+/* ===================================================== finestre di domanda */
+// Al posto di OK/Annulla del browser: pulsanti grandi che dicono cosa succede.
+// scelte: [{ valore, testo, tipo: 'primary' | 'ok' | 'danger' }]; "Annulla" (valore null) è sempre in fondo.
+// Con opz.campo c'è anche una casella di testo: il risultato diventa { valore, nota }.
+let finestraAperta = null;
+// Una domanda aperta si chiude (come "Annulla") se si cambia pagina o se scatta il blocco col PIN:
+// non deve restare utilizzabile sopra un'altra schermata.
+function chiudiFinestre() { if (finestraAperta) finestraAperta(null); }
+window.addEventListener('hashchange', chiudiFinestre);
+function chiedi(opz) {
+  chiudiFinestre();
+  return new Promise(resolve => {
+    const prima = document.activeElement;
+    const velo = document.createElement('div');
+    velo.className = 'velo';
+    const scelte = (opz.scelte || []).concat(opz.senzaAnnulla ? [] : [{ valore: null, testo: opz.annulla || 'Annulla' }]);
+    const cls = t => t === 'primary' ? 'btn-primary' : t === 'ok' ? 'btn-ok' : t === 'danger' ? 'btn-danger-pieno' : '';
+    velo.innerHTML = '<div class="finestra" role="dialog" aria-modal="true" aria-labelledby="fin-t">' +
+      (opz.icona ? '<div class="fin-ic ' + (opz.tono || '') + '">' + ic(opz.icona, 30) + '</div>' : '') +
+      '<h2 id="fin-t">' + esc(opz.titolo || '') + '</h2>' + (opz.testo ? '<div class="fin-testo">' + opz.testo + '</div>' : '') +
+      (opz.campo ? '<div class="field" style="margin-top:8px"><label for="fin-campo">' + esc(opz.campo.etichetta) + '</label>' +
+        '<textarea id="fin-campo" maxlength="300" style="min-height:76px" placeholder="' + esc(opz.campo.ph || '') + '"></textarea><p class="err" id="fin-err"></p></div>' : '') +
+      '<div class="fin-bottoni">' + scelte.map((s, i) => '<button type="button" class="btn ' + cls(s.tipo) + '" data-i="' + i + '">' + esc(s.testo) + '</button>').join('') + '</div></div>';
+    const tasto = e => { if (e.key === 'Escape' && !opz.senzaAnnulla) { e.preventDefault(); chiudi(null); } };
+    function chiudi(v) {
+      if (finestraAperta === chiudi) finestraAperta = null;
+      document.removeEventListener('keydown', tasto, true);
+      velo.remove();
+      document.body.classList.remove('con-velo');
+      try { if (prima && prima.focus && prima.isConnected) prima.focus(); } catch (e) { /* niente */ }
+      resolve(v);
+    }
+    velo.addEventListener('click', e => {
+      const b = e.target.closest('button[data-i]');
+      if (!b) { if (e.target === velo && !opz.senzaAnnulla) chiudi(null); return; }
+      const s = scelte[Number(b.dataset.i)];
+      if (!opz.campo) return chiudi(s.valore);
+      if (s.valore === null) return chiudi(null);
+      const campo = velo.querySelector('#fin-campo');
+      const nota = campo.value.trim();
+      if (opz.campo.controlla) {
+        const err = opz.campo.controlla(nota, s.valore);
+        if (err) { velo.querySelector('#fin-err').textContent = err; campo.focus(); return; }
+      } else if (opz.campo.obbligatorio && !nota) {
+        velo.querySelector('#fin-err').textContent = opz.campo.errore || 'Scrivi il motivo.'; campo.focus(); return;
+      }
+      chiudi({ valore: s.valore, nota });
+    });
+    document.addEventListener('keydown', tasto, true);
+    finestraAperta = chiudi;
+    document.body.appendChild(velo);
+    document.body.classList.add('con-velo');
+    const primo = opz.campo ? velo.querySelector('#fin-campo') : velo.querySelector('button[data-i]');
+    if (primo) primo.focus({ preventScroll: true });
+  });
+}
+// Domanda sì/no: il pulsante dice cosa succede ("Sì, elimina"), il no è sempre "No, lascia stare".
+async function conferma(titolo, testo, si = 'Sì', opz = {}) {
+  const v = await chiedi(Object.assign({ titolo, testo: testo ? '<p>' + esc(testo).replace(/\n/g, '<br>') + '</p>' : '',
+    scelte: [{ valore: true, testo: si, tipo: opz.pericolo ? 'danger' : 'primary' }], annulla: opz.no || 'No, lascia stare' }, opz.extra || {}));
+  return v === true;
+}
+
 /* ============================================================ Oggi */
 
 function vBenvenuto() {
   return '<header class="top"><div class="tt"><div class="kicker">Comunità Alloggio Kenosis</div><h1>Benvenuto</h1></div></header>' +
     effie('Ciao, sono <b>Effie</b>. Ti aiuto a ricordare terapie, visite, pagamenti e tutte le cose della casa.') + bannerProva() +
-    '<main class="pad"><form data-form="benvenuto">' +
-    '<div class="field"><span class="lab">Chi usa questo telefono?</span>' + chipsRadio('utente', UTENTI, 'Rita') + '</div>' +
+    '<main class="pad"><form data-form="benvenuto" novalidate>' +
+    '<div class="field"><span class="lab">Chi usa questo telefono?</span>' + chipsRadio('utente', UTENTI, '') +
+    '<span class="hint">Quello che segnerai da qui risulterà fatto da questa persona.</span><p class="err" id="err-utente"></p></div>' +
     '<div class="field"><span class="lab">Come vuoi partire?</span>' + chipsRadio('dati', [['esempio', 'Con dati di esempio'], ['vuota', 'App vuota']], 'esempio') +
-    '<span class="hint">Con i dati di esempio vedi subito come funziona. Si cancellano quando vuoi dalle Impostazioni.</span></div>' +
+    '<span class="hint">Con i dati di esempio vedi subito come funziona. Poi li togli da Impostazioni → «Togli i dati di esempio», senza toccare quelli veri.</span></div>' +
     '<div class="actions"><button class="btn btn-primary" type="submit">Inizia</button></div></form></main>';
 }
 moduli.benvenuto = async form => {
   const fd = new FormData(form);
-  await setKV('utente', fd.get('utente') || 'Rita');
+  if (!fd.get('utente')) { errore('err-utente', 'Tocca il tuo nome.'); return; }
+  await setKV('utente', String(fd.get('utente')));
   if (fd.get('dati') === 'esempio') await caricaEsempio();
   vai('#/oggi', true);
 };
@@ -1108,32 +1327,49 @@ function vBlocco() {
     '<h1 style="text-align:center;margin:0 0 4px;font-size:28px">Kenosis</h1><p class="empty" style="text-align:center">Inserisci il PIN per entrare.</p>' +
     '<form data-form="sblocca"><div class="field"><label for="f-pin">PIN</label><input type="password" id="f-pin" name="pin" inputmode="numeric" autocomplete="off" autofocus></div>' +
     '<p class="err" id="err-pin"></p><div class="actions"><button class="btn btn-primary" type="submit">Entra</button></div></form>' +
-    '<details style="margin-top:24px"><summary class="hint" style="cursor:pointer">Ho dimenticato il PIN</summary><p class="hint">Il PIN non si può recuperare. Puoi cancellare i dati da questo telefono: se è collegato, ritornano dallo spazio condiviso; altrimenti si ripristinano dall\'ultima copia di sicurezza.</p>' +
+    '<details style="margin-top:24px"><summary class="hint" style="cursor:pointer">Ho dimenticato il PIN</summary><p class="hint">Il PIN non si può recuperare: chiedi a Vincenzo. ' +
+    'In alternativa si possono cancellare i dati da questo telefono: se è collegato tornano dallo spazio condiviso, altrimenti dall\'ultima copia di sicurezza.</p>' +
     '<button class="btn btn-danger btn-sm" data-action="cancella-tutto">Cancella tutto e ricomincia</button></details></main>';
 }
+let tentativiPin = 0, pinFermoFino = 0;
 moduli.sblocca = async form => {
+  if (Date.now() < pinFermoFino) { errore('err-pin', 'Troppi tentativi: riprova tra ' + Math.ceil((pinFermoFino - Date.now()) / 1000) + ' secondi.'); return; }
   const pin = String(new FormData(form).get('pin') || '');
   const ok = S.kv.pin && (await hashPin(pin, S.kv.pin.sale)) === S.kv.pin.hash;
-  if (!ok) { errore('err-pin', 'PIN sbagliato.'); form.querySelector('input').value = ''; return; }
+  if (!ok) {
+    tentativiPin++;
+    if (tentativiPin >= 5) { tentativiPin = 0; pinFermoFino = Date.now() + 30000; }
+    errore('err-pin', 'PIN sbagliato.'); form.querySelector('input').value = ''; return;
+  }
+  tentativiPin = 0;
   bloccato = false;
   render();
 };
 
-// Tutto quello che c'è da fare oggi, in un'unica lista ordinata per ora.
+const giroHref = s => '#/giro/' + s.data + '/' + s.ora.replace(':', '');
+const nomiMancanti = s => [...new Set(s.dosi.filter(d => !d.sm).map(d => ((ospite(d.f.ospiteId) || {}).nome || '').split(' ')[0]))].filter(Boolean).join(', ');
+// Cosa portare o sapere per una visita ("a digiuno!"), da leggere già nella lista.
+function daSapereVisita(v) {
+  const t = [v.portare, v.note].filter(Boolean).join(' · ');
+  return t ? (t.length > 70 ? t.slice(0, 68) + '…' : t) : null;
+}
+// Tutto quello che c'è da fare oggi, in un'unica lista: prima le medicine in ritardo.
 function coseDiOggi() {
   const t = oggi(), ora = oraAdesso();
   const cose = [];
   for (const s of slotDel(t)) {
     if (!s.mancano) continue;
-    const nomi = [...new Set(s.dosi.filter(d => !d.sm).map(d => ((ospite(d.f.ospiteId) || {}).nome || '').split(' ')[0]))].filter(Boolean);
-    cose.push({ ora: s.ora, titolo: 'Medicine delle ' + fmtOra(s.ora), meta: plur(s.mancano, 'da dare', 'da dare') + (nomi.length ? ' · ' + nomi.join(', ') : ''),
-      href: '#/giro/' + t + '/' + s.ora.replace(':', ''), azione: { href: '#/giro/' + t + '/' + s.ora.replace(':', ''), testo: 'Apri', tipo: 'p' }, medicine: true });
+    const nomi = nomiMancanti(s);
+    const rit = scartoMinuti(s.ora);
+    const inRitardo = rit > 30;
+    cose.push({ ora: s.ora, titolo: 'Medicine delle ' + fmtOra(s.ora), meta: plur(s.mancano, 'da dare', 'da dare') + (nomi ? ' · ' + nomi : '') + (inRitardo ? ' · ' + descRitardo(rit) : ''),
+      href: giroHref(s), azione: { href: giroHref(s), testo: 'Apri', tipo: 'p' }, medicine: true, cls: inRitardo ? 'rust' : '' });
   }
   for (const v of attive().filter(v => v.prossima <= t)) {
     const rit = v.prossima < t;
     const o = ospite(v.ospiteId);
     const meta = [v.importo != null ? euro(v.importo) : null, rit ? (ePagamento(v) ? 'scadeva ' : 'era per ') + fmt(v.prossima) : null,
-      v.domiciliato ? 'si paga da solo' : (v.responsabile && v.responsabile !== 'Entrambi' ? v.responsabile : null), o && !v.nome.includes(o.nome) ? o.nome : null].filter(Boolean).join(' · ');
+      v.domiciliato ? 'addebito in banca: controlla che ci sia' : (v.responsabile && v.responsabile !== 'Entrambi' ? v.responsabile : null), o && !v.nome.includes(o.nome) ? o.nome : null].filter(Boolean).join(' · ');
     let azione;
     if (v.tipo === 'misura') azione = { href: '#/misura?voce=' + v.id, testo: 'Scrivi', tipo: 'p' };
     else if (v.domiciliato) azione = { href: '#/segna?voce=' + v.id, testo: 'Controllato' };
@@ -1144,13 +1380,17 @@ function coseDiOggi() {
   for (const v of visitePreviste().filter(v => v.data <= t)) {
     const o = ospite(v.ospiteId);
     const prima = v.data < t;
-    cose.push({ ora: prima ? null : v.ora, titolo: 'Visita: ' + (v.tipo || '') , meta: [o ? o.nome : null, prima ? 'era ' + fmt(v.data) + ': com\'è andata?' : v.accompagna && v.accompagna !== 'Da decidere' ? 'accompagna ' + v.accompagna : null].filter(Boolean).join(' · '),
+    cose.push({ ora: prima ? null : v.ora, titolo: 'Visita: ' + (v.tipo || ''), meta: [o ? o.nome : null, prima ? 'era ' + fmt(v.data) + ': com\'è andata?' : v.accompagna && v.accompagna !== 'Da decidere' ? 'accompagna ' + v.accompagna : null, prima ? null : daSapereVisita(v)].filter(Boolean).join(' · '),
       href: '#/visita/' + v.id, azione: { href: '#/esito/' + v.id, testo: prima ? 'Scrivi' : 'Fatta' }, cls: prima ? 'amber' : '' });
   }
   for (const e of trasportiPrevisti().filter(e => e.data <= t)) {
     const o = ospite(e.ospiteId);
     cose.push({ ora: e.data === t ? e.ora : null, titolo: 'Uscita: ' + (e.dove || ''), meta: [o ? o.nome : null, e.accompagna && e.accompagna !== 'Da decidere' ? 'accompagna ' + e.accompagna : null].filter(Boolean).join(' · '),
       href: '#/trasporto?id=' + e.id, azione: { action: 'trasporto-fatto', dati: { id: e.id }, testo: 'Fatto' }, cls: e.data < t ? 'rust' : '' });
+  }
+  for (const e of guastiAperti().filter(e => e.urgente)) {
+    cose.push({ titolo: 'Guasto urgente: ' + e.cosa, meta: [e.dove, STATI_GUASTO[e.stato], 'segnalato ' + fmt(e.data) + (e.chi ? ' da ' + e.chi : '')].filter(Boolean).join(' · '),
+      href: '#/guasto?id=' + e.id, azione: { href: '#/guasto?id=' + e.id, testo: 'Apri', tipo: 'p' }, cls: 'rust' });
   }
   const fuori = rifiutiStasera(t);
   if (fuori.length && !S.eventi.some(e => e.tipo === 'rifiuti' && e.data === t)) {
@@ -1159,42 +1399,60 @@ function coseDiOggi() {
   }
   const ordinare = farmaciDaControllare().filter(x => (x.s.daRiordinare || x.s.finito) && !x.f.ordinatoIl);
   if (ordinare.length) cose.push({ titolo: 'Ordinare le medicine', meta: ordinare.slice(0, 3).map(x => x.f.nome).join(', ') + (ordinare.length > 3 ? '…' : ''), azione: { href: '#/ordina', testo: 'Ordina', tipo: 'p' }, cls: 'amber' });
+  const inAttesa = ordiniInRitardo();
+  if (inAttesa.length) cose.push({ titolo: 'Medicine ordinate, non ancora arrivate', meta: inAttesa.slice(0, 3).map(f => f.nome + ' (ordinato ' + fmt(f.ordinatoIl) + ')').join(', ') + (inAttesa.length > 3 ? '…' : ''),
+    azione: { href: '#/servizio/' + ((servizioDiTipo('farmacia') || {}).id || ''), testo: 'Controlla', tipo: 'p' }, cls: 'amber' });
   const adesso = cose.filter(c => !c.ora || c.ora <= ora);
   const dopo = cose.filter(c => c.ora && c.ora > ora).sort((a, b) => a.ora.localeCompare(b.ora));
-  const peso = c => (c.cls === 'rust' ? 0 : c.medicine ? 1 : 2);
+  // prima le medicine in ritardo, poi le altre cose in ritardo, poi le medicine, poi il resto
+  const peso = c => c.medicine ? (c.cls === 'rust' ? 0 : 2) : (c.cls === 'rust' ? 1 : 3);
   adesso.sort((a, b) => peso(a) - peso(b) || (a.ora || '99').localeCompare(b.ora || '99'));
-  if (adesso.length) adesso[0].cls = adesso[0].cls || 'adesso';
+  if (adesso.length && !adesso[0].cls) adesso[0].cls = 'adesso';
   return { adesso, dopo, tutte: cose.length };
 }
 function fatteOggi() {
   const t = oggi();
-  return vociFatto('', '').filter(x => x.data === t).length;
+  return vociFatto('', '').filter(x => x.data === t && x.f !== 'note' && !x.registro).length;
 }
 function vOggi() {
   const t = oggi();
   const { adesso, dopo, tutte } = coseDiOggi();
+  const chiarire = dosiDaChiarire();
+  const consegne = consegneDaLeggere();
   const nome = utente() && utente() !== 'Vincenzo' ? ', ' + utente() : '';
   const destra = '<a class="icon-btn" href="#/impostazioni" aria-label="Impostazioni">' + ic('gear', 24) + '</a>';
   let h = testata(saluto() + nome, { kicker: fmtLungo(t).replace(/ \d{4}$/, ''), destra });
-  h += effie(tutte ? 'Oggi ci sono <b>' + plur(tutte, 'cosa', 'cose') + '</b> da fare. Quando ne finisci una, tocca il pulsante verde.'
+  const daFare = tutte + chiarire.length;
+  h += effie(daFare ? 'Oggi ci sono <b>' + plur(daFare, 'cosa', 'cose') + '</b> da fare. Quando ne finisci una, tocca il suo pulsante.'
     : 'Per oggi è <b>tutto fatto</b>. Se arriva qualcosa di nuovo, tocca <b>Aggiungi</b>.');
-  h += bannerMemoria() + bannerBackup() + '<main class="pad">';
+  h += bannerUnico() + '<main class="pad">';
+  if (chiarire.length) {
+    h += sezione('Da chiarire', chiarire.length, 'rust') +
+      '<p class="hint" style="margin:0 2px">Medicine dei giorni scorsi senza «Dato» né «Non dato». Chiedi al collega e segna cosa è successo.</p>' +
+      chiarire.map(s => cosaOggi({ titolo: 'Medicine di ' + fmtGiorno(s.data).toLowerCase() + ' alle ' + fmtOra(s.ora), meta: plur(s.mancano, 'senza esito', 'senza esito') + ' · ' + nomiMancanti(s),
+        href: giroHref(s), azione: { href: giroHref(s), testo: 'Chiarisci', tipo: 'p' }, cls: 'rust' })).join('');
+  }
+  if (consegne.length) h += sezione('Consegne da leggere', consegne.length, 'amber') + consegne.map(cardConsegna).join('');
   if (adesso.length) h += sezione('Adesso') + adesso.map(cosaOggi).join('');
   if (dopo.length) h += sezione('Più tardi') + dopo.map(cosaOggi).join('');
   const n = fatteOggi();
   h += '<a class="gia" href="#/fatto" style="margin-top:14px"><span class="tondo">' + ic('check', 24, 2.8) + '</span><b>Già fatto oggi: ' + n + '</b>' + ic('chev', 22) + '</a>';
   const domani = coseDelGiorno(piuGiorni(t, 1));
-  if (domani.length) h += sezione('Domani') + domani.slice(0, 3).map(c => cosaOggi(Object.assign({}, c, { azione: null }))).join('');
-  h += '<a class="btn btn-sm" style="margin-top:12px" href="#/prossimi">' + ic('cal', 22) + ' I prossimi giorni</a>';
+  if (domani.length) {
+    h += sezione('Domani') + domani.slice(0, 3).map(c => cosaOggi(Object.assign({}, c, { azione: null }))).join('');
+    if (domani.length > 3) h += '<a class="altre-domani" href="#/prossimi">' + (domani.length === 4 ? 'Ancora 1 cosa domani' : 'Ancora ' + (domani.length - 3) + ' cose domani') + ' →</a>';
+  }
+  h += '<div class="two" style="margin-top:12px"><a class="btn btn-sm" href="#/prossimi">' + ic('cal', 22) + ' Prossimi giorni</a>' +
+    '<a class="btn btn-sm" href="#/consegne">' + ic('chat', 22) + ' Fine turno</a></div>';
   if (collegato()) h += '<a class="syncline" href="#/impostazioni" data-stato-sync>' + esc(testoStatoSync()) + '</a>';
-  h += bannerProva().replace('mx', '') ;
+  h += bannerProva().replace('mx', '');
   return h + '</main>' + barra('oggi');
 }
 // Le cose di un giorno futuro (senza le medicine di tutti i giorni).
 function coseDelGiorno(d) {
   const cose = [];
   for (const v of attive().filter(v => v.prossima === d)) cose.push({ titolo: (ePagamento(v) && !v.domiciliato ? 'Pagare: ' : '') + v.nome, meta: [v.importo != null ? euro(v.importo) : null, (ospite(v.ospiteId) || {}).nome].filter(Boolean).join(' · '), href: '#/voce/' + v.id });
-  for (const v of visitePreviste().filter(v => v.data === d)) cose.push({ ora: v.ora, titolo: 'Visita: ' + (v.tipo || ''), meta: [(ospite(v.ospiteId) || {}).nome, v.accompagna && v.accompagna !== 'Da decidere' ? 'accompagna ' + v.accompagna : null].filter(Boolean).join(' · '), href: '#/visita/' + v.id });
+  for (const v of visitePreviste().filter(v => v.data === d)) cose.push({ ora: v.ora, titolo: 'Visita: ' + (v.tipo || ''), meta: [(ospite(v.ospiteId) || {}).nome, v.accompagna && v.accompagna !== 'Da decidere' ? 'accompagna ' + v.accompagna : null, daSapereVisita(v)].filter(Boolean).join(' · '), href: '#/visita/' + v.id, cls: /digiun/i.test((v.portare || '') + (v.note || '')) ? 'amber' : '' });
   for (const e of trasportiPrevisti().filter(e => e.data === d)) cose.push({ ora: e.ora, titolo: 'Uscita: ' + (e.dove || ''), meta: (ospite(e.ospiteId) || {}).nome || '', href: '#/trasporto?id=' + e.id });
   return cose.sort((a, b) => (a.ora || '00').localeCompare(b.ora || '00'));
 }
@@ -1217,7 +1475,7 @@ azioni['fatto-veloce'] = async el => {
   const v = voce(el.dataset.id);
   if (!v) return;
   const prima = JSON.parse(JSON.stringify(v));
-  const e = { id: uid(), voceId: v.id, servizio: sid(v.servizio), ospiteId: v.ospiteId || null, data: oggi(), ora: oraAdesso(), chi: utente(), tipo: 'fatto', creato: adesso() };
+  const e = { id: uid(), voceId: v.id, servizio: sid(v.servizio), ospiteId: v.ospiteId || null, data: oggi(), ora: oraAdesso(), chi: utente(), tipo: 'fatto', scadenza: v.prossima, creato: adesso() };
   await salva('eventi', e);
   if (v.ric) v.prossima = prossimaDopo(v, oggi()); else { v.attiva = false; v.chiusaIl = oggi(); }
   await salva('voci', v);
@@ -1234,6 +1492,80 @@ azioni['rifiuti-fuori'] = async el => {
   avvisa('Fatto: rifiuti fuori', async () => { await togli('eventi', e.id); dopoModifica(); render(); });
 };
 
+/* ------------------------------------------------ consegne di fine turno */
+
+function consegneDaLeggere() {
+  const u = utente();
+  return S.eventi.filter(e => e.tipo === 'consegna' && e.chi && e.chi !== u && !(e.letto && e.letto[u]) && giorniTra(e.data, oggi()) <= 3).sort(recenti);
+}
+function descLetto(e) {
+  const l = Object.entries(e.letto || {});
+  return l.length ? ' · letto da ' + l.map(([u, q]) => u + ' alle ' + oraDi(q)).join(', ') : ' · non ancora letto';
+}
+function cardConsegna(e) {
+  const o = ospite(e.ospiteId);
+  return '<div class="consegna"><div class="c-testa">Consegne di ' + esc(e.chi) + ' · ' + esc(fmtGiorno(e.data).toLowerCase() + (e.ora ? ' alle ' + fmtOra(e.ora) : '')) + (o ? ' · ' + esc(o.nome) : '') + '</div>' +
+    (e.testo ? '<div class="c-testo">' + esc(e.testo) + '</div>' : '') + (e.riepilogo ? (e.testo ? '<details><summary class="hint" style="cursor:pointer;font-weight:700">Riepilogo del turno</summary><div class="c-rie">' + esc(e.riepilogo) + '</div></details>' : '<div class="c-rie">' + esc(e.riepilogo) + '</div>') : '') +
+    '<button class="btn btn-ok btn-sm" data-action="consegna-letta" data-id="' + e.id + '">' + ic('check', 20, 2.6) + ' Letto</button></div>';
+}
+azioni['consegna-letta'] = async el => {
+  const e = evento(el.dataset.id);
+  if (!e) return;
+  e.letto = Object.assign({}, e.letto, { [utente()]: adesso() });
+  await salva('eventi', e);
+  render();
+  avvisa('Consegne lette');
+};
+// Il riepilogo del turno lo prepara l'app: chi scrive aggiunge solo quello che serve davvero.
+function riepilogoTurno() {
+  const t = oggi(), ora = oraAdesso();
+  const righe = [];
+  const primoNome = id => ((ospite(id) || {}).nome || '').split(' ')[0];
+  const slots = slotDel(t).filter(s => s.ora <= ora);
+  const nonDate = [], senzaEsito = [];
+  for (const s of slots) for (const d of s.dosi) {
+    if (!d.sm) senzaEsito.push(d.f.nome + ' (' + primoNome(d.f.ospiteId) + ', ' + fmtOra(s.ora) + ')');
+    else if (d.sm.esito === 'nondato') nonDate.push(d.f.nome + ' (' + primoNome(d.f.ospiteId) + ', ' + fmtOra(s.ora) + ': ' + String(d.sm.motivo || '').toLowerCase() + ')');
+  }
+  const dati = slots.reduce((a, s) => a + s.dati, 0);
+  if (slots.length) righe.push('Medicine fin qui: ' + plur(dati, 'data', 'date') + (nonDate.length ? ', ' + nonDate.length + ' non date' : '') + (senzaEsito.length ? ', ' + senzaEsito.length + ' ancora da segnare' : '') + '.');
+  if (nonDate.length) righe.push('Non date: ' + nonDate.join('; ') + '.');
+  if (senzaEsito.length) righe.push('Da segnare: ' + senzaEsito.join('; ') + '.');
+  const bisogno = sommDelGiorno(t).filter(x => x.bisogno && x.esito === 'dato');
+  if (bisogno.length) righe.push('Al bisogno: ' + bisogno.map(x => ((farmaco(x.farmacoId) || {}).nome || x.nome || 'farmaco') + ' a ' + primoNome(x.ospiteId) + ' alle ' + fmtOra(x.ora)).join('; ') + '.');
+  const restano = coseDiOggi().adesso.filter(c => !c.medicine).map(c => c.titolo);
+  if (restano.length) righe.push('Ancora da fare: ' + restano.slice(0, 6).join('; ') + (restano.length > 6 ? '…' : '') + '.');
+  const guasti = guastiAperti();
+  if (guasti.length) righe.push('Guasti aperti: ' + guasti.map(g => g.cosa + (g.urgente ? ' (urgente)' : '')).join('; ') + '.');
+  const visite = S.visite.filter(v => v.data === t);
+  if (visite.length) righe.push('Visite di oggi: ' + visite.map(v => (v.tipo || 'visita') + ' di ' + primoNome(v.ospiteId) + (v.stato === 'fatta' ? ' (fatta)' : v.stato === 'annullata' ? ' (annullata)' : ' (da segnare)')).join('; ') + '.');
+  return righe.join('\n');
+}
+function vConsegne() {
+  const rie = riepilogoTurno();
+  const altri = UTENTI.filter(u => u !== utente() && u !== 'Vincenzo');
+  let h = testata('Fine turno', { indietro: true, sub: 'Le consegne per ' + (altri.join(' e ') || 'chi arriva dopo') }) + '<main class="pad">';
+  h += '<div class="box"><h3>Il riepilogo lo prepara l\'app</h3><p class="hint" style="margin:0;white-space:pre-wrap">' + esc(rie || 'Oggi non c\'è niente da segnalare.') + '</p></div>';
+  h += '<form data-form="consegna" novalidate>' +
+    campo('testo', 'Cosa deve sapere chi arriva?', '<textarea id="f-testo" name="testo" maxlength="2000" style="min-height:140px" placeholder="es. Giovanni ha mangiato poco; la figlia di Maria richiama domani; manca il latte"></textarea>', 'Se non c\'è altro, puoi lasciare solo il riepilogo.') +
+    '<div class="field"><label for="f-ospite">Riguarda soprattutto un ospite? (facoltativo)</label><select name="ospite" id="f-ospite">' + opzioniOspiti('') + '</select></div>' +
+    '<input type="hidden" name="riepilogo" value="' + esc(rie) + '">' + bottoniFine('Lascia le consegne') + '</form>';
+  const ultime = S.eventi.filter(e => e.tipo === 'consegna').sort(recenti).slice(0, 5);
+  if (ultime.length) h += sezione('Ultime consegne') + ultime.map(e => '<div class="nota-card"><div class="testo">' + esc(e.testo || '(solo il riepilogo)') + '</div><div class="chi">' +
+    esc((e.chi || '—') + ' · ' + fmtGiorno(e.data).toLowerCase() + (e.ora ? ' alle ' + fmtOra(e.ora) : '') + descLetto(e)) + '</div></div>').join('');
+  return h + '</main>' + barra('oggi');
+}
+moduli.consegna = async form => {
+  const fd = new FormData(form);
+  const testo = String(fd.get('testo') || '').trim();
+  const riepilogo = String(fd.get('riepilogo') || '').trim();
+  if (!testo && !riepilogo) { errore('err-testo', 'Scrivi qualcosa per chi arriva.'); return; }
+  await salva('eventi', { id: uid(), tipo: 'consegna', testo: testo || null, riepilogo: riepilogo || null, ospiteId: String(fd.get('ospite') || '') || null,
+    data: oggi(), ora: oraAdesso(), chi: utente(), letto: {}, creato: adesso() });
+  avvisa('Consegne lasciate: le vede chi apre l\'app');
+  vai('#/oggi', true);
+};
+
 /* ======================================================== Aggiungi */
 
 function scelta(href, icona, titolo, meta) {
@@ -1247,14 +1579,18 @@ function vAggiungi() {
     h += scelta('#/avviso-pagamento', 'euro', 'Un pagamento da fare', 'Bolletta, fattura, avviso') + scelta('#/nuovo-doc', 'folder', 'Un documento', 'Referto, contratto, altro') +
       scelta('#/gia-fatto', 'check', 'La ricevuta di una cosa fatta', '') + '<button class="btn btn-sm" style="margin-top:8px" data-action="scarta-file">Lascia perdere il file</button>';
   } else {
-    h += scelta('#/avviso-pagamento', 'euro', 'Un pagamento', 'Bolletta, assicurazione, commercialista…') +
+    const spesa = servizioDiTipo('spesa');
+    h += scelta('#/per-ospite', 'users', 'Per un ospite', 'Medicina, visita, misura, documento') +
+      scelta('#/nota', 'note', 'Una nota', 'Un fatto, un appunto per i colleghi') +
+      (spesa ? scelta('#/servizio/' + spesa.id + '?scrivi=1', 'cart', 'Una cosa da comprare', 'Va nella lista della spesa') : '') +
+      scelta('#/guasto', 'tool', 'Un guasto', 'Qualcosa da riparare') +
       scelta('#/nuova-voce', 'cal', 'Una cosa da fare', 'Una volta, o che si ripete') +
-      scelta('#/per-ospite', 'users', 'Per un ospite', 'Medicina, visita, misura, documento') +
-      scelta('#/nota', 'note', 'Una nota', 'Un fatto, un appunto') +
+      scelta('#/avviso-pagamento', 'euro', 'Un pagamento', 'Bolletta, assicurazione, commercialista…') +
+      scelta('#/trasporto', 'car', 'Un\'uscita o un accompagnamento', 'Chi va, dove, quando') +
       scelta('#/nuovo-doc', 'camera', 'Una foto o un documento', 'Va nell\'archivio');
     h += '<a class="btn" style="margin-top:6px" href="#/oggi">Annulla</a>';
   }
-  return h + '</main>' + barra('');
+  return h + '</main>' + barra('aggiungi');
 }
 // Per un ospite: prima chi, poi cosa.
 function vPerOspite(q) {
@@ -1371,7 +1707,8 @@ function vFormVoce(q) {
   const sv = servizio(servizioId);
   const pag = v ? ePagamento(v) : (q.get('pag') === '1' || (sv && sv.tipo === 'pagamenti'));
   const cat = v ? categoria(v) : q.get('cat') || (pag ? 'Pagamenti' : sv ? 'Servizi della casa' : q.get('ospite') ? 'Ospiti' : 'Altro');
-  const ricSel = v ? chiaveRic(v.ric) : (pag ? '1-anni' : '1-mesi');
+  // una cosa nuova di solito si fa una volta sola: chi vuole la ripete con un tocco
+  const ricSel = v ? chiaveRic(v.ric) : (pag ? '1-anni' : '');
   const titolo = v ? 'Modifica' : pag ? 'Pagamento che si ripete' : 'Una cosa da fare';
   let h = testata(titolo, { indietro: true, sub: v ? v.nome : pag ? 'Es. assicurazione, quota, commercialista' : 'Te la ricordo io' }) +
     '<main class="pad"><form data-form="voce"' + (v ? ' data-id="' + v.id + '"' : '') + ' novalidate>' +
@@ -1412,6 +1749,7 @@ moduli.voce = async form => {
     note: String(fd.get('note') || '').trim() || null
   });
   if (fd.has('pag')) { v.pag = p === 'Altro' ? nome : p; v.importo = numero(fd.get('importo')); v.domiciliato = fd.get('domiciliato') === 'on'; }
+  v.ancora = ancoraDi(prossima, v.ric);
   await salva('voci', v);
   dopoModifica();
   avvisa(vecchia ? 'Modifiche salvate' : 'Salvata: te la ricordo io');
@@ -1487,7 +1825,7 @@ moduli.segna = async form => {
   });
   await salva('eventi', {
     id: uid(), voceId: v ? v.id : null, servizio: servizioId, ospiteId: v ? v.ospiteId || null : null, data, ora: data === oggi() ? oraAdesso() : null,
-    chi: String(fd.get('chi') || utente()), tipo: pagato ? 'pagato' : 'fatto', importo, nota, docId, creato: adesso()
+    chi: String(fd.get('chi') || utente()), tipo: pagato ? 'pagato' : 'fatto', importo, nota, docId, scadenza: v ? v.prossima : null, creato: adesso()
   });
   let msg = v && v.domiciliato ? 'Segnato: addebitato' : pagato ? 'Segnato come pagato' : 'Segnato come fatto';
   if (v) {
@@ -1562,28 +1900,30 @@ function vOspiti(q) {
   const t = oggi();
   h += lista.map(o => {
     const slots = slotDel(t, o.id);
-    const mancano = slots.filter(s => s.mancano && s.ora <= oraAdesso()).length;
+    const inRitardo = slots.filter(s => s.mancano && scartoMinuti(s.ora) > 30).length;
+    const daDare = slots.filter(s => s.mancano && s.ora <= oraAdesso()).length;
     const vs = attive().filter(v => v.ospiteId === o.id);
     const rit = vs.filter(v => stato(v) === 'ritardo').length;
     const pv = visitePreviste().find(v => v.ospiteId === o.id);
     const nf = S.farmaci.filter(f => f.ospiteId === o.id && farmacoAttivo(f, t)).length;
     const pezzi = [];
-    if (mancano) pezzi.push('terapia da segnare');
+    if (inRitardo) pezzi.push('medicine in ritardo');
+    else if (daDare) pezzi.push('medicine da dare adesso');
     if (rit) pezzi.push(plur(rit, 'cosa in ritardo', 'cose in ritardo'));
     if (pv) pezzi.push((pv.tipo || 'visita') + ' ' + fmt(pv.data));
     if (!pezzi.length) pezzi.push(nf ? plur(nf, 'farmaco in terapia', 'farmaci in terapia') : 'nessuna terapia inserita');
-    return '<a class="row ' + (mancano || rit ? 'row-rust' : '') + '" href="#/ospite/' + o.id + '"><span class="avatar">' + esc(iniziali(o.nome)) + '</span><span class="row-main"><span class="row-title">' + esc(o.nome) + '</span><span class="row-meta">' + esc(pezzi.join(' · ')) + '</span></span>' + ic('chev', 20) + '</a>';
+    return '<a class="row ' + (inRitardo || rit ? 'row-rust' : '') + '" href="#/ospite/' + o.id + '">' + avatar(o) + '<span class="row-main"><span class="row-title">' + esc(o.nome) + '</span><span class="row-meta">' + esc(pezzi.join(' · ')) + '</span></span>' + ic('chev', 20) + '</a>';
   }).join('');
   const nEx = S.ospiti.filter(o => o.attivo === false).length;
   if (!ex && nEx) h += '<a class="btn btn-sm" style="margin-top:10px" href="#/ospiti?vista=ex">Non più ospiti (' + nEx + ')</a>';
   return h + '</main>' + barra('ospiti');
 }
 
-function vOspite(id, sotto) {
+function vOspite(id, sotto, q) {
   const o = ospite(id);
   if (!o) return nonTrovato();
   switch (sotto) {
-    case 'terapia': return vOspiteTerapia(o);
+    case 'terapia': return vOspiteTerapia(o, q);
     case 'visite': return vOspiteVisite(o);
     case 'parametri': return vOspiteParametri(o);
     case 'scadenze': return vOspiteScadenze(o);
@@ -1593,7 +1933,8 @@ function vOspite(id, sotto) {
   const t = oggi();
   const destra = '<a class="icon-btn" href="#/nuovo-ospite?id=' + o.id + '" aria-label="Modifica i dati di ' + esc(o.nome) + '">' + ic('edit', 22) + '</a>';
   let h = testata(o.nome, { indietro: true, sub: [o.codice, o.nascita ? 'nato/a il ' + fmtLungo(o.nascita).replace(/^\S+ /, '') : null].filter(Boolean).join(' · '), destra }) + '<main class="pad">';
-  if (o.attivo === false) h += banner('amber', 'Non è più ospite della casa. I suoi dati restano in archivio.');
+  if (o.foto) h += '<div class="foto-ospite">' + avatar(o, 88) + '</div>';
+  if (o.attivo === false) h += banner('amber', 'Non è più ospite della casa' + (o.usciteIl ? ' dal ' + esc(fmtLungo(o.usciteIl)) : '') + '. I suoi dati restano in archivio.');
   if (o.note) h += '<div class="box" style="border-color:var(--amberline);background:var(--amberbg)"><div style="font-size:14px;font-weight:800;color:var(--amber);letter-spacing:.04em">DA SAPERE</div><div style="white-space:pre-wrap;margin-top:4px;font-size:17px">' + esc(o.note) + '</div></div>';
   const slots = slotDel(t, o.id);
   const fs = S.farmaci.filter(f => f.ospiteId === o.id && farmacoAttivo(f, t));
@@ -1603,7 +1944,7 @@ function vOspite(id, sotto) {
   const nd = S.documenti.filter(d => d.ospiteId === o.id).length;
   const riq = (href, icona, titolo, meta, rust) => '<a class="riq ' + (rust ? 'rust' : '') + '" href="' + href + '"><span class="dicon">' + ic(icona, 28) + '</span><b>' + esc(titolo) + '</b><small>' + esc(meta) + '</small></a>';
   h += '<div class="tiles">' +
-    riq('#/ospite/' + o.id + '/terapia', 'pill', 'Medicine', fs.length ? plur(fs.length, 'medicina', 'medicine') + (prossimo ? ' · da dare alle ' + fmtOra(prossimo.ora) : slots.length ? ' · oggi tutte date' : '') : 'Nessuna inserita', prossimo && prossimo.ora <= oraAdesso()) +
+    riq('#/ospite/' + o.id + '/terapia', 'pill', 'Medicine', fs.length ? plur(fs.length, 'medicina', 'medicine') + (prossimo ? ' · da dare alle ' + fmtOra(prossimo.ora) : slots.length ? ' · oggi tutte segnate' : '') : 'Nessuna inserita', prossimo && scartoMinuti(prossimo.ora) > 30) +
     riq('#/ospite/' + o.id + '/visite', 'steth', 'Visite', pv ? (pv.tipo || 'Visita') + ' ' + fmt(pv.data) + (pv.ora ? ' alle ' + fmtOra(pv.ora) : '') : 'Nessuna in programma', pv && pv.data <= t) +
     riq('#/ospite/' + o.id + '/parametri', 'heart', 'Misure', ultima ? parametro(ultima.tipo).nome + ' ' + ultima.valore + ' · ' + fmt(ultima.data) : 'Pressione, glicemia, peso…') +
     riq('#/ospite/' + o.id + '/documenti', 'folder', 'Documenti', nd ? plur(nd, 'documento', 'documenti') : 'Nessuno') + '</div>';
@@ -1669,10 +2010,15 @@ function vFormOspite(q) {
   let h = testata(o ? 'Modifica ospite' : 'Nuovo ospite', { indietro: true }) +
     '<main class="pad"><form data-form="ospite"' + (o ? ' data-id="' + o.id + '"' : '') + ' novalidate>' +
     campo('nome', 'Nome e cognome', testo('nome', 'nome', o ? o.nome : '', 'maxlength="80" autocomplete="off"')) +
+    '<div class="field"><span class="lab">Foto (facoltativa)</span>' +
+    (o && o.foto ? '<div class="foto-anteprima">' + avatar(o, 64) + '<div class="chips"><label><input type="checkbox" name="togli_foto"><span>Togli la foto</span></label></div></div>' : '') +
+    '<div class="filebtns"><label class="btn btn-sm">' + ic('camera', 20) + ' Fotografa<input type="file" name="foto" accept="image/*" capture="user"></label>' +
+    '<label class="btn btn-sm">' + ic('user', 20) + ' Scegli foto<input type="file" name="file" accept="image/*"></label></div>' +
+    '<span class="hint" data-nomefile>Nel giro delle medicine la foto aiuta a non sbagliare persona. Serve il consenso dell\'ospite o del tutore.</span><p class="err" id="err-file"></p></div>' +
     campo('codice', 'Codice', testo('codice', 'codice', o ? o.codice : prossimoCodice(), 'maxlength="20"'), 'Lo stesso delle cartelle sul PC, così i documenti si ritrovano.') +
     campo('nascita', 'Data di nascita (facoltativa)', '<input type="date" id="f-nascita" name="nascita" value="' + esc(o ? o.nascita || '' : '') + '">') +
     campo('medico', 'Medico di base (facoltativo)', testo('medico', 'medico', o ? o.medico || '' : '', 'maxlength="80" placeholder="es. Dott. Rossi, 0833 123456"')) +
-    campo('note', 'Da sapere (facoltativo)', '<textarea id="f-note" name="note" maxlength="1000" placeholder="Allergie, attenzioni particolari, cose importanti">' + esc(o ? o.note || '' : '') + '</textarea>', 'Compare in evidenza in cima alla sua cartella.') +
+    campo('note', 'Da sapere (facoltativo)', '<textarea id="f-note" name="note" maxlength="1000" placeholder="Allergie, attenzioni particolari, cose importanti">' + esc(o ? o.note || '' : '') + '</textarea>', 'Compare in evidenza in cima alla sua cartella e nel giro delle medicine.') +
     bottoniFine() +
     (o ? '<div class="actions">' + (o.attivo === false
       ? '<button class="btn btn-sm" type="button" data-action="riattiva-ospite" data-id="' + o.id + '">È di nuovo ospite</button>'
@@ -1687,26 +2033,42 @@ function prossimoCodice() {
   while (usati.has('OSP-' + pad(n))) n++;
   return 'OSP-' + pad(n);
 }
+// Una foto quadrata piccola (circa 20 KB): sta dentro la scheda dell'ospite e viaggia cifrata con il resto.
+async function fotoPiccola(file, lato = 240) {
+  const bmp = await createImageBitmap(file);
+  const s = Math.min(bmp.width, bmp.height);
+  const c = document.createElement('canvas');
+  c.width = lato; c.height = lato;
+  c.getContext('2d').drawImage(bmp, (bmp.width - s) / 2, (bmp.height - s) / 2, s, s, 0, 0, lato, lato);
+  return c.toDataURL('image/jpeg', 0.8);
+}
 moduli.ospite = async form => {
   const fd = new FormData(form);
   const nome = String(fd.get('nome') || '').trim();
   if (!nome) { errore('err-nome', 'Scrivi il nome.'); return; }
   const vecchio = form.dataset.id ? ospite(form.dataset.id) : null;
+  const codice = String(fd.get('codice') || '').trim() || prossimoCodice();
+  if (S.ospiti.some(x => x.codice === codice && (!vecchio || x.id !== vecchio.id))) { errore('err-codice', 'Questo codice è già di un altro ospite.'); return; }
   const nascita = String(fd.get('nascita') || '');
   const o = Object.assign({}, vecchio || { creato: adesso(), attivo: true }, {
-    id: vecchio ? vecchio.id : uid(), nome,
-    codice: String(fd.get('codice') || '').trim() || prossimoCodice(),
+    id: vecchio ? vecchio.id : uid(), nome, codice,
     nascita: dataValida(nascita) ? nascita : null,
     medico: String(fd.get('medico') || '').trim() || null,
     note: String(fd.get('note') || '').trim() || null
   });
+  const file = fileScelto(form);
+  if (file) {
+    try { o.foto = await fotoPiccola(file); fileInSospeso = null; }
+    catch (e) { errore('err-file', 'Non riesco a leggere questa foto: provane un\'altra.'); return; }
+  } else if (fd.get('togli_foto') === 'on') delete o.foto;
   await salva('ospiti', o);
+  dopoModifica();
   avvisa('Ospite salvato');
   vai('#/ospite/' + o.id, true);
 };
 azioni['archivia-ospite'] = async el => {
   const o = ospite(el.dataset.id);
-  if (!o || !confirm(o.nome + ' non è più ospite? La terapia smette di essere ricordata; la cartella resta in archivio.')) return;
+  if (!o || !(await conferma(o.nome + ' non è più ospite?', 'Da oggi le sue medicine non verranno più ricordate. La cartella e tutto lo storico restano in archivio.', 'Sì, non è più ospite'))) return;
   o.attivo = false;
   o.usciteIl = oggi();
   await salva('ospiti', o);
@@ -1717,7 +2079,10 @@ azioni['archivia-ospite'] = async el => {
 azioni['riattiva-ospite'] = async el => {
   const o = ospite(el.dataset.id);
   if (!o) return;
+  // il periodo fuori casa resta scritto: in quei giorni nessuna dose risulta "mancante"
+  if (o.usciteIl && o.usciteIl < oggi()) o.fuori = (o.fuori || []).concat([{ dal: o.usciteIl, al: oggi() }]);
   o.attivo = true;
+  o.usciteIl = null;
   await salva('ospiti', o);
   dopoModifica();
   avvisa('Di nuovo tra gli ospiti');
@@ -1726,34 +2091,73 @@ azioni['riattiva-ospite'] = async el => {
 azioni['elimina-ospite'] = async el => {
   const o = ospite(el.dataset.id);
   if (!o) return;
-  if (!confirm('Eliminare ' + o.nome + ' e TUTTI i suoi dati (terapia, visite, parametri, documenti)? Se vuoi solo toglierlo dall\'elenco, usa "Non è più ospite".')) return;
+  const ok = await chiedi({ titolo: 'Eliminare ' + o.nome + ' e tutti i suoi dati?', icona: 'warn', tono: 'rust',
+    testo: '<p>Verranno cancellati terapia, registro delle medicine, visite, misure, documenti, note e consegne che lo riguardano.</p><p>Se ha solo lasciato la casa, usa invece <b>«Non è più ospite»</b>: i dati restano in archivio.</p>',
+    campo: { etichetta: 'Per confermare scrivi ELIMINA', ph: 'ELIMINA', controlla: t => t.trim().toUpperCase() === 'ELIMINA' ? '' : 'Scrivi ELIMINA, tutto attaccato.' },
+    scelte: [{ valore: true, testo: 'Elimina tutto', tipo: 'danger' }], annulla: 'No, lascia stare' });
+  if (!ok) return;
   const tutto = [['ospiti', o]];
-  for (const st of ['farmaci', 'visite', 'parametri', 'documenti', 'somministrazioni']) S[st].filter(x => x.ospiteId === o.id).forEach(x => tutto.push([st, x]));
-  S.voci.filter(v => v.ospiteId === o.id).forEach(v => tutto.push(['voci', v]));
+  for (const st of ['farmaci', 'visite', 'parametri', 'documenti', 'somministrazioni', 'eventi', 'voci']) S[st].filter(x => x.ospiteId === o.id).forEach(x => tutto.push([st, x]));
   await eliminaConAnnulla(tutto, 'Eliminato: ' + o.nome, () => vai('#/ospiti', true));
 };
 
 /* ========================================================= Terapia */
 
-function vOspiteTerapia(o) {
+function dosiBisogno(f) { return sommDelFarmaco(f.id).filter(x => x.bisogno && x.esito === 'dato').sort((a, b) => (b.quando || '').localeCompare(a.quando || '')); }
+function descUltimaBisogno(f) {
+  const l = dosiBisogno(f);
+  const oggiN = l.filter(x => x.data === oggi()).length;
+  if (!l.length) return 'mai data finora';
+  const u = l[0];
+  return 'ultima: ' + fmt(u.data) + ' alle ' + fmtOra(u.ora) + (u.chi ? ' (' + u.chi + ')' : '') + ' · oggi ' + plur(oggiN, 'volta', 'volte') + (f.maxGiorno ? ' su ' + f.maxGiorno : '');
+}
+async function logTerapia(f, nota) {
+  await salva('eventi', { id: uid(), tipo: 'terapia', ospiteId: f.ospiteId, farmacoId: f.id, data: oggi(), ora: oraAdesso(), chi: utente(), nota, creato: adesso() });
+}
+
+function vOspiteTerapia(o, q) {
   const t = oggi();
   const fs = S.farmaci.filter(f => f.ospiteId === o.id);
   const attivi = fs.filter(f => farmacoAttivo(f, t) && f.giorni !== 'bisogno').sort(perNome);
   const bisogno = fs.filter(f => farmacoAttivo(f, t) && f.giorni === 'bisogno').sort(perNome);
   const altri = fs.filter(f => !farmacoAttivo(f, t)).sort(perNome);
   let h = testata('Medicine', { indietro: true, sub: o.nome }) + '<main class="pad">';
-  h += banner('amber', 'Dosi e orari si copiano dalla prescrizione del medico: l\'app non li calcola e non li cambia.');
+  if (q && q.get('dalla-visita')) h += banner('rust', '<b>Il medico ha cambiato la terapia.</b> Tocca il farmaco da cambiare e poi la matita in alto; per un farmaco nuovo usa «Aggiungi una medicina».', 'warn');
+  else h += banner('amber', 'Dosi e orari si copiano dalla prescrizione del medico: l\'app non li calcola e non li cambia.');
+  if (o.note) h += '<div class="da-sapere">' + esc(o.note) + '</div>';
   const slots = slotDel(t, o.id);
   if (slots.length) h += sezione('Oggi') + slots.map(s => rigaSlot(s, { ospite: o.id })).join('');
   h += sezione('Medicine a orario', attivi.length) + (attivi.length ? attivi.map(f => rigaFarmaco(f, { ospite: false })).join('') : '<p class="empty">Nessun farmaco a orario.</p>');
   if (bisogno.length) {
-    h += sezione('Al bisogno', bisogno.length) + bisogno.map(f => '<div class="row"><a class="row-main" href="#/farmaco/' + f.id + '"><span class="row-title">' + esc(f.nome) + '</span><span class="row-meta">' + esc((f.dose || '') + (f.note ? ' · ' + f.note : '')) + '</span></a>' +
-      '<button class="btn btn-sm" style="width:auto" data-action="dato-bisogno" data-f="' + f.id + '">Dato adesso</button></div>').join('');
+    h += sezione('Al bisogno', bisogno.length) + bisogno.map(f => '<div class="row"><a class="row-main" href="#/farmaco/' + f.id + '"><span class="row-title">' + esc(f.nome) + '</span><span class="row-meta">' +
+      esc([quantoOgniVolta(f), f.note, descUltimaBisogno(f)].filter(Boolean).join(' · ')) + '</span></a>' +
+      '<button class="btn btn-sm btn-ok" style="width:auto" data-action="dato-bisogno" data-f="' + f.id + '">Dato adesso</button></div>').join('');
   }
   h += '<a class="btn btn-primary" style="margin-top:10px" href="#/nuovo-farmaco?ospite=' + o.id + '">' + ic('plus', 21) + ' Aggiungi una medicina</a>';
   h += '<a class="btn btn-sm" href="#/registro-terapia?ospite=' + o.id + '">' + ic('book', 20) + ' Registro: quando è stata data</a>';
   if (altri.length) h += sezione('Sospesi o finiti', altri.length) + altri.map(f => rigaFarmaco(f, { ospite: false })).join('');
   return h + '</main>' + barra('ospiti');
+}
+
+function rigaVersione(titolo, v, sotto) {
+  return '<div class="gi" style="cursor:default"><span class="row-main"><span class="row-title">' + esc(titolo) + '</span><span class="row-meta">' + esc(descTerapia(v)) +
+    (sotto ? '<br>' + esc(sotto) : '') + '</span></span></div>';
+}
+function descCambio(c) {
+  if (!c) return '';
+  return (c.tipo === 'errore' ? 'Corretto un errore' : 'Cambiata su indicazione del medico') + (c.da ? ', da ' + c.da : '') + (c.quando ? ' il ' + fmtD(giornoDi(c.quando)) : '') + (c.motivo ? ': ' + c.motivo : '');
+}
+// La storia della terapia: com'è adesso e com'era prima, con chi l'ha cambiata e perché.
+function storiaTerapia(f) {
+  const righe = [];
+  const inizio = giornoDi(f.versioneDa || f.creato);
+  righe.push(rigaVersione((f.sospeso ? 'Sospesa' + (f.sospesoIl ? ' dal ' + fmtD(f.sospesoIl) : '') + (f.motivoSospensione ? ' — ' + f.motivoSospensione : '') + '. Prima: ' : 'Adesso') + (inizio ? ' (dal ' + fmtD(inizio) + ')' : ''), f, descCambio(f.cambio)));
+  for (const p of (f.pause || []).slice().reverse()) righe.push('<div class="gi" style="cursor:default"><span class="row-main"><span class="row-title">Sospesa dal ' + esc(fmtD(p.dal)) + ' al ' + esc(fmtD(piuGiorni(p.al, -1))) + '</span>' + (p.motivo ? '<span class="row-meta">' + esc(p.motivo) + '</span>' : '') + '</span></div>');
+  for (const v of (f.storia || []).slice().reverse()) {
+    const da = giornoDi(v.versioneDa), a = piuGiorni(v.fino, -1);
+    righe.push(rigaVersione(da && da > a ? 'Per poco, il ' + fmtD(da) + ' (cambiata subito)' : 'Dal ' + fmtD(da) + ' al ' + fmtD(a), v, descCambio(v.cambio)));
+  }
+  return '<div class="group storia">' + righe.join('') + '</div>';
 }
 
 function vFarmaco(id) {
@@ -1766,32 +2170,36 @@ function vFarmaco(id) {
   if (s.scad === 'scaduto') avviso += banner('rust', '<b>Confezione scaduta:</b> non usarla, va riportata in farmacia per lo smaltimento.', 'warn');
   else if (s.scad) avviso += banner('amber', 'La confezione scade il <b>' + esc(fmtLungo(f.scadenza)) + '</b>.');
   if (s.finito) avviso += banner('rust', '<b>Scorta finita</b> secondo i conti dell\'app. Se non è così, correggi con "Ho contato".', 'warn');
-  else if (s.daRiordinare) avviso += banner(s.giorni <= 2 ? 'rust' : 'amber', '<b>Da ordinare:</b> restano ' + esc(numIt(s.rimaste) + ' ' + u) + ', circa ' + plur(s.giorni, 'giorno', 'giorni') + '.' + (f.ordinatoIl ? ' Ordinato ' + fmt(f.ordinatoIl) + '.' : ''));
+  else if (s.daRiordinare) avviso += banner(s.bisogno || s.giorni <= 2 ? 'rust' : 'amber', '<b>Da ordinare:</b> restano ' + esc(numIt(s.rimaste) + ' ' + u) + (s.giorni != null ? ', circa ' + plur(s.giorni, 'giorno', 'giorni') : '') + '.' + (f.ordinatoIl ? ' Ordinato ' + fmt(f.ordinatoIl) + '.' : ''));
   const destra = '<a class="icon-btn" href="#/nuovo-farmaco?id=' + f.id + '" aria-label="Modifica farmaco">' + ic('edit', 20) + '</a>';
+  const bis = f.giorni === 'bisogno';
   let h = testata(f.nome, { indietro: true, sub: o ? o.nome : '', destra }) + '<main class="pad">' + avviso + '<div class="card">' +
-    (f.dose ? '<div class="kv"><span class="k">Dose</span><span class="v">' + esc(f.dose) + '</span></div>' : '') +
+    (f.dose ? '<div class="kv"><span class="k">Prescrizione</span><span class="v">' + esc(f.dose) + '</span></div>' : '') +
     (IN_TERAPIA(f) ? '<div class="kv"><span class="k">Quando</span><span class="v">' + esc(descOrari(f)) + '</span></div>' : '') +
-    (IN_TERAPIA(f) && f.giorni !== 'bisogno' ? '<div class="kv"><span class="k">Ogni volta</span><span class="v">' + esc(quantita(f.qta, u)) + '</span></div>' : '') +
-    ((f.dal || f.al) ? '<div class="kv"><span class="k">Periodo</span><span class="v">' + esc((f.dal ? 'dal ' + fmt(f.dal) : '') + (f.al ? ' fino al ' + fmt(f.al) : ' senza fine')) + '</span></div>' : '') +
+    (IN_TERAPIA(f) ? '<div class="kv"><span class="k">Ogni volta</span><span class="v">' + esc(quantita(f.qta, u)) + '</span></div>' : '') +
+    (bis ? '<div class="kv"><span class="k">Limiti</span><span class="v">' + esc([f.maxGiorno ? 'massimo ' + plur(Number(f.maxGiorno), 'volta', 'volte') + ' al giorno' : null, f.oreTra ? 'almeno ' + plur(Number(f.oreTra), 'ora', 'ore') + ' tra una e l\'altra' : null].filter(Boolean).join(', ') || 'nessuno indicato') + '</span></div>' : '') +
+    ((f.dal || f.al) ? '<div class="kv"><span class="k">Periodo</span><span class="v">' + esc((f.dal ? 'dal ' + fmtD(f.dal) : '') + (f.al ? ' fino al ' + fmtD(f.al) : ' senza fine')) + '</span></div>' : '') +
     (f.medico ? '<div class="kv"><span class="k">Prescritto da</span><span class="v">' + esc(f.medico) + '</span></div>' : '') +
     '<div class="kv"><span class="k">In casa</span><span class="v">' + esc(quantita(s.rimaste, u)) + (s.giorni != null ? ' <span class="muted" style="font-weight:500">· per ' + plur(s.giorni, 'giorno', 'giorni') + '</span>' : '') + '</span></div>' +
-    '<div class="kv"><span class="k">Avvisami quando</span><span class="v">restano ' + esc(plur(f.soglia == null ? 7 : f.soglia, 'giorno', 'giorni')) + '</span></div>' +
+    '<div class="kv"><span class="k">Avvisami quando</span><span class="v">' + (bis ? 'ne restano ' + esc(quantita(s.minimo, u)) : 'restano ' + esc(plur(f.soglia == null ? 7 : f.soglia, 'giorno', 'giorni'))) + '</span></div>' +
     '<div class="kv"><span class="k">Scadenza conf.</span><span class="v">' + esc(f.scadenza ? fmtLungo(f.scadenza) : 'non inserita') + '</span></div>' +
     (f.note ? '<div class="kv"><span class="k">Note</span><span class="v" style="font-weight:500;white-space:pre-wrap">' + esc(f.note) + '</span></div>' : '') + '</div>';
-  if (f.giorni === 'bisogno' && farmacoAttivo(f, oggi())) h += '<button class="btn btn-primary" style="margin-top:8px" data-action="dato-bisogno" data-f="' + f.id + '">' + ic('check', 21, 2.6) + ' Dato adesso</button>';
-  h += '<form class="box" data-form="ritiro" data-id="' + f.id + '" novalidate style="margin-top:8px"><h3>Arrivato dalla farmacia</h3>' +
+  if (bis && farmacoAttivo(f, oggi())) h += '<p class="hint" style="margin:6px 2px 0">' + esc(descUltimaBisogno(f)) + '</p><button class="btn btn-ok" style="margin-top:4px" data-action="dato-bisogno" data-f="' + f.id + '">' + ic('check', 21, 2.6) + ' Dato adesso</button>';
+  h += sezione('Storia della terapia') + storiaTerapia(f);
+  const storia = sommDelFarmaco(f.id).slice().sort((a, b) => (b.data + (b.ora || '')).localeCompare(a.data + (a.ora || ''))).slice(0, 15);
+  h += sezione('Ultime volte') + (storia.length ? '<div class="group">' + storia.map(x => '<div class="gi" style="cursor:default"><span class="dicon ' + (x.esito === 'dato' ? '' : 'amber') + '">' + ic(x.esito === 'dato' ? 'check' : 'x', 20) + '</span><span class="row-main"><span class="row-title">' +
+    esc(fmtGiorno(x.data) + (x.ora ? ' · ore ' + fmtOra(x.ora) : '')) + '</span><span class="row-meta">' + esc((x.esito === 'dato' ? (x.bisogno ? 'Dato al bisogno' : 'Dato') : 'Non dato: ' + (x.motivo || '')) + (x.chi ? ' da ' + x.chi : '') + (x.quando ? ' alle ' + oraDi(x.quando) : '') + (x.segnataDopo ? ' (segnato dopo)' : '') + (x.nota ? ' · ' + x.nota : '')) + '</span></span></div>').join('') + '</div>' : '<p class="empty">Ancora nessuna.</p>');
+  let scorte = '<form class="box" data-form="ritiro" data-id="' + f.id + '" novalidate style="margin-top:8px"><h3>Arrivato dalla farmacia</h3>' +
     (f.confezione ? '<div class="field" style="margin-top:8px"><label for="f-conf">Quante confezioni? (da ' + esc(numIt(f.confezione) + ' ' + u) + ')</label><input type="number" id="f-conf" name="confezioni" min="0" step="1" inputmode="numeric"></div><p class="hint" style="margin:6px 0 0">Oppure scrivi le ' + esc(u) + ' qui sotto.</p>' : '') +
     '<div class="field" style="margin-top:8px"><label for="f-ritirate">Quante ' + esc(u) + ' in tutto?</label><input type="number" id="f-ritirate" name="quante" min="0" step="any" inputmode="decimal"><p class="err" id="err-quante"></p></div>' +
     '<div class="field"><label for="f-scad-nuova">Scadenza della nuova confezione (facoltativa)</label><input type="date" id="f-scad-nuova" name="scadenza"></div>' +
     '<div class="actions" style="margin-top:12px"><button class="btn btn-primary btn-sm" type="submit">Aggiungi alla scorta</button></div></form>';
-  h += '<form class="box" data-form="conta" data-id="' + f.id + '" novalidate><h3>Ho contato</h3><p class="hint" style="margin:0">Se il numero dell\'app non torna, scrivi quante ce ne sono davvero.</p>' +
+  scorte += '<form class="box" data-form="conta" data-id="' + f.id + '" novalidate><h3>Ho contato</h3><p class="hint" style="margin:0">Se il numero dell\'app non torna, scrivi quante ce ne sono davvero.</p>' +
     '<div class="field" style="margin-top:8px"><label for="f-contate">Quante ' + esc(u) + ' ci sono adesso?</label><input type="number" id="f-contate" name="quante" min="0" step="any" inputmode="decimal"><p class="err" id="err-contate"></p></div>' +
     '<div class="actions" style="margin-top:12px"><button class="btn btn-sm" type="submit">Correggi la scorta</button></div></form>';
-  const storia = S.somministrazioni.filter(x => x.farmacoId === f.id).sort((a, b) => (b.data + (b.ora || '')).localeCompare(a.data + (a.ora || ''))).slice(0, 15);
-  h += sezione('Ultime volte') + (storia.length ? '<div class="group">' + storia.map(x => '<div class="gi" style="cursor:default"><span class="dicon ' + (x.esito === 'dato' ? '' : 'amber') + '">' + ic(x.esito === 'dato' ? 'check' : 'x', 20) + '</span><span class="row-main"><span class="row-title">' +
-    esc(fmtGiorno(x.data) + (x.ora ? ' · ore ' + fmtOra(x.ora) : '')) + '</span><span class="row-meta">' + esc((x.esito === 'dato' ? 'Dato' : 'Non dato: ' + (x.motivo || '')) + (x.chi ? ' da ' + x.chi : '') + (x.quando ? ' alle ' + new Date(x.quando).toTimeString().slice(0, 5) : '')) + '</span></span></div>').join('') + '</div>' : '<p class="empty">Ancora nessuna.</p>');
+  h += altreOpzioni('<div style="display:flex;flex-direction:column;gap:9px">' + scorte + '</div>', 'Scorta: arrivato dalla farmacia, ho contato');
   h += '<div class="actions"><button class="btn btn-sm" data-action="sospendi-farmaco" data-id="' + f.id + '">' + (f.sospeso ? 'Riprendi la terapia' : 'Sospendi (il medico l\'ha tolto)') + '</button>' +
-    '<button class="btn btn-sm btn-danger" data-action="elimina-farmaco" data-id="' + f.id + '">Elimina farmaco</button></div>';
+    '<button class="btn btn-sm btn-danger" data-action="elimina-farmaco" data-id="' + f.id + '">Elimina farmaco (inserito per sbaglio)</button></div>';
   return h + '</main>' + barra('ospiti');
 }
 
@@ -1804,21 +2212,32 @@ function vFormFarmaco(q) {
   const giorniTipo = f && f.giorni === 'bisogno' ? 'bisogno' : f && Array.isArray(f.giorni) ? 'alcuni' : 'tutti';
   const orari = f && IN_TERAPIA(f) ? f.orari : [];
   const tuttiOrari = [...new Set(ORARI_COMUNI.concat(orari))].sort();
-  let h = testata(f ? 'Modifica medicina' : 'Nuova medicina', { indietro: true, sub: ospite(f ? f.ospiteId : q.get('ospite')) ? ospite(f ? f.ospiteId : q.get('ospite')).nome : '' }) +
+  const o = ospite(f ? f.ospiteId : q.get('ospite'));
+  let h = testata(f ? 'Modifica medicina' : 'Nuova medicina', { indietro: true, sub: o ? o.nome : '' }) +
     '<main class="pad">' + banner('amber', 'Copia dalla prescrizione. L\'app ricorda gli orari e conta le scorte: le dosi le decide solo il medico.') +
     '<form data-form="farmaco"' + (f ? ' data-id="' + f.id + '"' : '') + ' novalidate>' +
-    campo('nome', 'Nome della medicina', testo('nome', 'nome', f ? f.nome : '', 'maxlength="80" autocomplete="off" placeholder="es. Cardioaspirina 100 mg"')) +
-    '<div class="field"><label for="f-ospite">Per quale ospite?</label><select name="ospite" id="f-ospite">' + opzioniOspiti(f ? f.ospiteId : q.get('ospite'), '— scegli —') + '</select><p class="err" id="err-ospite"></p></div>' +
-    campo('dose', 'Dose, come è scritta nella prescrizione', testo('dose', 'dose', f ? f.dose || '' : '', 'maxlength="120" placeholder="es. 1 compressa dopo colazione"')) +
+    campo('nome', 'Nome della medicina', testo('nome', 'nome', f ? f.nome : '', 'maxlength="80" autocomplete="off" placeholder="es. Cardioaspirina 100 mg"'));
+  // in modifica l'ospite non si cambia: la terapia (e il suo registro) resta di chi era
+  if (f) h += '<div class="field"><span class="lab">Per quale ospite?</span><div class="foto-anteprima">' + avatar(o) + '<b>' + esc(o ? o.nome : '—') + '</b></div>' +
+    '<input type="hidden" name="ospite" value="' + esc(f.ospiteId) + '"><span class="hint">Per darla a un altro ospite, crea una medicina nuova nella sua cartella.</span></div>';
+  else h += '<div class="field"><label for="f-ospite">Per quale ospite?</label><select name="ospite" id="f-ospite">' + opzioniOspiti(q.get('ospite'), '— scegli —') + '</select><p class="err" id="err-ospite"></p></div>';
+  h += campo('dose', 'Come è scritta nella prescrizione', testo('dose', 'dose', f ? f.dose || '' : '', 'maxlength="120" placeholder="es. 1 compressa dopo colazione"')) +
+    '<div class="field"><label for="f-qta">Quante ogni volta?</label><div class="inline"><input type="number" id="f-qta" name="qta" min="0" step="any" inputmode="decimal" value="' + esc(f && f.qta != null ? f.qta : 1) + '">' +
+    selezione('unita', UNITA_FARMACO, f ? f.unita : 'compresse') + '</div><span class="hint">Deve dire lo stesso della prescrizione: è il numero che si toglie dalla scorta a ogni «Dato».</span><p class="err" id="err-qta"></p></div>' +
     '<div class="field"><span class="lab">Quando si prende?</span>' + chipsRadio('giorni_tipo', [['tutti', 'Tutti i giorni'], ['alcuni', 'Solo alcuni giorni'], ['bisogno', 'Al bisogno']], giorniTipo) +
     '<div id="box-giorni" class="' + (giorniTipo === 'alcuni' ? '' : 'hidden') + '" style="margin-top:6px">' + chipsCheck('giorno', ORDINE_SETTIMANA.map(g => [g, GIORNI_BREVI[g]]), Array.isArray(f && f.giorni) ? f.giorni : []) + '</div></div>' +
     '<div id="box-orari" class="' + (giorniTipo === 'bisogno' ? 'hidden' : '') + '">' +
-    '<div class="field"><span class="lab">A che ora?</span>' + chipsCheck('ora', tuttiOrari.map(o => [o, fmtOra(o)]), orari) +
-    '<div class="inline" style="margin-top:4px"><span class="lbl">Altro orario</span><input type="time" name="ora_extra" aria-label="Altro orario"></div><p class="err" id="err-ora"></p></div>' +
-    '<div class="field"><label for="f-qta">Quante ' + esc(f ? f.unita || 'unità' : 'unità') + ' ogni volta?</label><div class="inline"><input type="number" id="f-qta" name="qta" min="0" step="any" inputmode="decimal" value="' + esc(f && f.qta != null ? f.qta : 1) + '">' +
-    selezione('unita', UNITA_FARMACO, f ? f.unita : 'compresse') + '</div><span class="hint">Serve a contare le scorte: ogni volta che segni "Dato" si tolgono dalla scorta.</span><p class="err" id="err-qta"></p></div></div>' +
-    campo('incasa', 'Quante ce ne sono adesso in casa?', '<input type="number" id="f-incasa" name="inCasa" min="0" step="any" inputmode="decimal" value="' + esc(f ? s.rimaste : '') + '">', 'Serve per avvisarti prima che finiscano.') +
-    altreOpzioni('<div class="two"><div class="field"><label for="f-dal">Dal</label><input type="date" id="f-dal" name="dal" value="' + esc(f ? f.dal || '' : oggi()) + '"></div>' +
+    '<div class="field"><span class="lab">A che ora?</span>' + chipsCheck('ora', tuttiOrari.map(x => [x, fmtOra(x)]), orari) +
+    '<div class="inline" style="margin-top:4px"><span class="lbl">Altro orario</span><input type="time" name="ora_extra" aria-label="Altro orario"></div><p class="err" id="err-ora"></p></div></div>' +
+    '<div id="box-bisogno" class="' + (giorniTipo === 'bisogno' ? '' : 'hidden') + '"><div class="two">' +
+    campo('maxgiorno', 'Massimo al giorno', '<input type="number" id="f-maxgiorno" name="maxGiorno" min="1" max="24" inputmode="numeric" value="' + esc(f && f.maxGiorno ? f.maxGiorno : '') + '" placeholder="es. 2">') +
+    campo('oretra', 'Ore tra due dosi', '<input type="number" id="f-oretra" name="oreTra" min="1" max="48" inputmode="numeric" value="' + esc(f && f.oreTra ? f.oreTra : '') + '" placeholder="es. 6">') +
+    '</div><span class="hint">Se la prescrizione li indica. L\'app avvisa prima di superarli.</span></div>' +
+    campo('incasa', 'Quante ce ne sono adesso in casa?', '<input type="number" id="f-incasa" name="inCasa" min="0" step="any" inputmode="decimal" value="' + esc(f ? s.rimaste : '') + '">', 'Serve per avvisarti prima che finiscano.');
+  if (f) h += '<div class="field"><span class="lab">Se cambi dose, orari, giorni o periodo: perché?</span>' +
+    chipsRadio('perche', [['medico', 'Nuova indicazione del medico'], ['errore', 'Correggo un errore di inserimento']], '') + '<p class="err" id="err-perche"></p></div>' +
+    campo('motivo', 'Chi l\'ha prescritta e quando', testo('motivo', 'motivo', '', 'maxlength="120" placeholder="es. Dott. Bianchi, visita del 20/11"'), 'La versione di prima resta nella storia della terapia.');
+  h += altreOpzioni('<div class="two"><div class="field"><label for="f-dal">Dal</label><input type="date" id="f-dal" name="dal" value="' + esc(f ? f.dal || '' : oggi()) + '"></div>' +
       '<div class="field"><label for="f-al">Fino al (se c\'è)</label><input type="date" id="f-al" name="al" value="' + esc(f ? f.al || '' : '') + '"></div></div>' +
       campo('medico', 'Prescritto da', testo('medico', 'medico', f ? f.medico || '' : '', 'maxlength="80" placeholder="es. Dott. Rossi, cardiologo"')) +
       campo('confezione', 'Quante in una confezione?', '<input type="number" id="f-confezione" name="confezione" min="0" step="any" inputmode="decimal" value="' + esc(f && f.confezione ? f.confezione : '') + '">', 'Così quando arriva dalla farmacia basta scrivere quante confezioni.') +
@@ -1827,6 +2246,18 @@ function vFormFarmaco(q) {
       campo('note', 'Note', '<textarea id="f-note" name="note" maxlength="500" placeholder="es. a stomaco pieno, sciogliere in acqua">' + esc(f ? f.note || '' : '') + '</textarea>'), 'Periodo, medico, confezione, scadenza') +
     bottoniFine() + '</form></main>';
   return h + barra('ospiti');
+}
+// Per confrontare due versioni della terapia senza farsi ingannare da campi vuoti o dall'ordine.
+function normTerapia(v) {
+  const o = {};
+  for (const k of CAMPI_TERAPIA) {
+    let x = v[k];
+    if (x === undefined || x === '' || (typeof x === 'number' && isNaN(x))) x = null;
+    if (Array.isArray(x)) x = x.slice().sort();
+    if (k === 'qta' || k === 'maxGiorno' || k === 'oreTra') x = x == null ? null : Number(x);
+    o[k] = x;
+  }
+  return JSON.stringify(o);
 }
 moduli.farmaco = async form => {
   const fd = new FormData(form);
@@ -1838,26 +2269,52 @@ moduli.farmaco = async form => {
   const inCasa = numero(fd.get('inCasa'));
   if (!nome) { errore('err-nome', 'Scrivi il nome del farmaco.'); return; }
   if (!ospiteId) { errore('err-ospite', 'Scegli l\'ospite.'); return; }
+  if (qta == null || qta <= 0) { errore('err-qta', 'Scrivi quante ogni volta (dalla prescrizione).'); return; }
   if (tipo !== 'bisogno' && !orari.length) { errore('err-ora', 'Scegli almeno un orario.'); return; }
-  if (tipo !== 'bisogno' && (qta == null || qta < 0)) { errore('err-qta', 'Scrivi quante ogni volta (dalla prescrizione).'); return; }
   const giorni = tipo === 'bisogno' ? 'bisogno' : tipo === 'alcuni' ? fd.getAll('giorno').map(Number) : 'tutti';
   if (Array.isArray(giorni) && !giorni.length) { errore('err-ora', 'Scegli in quali giorni.'); return; }
   const vecchio = form.dataset.id ? farmaco(form.dataset.id) : null;
   const sPrima = vecchio ? scorta(vecchio) : null;
   const dal = String(fd.get('dal') || ''), al = String(fd.get('al') || ''), scad = String(fd.get('scadenza') || '');
   const soglia = parseInt(fd.get('soglia'), 10);
-  const f = Object.assign({}, vecchio || { creato: adesso() }, {
+  const maxGiorno = tipo === 'bisogno' ? parseInt(fd.get('maxGiorno'), 10) || null : null;
+  const oreTra = tipo === 'bisogno' ? parseInt(fd.get('oreTra'), 10) || null : null;
+  const terapia = { dose: String(fd.get('dose') || '').trim() || null, giorni, orari: tipo === 'bisogno' ? [] : orari, qta,
+    unita: String(fd.get('unita') || (vecchio && vecchio.unita) || 'compresse'), dal: dataValida(dal) ? dal : null, al: dataValida(al) ? al : null, maxGiorno, oreTra };
+  const cambiata = !vecchio || normTerapia(vecchio) !== normTerapia(terapia);
+  let cambio = null;
+  if (vecchio && cambiata) {
+    const perche = String(fd.get('perche') || '');
+    const motivo = String(fd.get('motivo') || '').trim();
+    if (!perche) { errore('err-perche', 'Hai cambiato la terapia: scegli perché.'); return; }
+    if (perche === 'medico' && !motivo) { errore('err-motivo', 'Scrivi chi l\'ha prescritta e quando.'); return; }
+    cambio = { tipo: perche, motivo: motivo || null, da: utente(), quando: adesso() };
+  }
+  if (cambiata) {
+    const o = ospite(ospiteId);
+    const ok = await chiedi({ titolo: 'Controlla con la prescrizione', icona: 'pill',
+      testo: '<p><b>' + esc(o ? o.nome : '') + '</b> — ' + esc(nome) + '</p><p>' + esc(descTerapia(terapia)) + '</p>' +
+        (vecchio ? '<p class="muted">Prima: ' + esc(descTerapia(vecchio)) + '</p>' : '') + '<p>È tutto uguale alla prescrizione?</p>',
+      scelte: [{ valore: true, testo: 'Sì, è uguale: salva', tipo: 'ok' }], annulla: 'No, correggo' });
+    if (!ok) return;
+  }
+  const f = Object.assign({}, vecchio || { creato: adesso() }, terapia, {
     id: vecchio ? vecchio.id : uid(), nome, ospiteId,
-    dose: String(fd.get('dose') || '').trim() || null,
-    giorni, orari: tipo === 'bisogno' ? [] : orari, qta: qta == null ? 1 : qta,
-    unita: String(fd.get('unita') || (vecchio && vecchio.unita) || 'compresse'),
-    dal: dataValida(dal) ? dal : null, al: dataValida(al) ? al : null,
     medico: String(fd.get('medico') || '').trim() || null,
     confezione: numero(fd.get('confezione')) || null,
     scadenza: dataValida(scad) ? scad : null,
     soglia: isNaN(soglia) ? 7 : soglia,
     note: String(fd.get('note') || '').trim() || null
   });
+  if (!vecchio) f.versioneDa = f.creato;
+  if (vecchio && cambiata) {
+    // la versione di prima resta valida per i giorni passati
+    const snap = { fino: oggi(), versioneDa: vecchio.versioneDa || vecchio.creato || null, cambio: vecchio.cambio || null };
+    for (const k of CAMPI_TERAPIA) snap[k] = vecchio[k] === undefined ? null : vecchio[k];
+    f.storia = (vecchio.storia || []).concat([snap]);
+    f.versioneDa = adesso();
+    f.cambio = cambio;
+  }
   // la scorta si riparte da adesso solo se è stata cambiata a mano
   if (!vecchio || inCasa == null || !sPrima || Math.abs(inCasa - sPrima.rimaste) > 0.001) {
     f.inCasa = inCasa == null ? 0 : inCasa;
@@ -1866,8 +2323,10 @@ moduli.farmaco = async form => {
   }
   delete f.alGiorno;
   await salva('farmaci', f);
+  if (cambiata) await logTerapia(f, (vecchio ? 'Terapia cambiata: ' : 'Nuova medicina: ') + nome + ' — ' + descTerapia(f) + (vecchio ? ' (prima: ' + descTerapia(vecchio) + ')' : '') +
+    (cambio ? ' · ' + (cambio.tipo === 'errore' ? 'correzione di un errore' : 'indicazione del medico') + (cambio.motivo ? ': ' + cambio.motivo : '') : ''));
   dopoModifica();
-  avvisa('Farmaco salvato');
+  avvisa(cambiata && vecchio ? 'Terapia cambiata: la versione di prima resta nella storia' : 'Farmaco salvato');
   vai('#/farmaco/' + f.id, true);
 };
 moduli.ritiro = async form => {
@@ -1907,9 +2366,25 @@ moduli.conta = async form => {
 azioni['sospendi-farmaco'] = async el => {
   const f = farmaco(el.dataset.id);
   if (!f) return;
-  if (!f.sospeso && !confirm('Sospendere ' + f.nome + '? Non verrà più ricordato negli orari della terapia.')) return;
-  f.sospeso = !f.sospeso;
-  await salva('farmaci', f);
+  if (!f.sospeso) {
+    const r = await chiedi({ titolo: 'Sospendere ' + f.nome + '?', icona: 'pill', testo: '<p>Da oggi non verrà più ricordato negli orari. Lo storico resta.</p>',
+      campo: { etichetta: 'Chi l\'ha deciso? (medico e data)', ph: 'es. Dott. Bianchi, telefonata del 25/11', obbligatorio: true, errore: 'Scrivi chi ha deciso la sospensione.' },
+      scelte: [{ valore: true, testo: 'Sì, sospendi', tipo: 'primary' }], annulla: 'No, lascia stare' });
+    if (!r) return;
+    f.sospeso = true;
+    f.sospesoIl = oggi();
+    f.motivoSospensione = r.nota;
+    await salva('farmaci', f);
+    await logTerapia(f, 'Sospesa: ' + f.nome + ' — ' + r.nota);
+  } else {
+    if (!(await conferma('Riprendere ' + f.nome + '?', 'Da oggi torna negli orari: ' + descTerapia(f) + '.', 'Sì, riprendi'))) return;
+    if (f.sospesoIl && f.sospesoIl < oggi()) f.pause = (f.pause || []).concat([{ dal: f.sospesoIl, al: oggi(), motivo: f.motivoSospensione || null }]);
+    f.sospeso = false;
+    f.sospesoIl = null;
+    f.motivoSospensione = null;
+    await salva('farmaci', f);
+    await logTerapia(f, 'Ripresa: ' + f.nome + ' — ' + descTerapia(f));
+  }
   dopoModifica();
   avvisa(f.sospeso ? 'Sospeso' : 'Di nuovo in terapia');
   render();
@@ -1917,8 +2392,9 @@ azioni['sospendi-farmaco'] = async el => {
 azioni['elimina-farmaco'] = async el => {
   const f = farmaco(el.dataset.id);
   if (!f) return;
-  if (!confirm('Eliminare ' + f.nome + ' e il suo registro? Se il medico l\'ha solo tolto, meglio "Sospendi": il registro resta.')) return;
-  const tutto = [['farmaci', f]].concat(S.somministrazioni.filter(x => x.farmacoId === f.id).map(x => ['somministrazioni', x]));
+  if (!(await conferma('Eliminare ' + f.nome + ' e il suo registro?', 'Usalo solo se è stato inserito per sbaglio. Se il medico l\'ha tolto, meglio «Sospendi»: il registro resta.', 'Sì, elimina', { pericolo: true }))) return;
+  const tutto = [['farmaci', f]].concat(sommDelFarmaco(f.id).map(x => ['somministrazioni', x]));
+  await logTerapia(f, 'Eliminata (inserita per sbaglio): ' + f.nome);
   await eliminaConAnnulla(tutto, 'Eliminato: ' + f.nome, () => indietro());
 };
 
@@ -1932,13 +2408,18 @@ function vGiro(data, hhmm, q) {
   const s = slotDel(data, filtro || undefined).find(x => x.ora === ora);
   const i = tutti.findIndex(x => x.ora === ora);
   const prec = tutti[i - 1], succ = tutti[i + 1];
+  const futuro = data > oggi();
+  const passato = data < oggi();
   const nav = '<div class="two" style="margin-bottom:4px">' +
     (prec ? '<a class="btn btn-sm" href="#/giro/' + data + '/' + prec.ora.replace(':', '') + '">' + ic('back', 18) + ' ' + fmtOra(prec.ora) + '</a>' : '<span></span>') +
     (succ ? '<a class="btn btn-sm" href="#/giro/' + data + '/' + succ.ora.replace(':', '') + '">' + fmtOra(succ.ora) + ' ' + ic('chev', 18) + '</a>' : '<span></span>') + '</div>';
-  let h = testata('Medicine delle ' + fmtOra(ora), { indietro: true, sub: fmtGiorno(data) + (filtro && ospite(filtro) ? ' · ' + ospite(filtro).nome : '') }) + '<main class="pad">';
+  let h = testata('Medicine delle ' + fmtOra(ora), { indietro: true, sub: fmtGiorno(data) + (filtro && ospite(filtro) ? ' · ' + ospite(filtro).nome : '') + (futuro ? '' : ' · segni come ' + (utente() || '—')) }) + '<main class="pad">';
   if (!filtro) h += nav;
   if (!s) return h + '<p class="empty">A quest\'ora non c\'è niente da dare.</p></main>' + barra('oggi');
-  if (!s.mancano) h += banner('green', 'Tutto segnato per le ' + fmtOra(ora) + '.', 'check');
+  if (futuro) h += banner('amber', 'Sono le medicine di <b>' + esc(fmtGiorno(data).toLowerCase()) + '</b>: si segnano quel giorno.', 'clock');
+  else if (!s.mancano) h += banner('green', 'Tutto segnato per le ' + fmtOra(ora) + '.', 'check');
+  else if (passato) h += banner('rust', '<b>Medicine di un giorno passato.</b> Per ognuna segna cosa è successo; se non lo sai, chiedi al collega.', 'warn');
+  else if (scartoMinuti(ora) > FINESTRA_DOSE) h += banner('rust', '<b>Sono le ' + fmtOra(oraAdesso()) + ': queste medicine sono ' + esc(descRitardo(scartoMinuti(ora))) + '.</b> Toccando «Dato» l\'app ti chiede cosa è successo.', 'warn');
   else h += banner('amber', 'Segna <b>dopo</b> averla data davvero. Se ci sono dubbi sulla dose, chiedi al medico.');
   const perOspite = new Map();
   for (const d of s.dosi) { if (!perOspite.has(d.f.ospiteId)) perOspite.set(d.f.ospiteId, []); perOspite.get(d.f.ospiteId).push(d); }
@@ -1947,58 +2428,116 @@ function vGiro(data, hhmm, q) {
     const o = ospite(oid);
     const dosi = perOspite.get(oid);
     const mancano = dosi.filter(d => !d.sm).length;
-    h += '<div class="ospite-testa"><span class="avatar">' + esc(iniziali(o ? o.nome : '?')) + '</span><b>' + esc(o ? o.nome : 'Ospite') + '</b>' +
-      (mancano > 1 ? '<button class="btn btn-sm" data-action="tutti-dati" data-o="' + oid + '" data-d="' + data + '" data-ora="' + ora + '">Tutte date</button>' : '') + '</div>';
-    if (o && o.note) h += '<p class="hint" style="margin:0 2px;color:var(--amber);font-weight:700">' + esc(o.note.slice(0, 140)) + '</p>';
+    h += '<div class="ospite-testa">' + avatar(o) + '<b>' + esc(o ? o.nome : 'Ospite') + '</b>' +
+      (mancano > 1 && !futuro ? '<button class="btn btn-sm btn-ok" data-action="tutti-dati" data-o="' + oid + '" data-d="' + data + '" data-ora="' + ora + '">Tutte date</button>' : '') + '</div>';
+    if (o && o.note) h += '<div class="da-sapere">' + esc(o.note) + '</div>';
     h += dosi.map(({ f, sm }) => {
-      const quanto = f.dose || (f.qta != null ? quantita(f.qta, f.unita) : '');
+      const qv = quantoOgniVolta(f);
+      const quanto = (qv ? '<b>' + esc(qv) + '</b>' : '') + (f.dose && semplifica(f.dose) !== semplifica(qv) ? (qv ? ' · ' : '') + esc(f.dose) : '');
       if (sm) {
-        const quando = sm.quando ? new Date(sm.quando).toTimeString().slice(0, 5) : '';
-        return '<div class="dose ' + (sm.esito === 'dato' ? 'ok' : 'no') + '"><div class="testa"><div style="flex:1"><div class="nome">' + esc(f.nome) + '</div><div class="quanto">' + esc(quanto) + '</div></div></div>' +
-          '<div class="esito">' + (sm.esito === 'dato' ? '✓ Dato' : '✗ Non dato' + (sm.motivo ? ': ' + esc(sm.motivo.toLowerCase()) : '')) + (sm.chi ? ' da ' + esc(sm.chi) : '') + (quando ? ' alle ' + quando : '') + '</div>' +
+        const quando = sm.quando ? oraDi(sm.quando) : '';
+        const come = sm.segnataDopo ? 'data in orario, segnata alle ' + quando : sm.fuoriOrario === 'ritardo' ? 'data in ritardo, alle ' + quando : sm.fuoriOrario === 'anticipo' ? 'data in anticipo, alle ' + quando : quando ? 'segnata alle ' + quando : '';
+        return '<div class="dose ' + (sm.esito === 'dato' ? 'ok' : 'no') + '"><div class="testa"><div style="flex:1"><div class="nome">' + esc(f.nome) + '</div><div class="quanto">' + quanto + '</div></div></div>' +
+          '<div class="esito">' + (sm.esito === 'dato' ? '✓ Dato' : '✗ Non dato' + (sm.motivo ? ': ' + esc(sm.motivo.toLowerCase()) : '')) + (sm.chi ? ' da ' + esc(sm.chi) : '') +
+          (come || sm.nota ? '<small>' + esc([come, sm.nota].filter(Boolean).join(' · ')) + '</small>' : '') + '</div>' +
           '<button class="btn btn-sm" data-action="annulla-somm" data-id="' + sm.id + '">Correggi</button></div>';
       }
-      const s2 = scorta(f);
-      return '<div class="dose"><div class="testa"><div style="flex:1"><div class="nome">' + esc(f.nome) + '</div><div class="quanto">' + esc(quanto) + '</div>' +
-        (f.note ? '<div class="quanto">' + esc(f.note) + '</div>' : '') + (s2.finito ? '<div class="quanto t-rust">Scorta finita secondo l\'app</div>' : '') + '</div></div>' +
-        '<div class="bottoni"><button class="btn btn-primary" data-action="dato" data-f="' + f.id + '" data-d="' + data + '" data-ora="' + ora + '">' + ic('check', 21, 2.6) + ' Dato</button>' +
-        '<a class="btn" href="#/nondato?f=' + f.id + '&d=' + data + '&o=' + ora.replace(':', '') + '">Non dato</a></div></div>';
+      const s2 = f.eliminato ? null : scorta(f);
+      return '<div class="dose"><div class="testa"><div style="flex:1"><div class="nome">' + esc(f.nome) + '</div><div class="quanto">' + quanto + '</div>' +
+        (f.note ? '<div class="quanto">' + esc(f.note) + '</div>' : '') + (s2 && s2.finito ? '<div class="quanto t-rust">Scorta finita secondo l\'app</div>' : '') + '</div></div>' +
+        (futuro ? '' : '<div class="bottoni"><button class="btn btn-ok" data-action="dato" data-f="' + f.id + '" data-d="' + data + '" data-ora="' + ora + '">' + ic('check', 21, 2.6) + ' Dato</button>' +
+          '<a class="btn" href="#/nondato?f=' + f.id + '&d=' + data + '&o=' + ora.replace(':', '') + '">Non dato</a></div>') + '</div>';
     }).join('');
   }
   return h + '</main>' + barra('oggi');
 }
 function nuovaSomm(f, data, ora, esito, motivo) {
-  return { id: smId(f, data, ora), farmacoId: f.id, ospiteId: f.ospiteId, data, ora, esito, motivo: motivo || null, chi: utente(), quando: adesso(), qta: esito === 'dato' ? Number(f.qta) || 0 : 0, creato: adesso() };
+  return { id: smId(f, data, ora), farmacoId: f.id, ospiteId: f.ospiteId, data, ora, esito, motivo: motivo || null, chi: utente(), quando: adesso(),
+    qta: esito === 'dato' ? Number(f.qta) || 0 : 0, nome: f.nome, dose: f.dose || null, unita: f.unita || null, creato: adesso() };
 }
 async function dopoSomm(data, ora) {
   const s = slotDel(data).find(x => x.ora === ora);
   if (s && !s.mancano) chiudiSlot(data + 'T' + ora);
   dopoModifica();
 }
+// Prima di segnare "Dato" fuori orario l'app chiede cosa è successo, per non dare una dose due volte.
+// Restituisce null (annullato), { nondato: true }, oppure i dati da aggiungere alla registrazione.
+async function controllaOrario(fs, d, ora, singolo) {
+  const t = oggi();
+  if (d > t) { await chiedi({ titolo: 'Non ancora', icona: 'clock', tono: 'amber', testo: '<p>Queste medicine sono di ' + esc(fmtGiorno(d).toLowerCase()) + ': si segnano quel giorno.</p>', annulla: 'Ho capito' }); return null; }
+  const scarto = d === t ? scartoMinuti(ora) : null;
+  if (d === t && Math.abs(scarto) <= FINESTRA_DOSE) return {};
+  // le altre dosi dello stesso farmaco oggi, vicine a adesso: il rischio di raddoppiare è lì
+  const avvisi = [];
+  if (d === t) for (const f of fs) for (const s of slotDel(t, f.ospiteId)) {
+    if (s.ora === ora || Math.abs(scartoMinuti(s.ora)) > 180) continue;
+    const x = s.dosi.find(x => x.f.id === f.id);
+    if (x) avvisi.push(f.nome + ': c\'è anche la dose delle ' + fmtOra(s.ora) + (x.sm ? (x.sm.esito === 'dato' ? ', già data' : ', non data') : ', ancora da dare') + '.');
+  }
+  const att = avvisi.length ? '<span class="att">' + avvisi.map(esc).join('<br>') + '</span>' : '';
+  const quali = fs.length === 1 ? '<b>' + esc(fs[0].nome) + '</b>' : 'queste ' + fs.length + ' medicine (' + esc(fs.map(f => f.nome).join(', ')) + ')';
+  if (d === t && scarto < -FINESTRA_DOSE) {
+    const v = await chiedi({ titolo: 'È presto', icona: 'clock', tono: 'amber',
+      testo: '<p>' + quali + ': è la dose delle <b>' + fmtOra(ora) + '</b> e sono le <b>' + fmtOra(oraAdesso()) + '</b>.</p><p>La stai dando adesso, in anticipo?</p>' + att,
+      scelte: [{ valore: 'anticipo', testo: 'Sì, la do adesso', tipo: 'ok' }], annulla: 'No, torno indietro' });
+    return v ? { fuoriOrario: 'anticipo' } : null;
+  }
+  const quando = d === t ? 'delle <b>' + fmtOra(ora) + '</b> e sono le <b>' + fmtOra(oraAdesso()) + '</b>' : 'di <b>' + esc(fmtGiorno(d).toLowerCase()) + ' alle ' + fmtOra(ora) + '</b>';
+  const scelte = [{ valore: 'inorario', testo: d === t ? 'Era stata data in orario: non era segnata' : 'Era stata data: non era segnata', tipo: 'ok' }];
+  if (d === t) scelte.push({ valore: 'ritardo', testo: 'La do adesso, in ritardo', tipo: 'primary' });
+  if (singolo) scelte.push({ valore: 'nondato', testo: 'Non è stata data' });
+  const v = await chiedi({ titolo: d === t ? 'Dose in ritardo' : 'Dose di un giorno passato', icona: 'warn', tono: 'rust',
+    testo: '<p>' + quali + ': è la dose ' + quando + '.</p><p>Cosa è successo?</p>' + att +
+      (d === t && scarto > 120 ? '<p class="hint" style="margin-top:10px">Se è passato molto tempo o è vicina la dose successiva, prima di darla chiedi al medico.</p>' : ''), scelte, annulla: 'Annulla' });
+  if (!v) return null;
+  if (v === 'nondato') return { nondato: true };
+  return v === 'inorario' ? { segnataDopo: true } : { fuoriOrario: 'ritardo' };
+}
 azioni.dato = async el => {
   const f = farmaco(el.dataset.f);
+  const d = el.dataset.d, ora = el.dataset.ora;
   if (!f) return;
-  await salva('somministrazioni', nuovaSomm(f, el.dataset.d, el.dataset.ora, 'dato'));
-  await dopoSomm(el.dataset.d, el.dataset.ora);
+  const extra = await controllaOrario([f], d, ora, true);
+  if (!extra) return;
+  if (extra.nondato) { vai('#/nondato?f=' + f.id + '&d=' + d + '&o=' + ora.replace(':', '')); return; }
+  const x = Object.assign(nuovaSomm(f, d, ora, 'dato'), extra);
+  await salva('somministrazioni', x);
+  await dopoSomm(d, ora);
   render();
-  avvisa('Dato: ' + f.nome);
+  // un tocco sbagliato si annulla subito, senza lasciare traccia
+  avvisa('Dato: ' + f.nome, async () => { await togli('somministrazioni', x.id); dopoModifica(); render(); avvisa('Tolto: ' + f.nome + ' è di nuovo da dare'); });
 };
 azioni['tutti-dati'] = async el => {
   const o = ospite(el.dataset.o);
-  const s = slotDel(el.dataset.d, el.dataset.o).find(x => x.ora === el.dataset.ora);
+  const d = el.dataset.d, ora = el.dataset.ora;
+  const s = slotDel(d, el.dataset.o).find(x => x.ora === ora);
   if (!s) return;
-  const mancano = s.dosi.filter(d => !d.sm);
-  if (!confirm('Segnare come dati tutti i ' + mancano.length + ' farmaci delle ' + fmtOra(el.dataset.ora) + (o ? ' di ' + o.nome : '') + '?\n\n' + mancano.map(d => '• ' + d.f.nome).join('\n'))) return;
-  for (const d of mancano) await salva('somministrazioni', nuovaSomm(d.f, el.dataset.d, el.dataset.ora, 'dato'));
-  await dopoSomm(el.dataset.d, el.dataset.ora);
+  const mancano = s.dosi.filter(x => !x.sm && !x.f.eliminato);
+  if (!mancano.length) return;
+  let extra = {};
+  if (d === oggi() && Math.abs(scartoMinuti(ora)) <= FINESTRA_DOSE) {
+    const ok = await chiedi({ titolo: 'Tutte date?', icona: 'pill',
+      testo: '<p>Segno come date le medicine delle <b>' + fmtOra(ora) + '</b>' + (o ? ' di <b>' + esc(o.nome) + '</b>' : '') + ':</p><ul>' + mancano.map(x => '<li>' + esc(x.f.nome) + ' — ' + esc(quantoOgniVolta(x.f)) + '</li>').join('') + '</ul>',
+      scelte: [{ valore: true, testo: 'Sì, le ho date tutte', tipo: 'ok' }], annulla: 'No, le segno una per una' });
+    if (!ok) return;
+  } else {
+    extra = await controllaOrario(mancano.map(x => x.f), d, ora, false);
+    if (!extra) return;
+  }
+  for (const x of mancano) await salva('somministrazioni', Object.assign(nuovaSomm(x.f, d, ora, 'dato'), extra));
+  await dopoSomm(d, ora);
   render();
-  avvisa('Segnati ' + mancano.length + ' farmaci');
+  avvisa('Segnate ' + plur(mancano.length, 'medicina', 'medicine'));
 };
 azioni['annulla-somm'] = async el => {
   const x = trova('somministrazioni', el.dataset.id);
   if (!x) return;
-  if (!confirm('Togliere quello che è stato segnato per ' + ((farmaco(x.farmacoId) || {}).nome || 'questo farmaco') + '?')) return;
+  const f = farmacoDaRegistrazione(x);
+  if (!(await conferma('Togliere quello che è stato segnato?', f.nome + ' delle ' + fmtOra(x.ora) + ' risulta «' + (x.esito === 'dato' ? 'Dato' : 'Non dato') + '»' +
+    (x.chi ? ' da ' + x.chi : '') + (x.quando ? ' alle ' + oraDi(x.quando) : '') + '. Se lo togli torna «da dare». La correzione resta scritta nel diario.', 'Sì, togli', { pericolo: true }))) return;
   await togli('somministrazioni', x.id);
+  await salva('eventi', { id: uid(), tipo: 'correzione', ospiteId: x.ospiteId, farmacoId: x.farmacoId, data: oggi(), ora: oraAdesso(), chi: utente(), creato: adesso(),
+    nota: 'Tolto «' + (x.esito === 'dato' ? 'Dato' : 'Non dato') + '» di ' + f.nome + ' (' + fmtGiorno(x.data).toLowerCase() + ' alle ' + fmtOra(x.ora) + ', segnato da ' + (x.chi || '—') + ')' });
   dopoModifica();
   render();
   avvisa('Tolto: ora risulta da dare');
@@ -2006,10 +2545,25 @@ azioni['annulla-somm'] = async el => {
 azioni['dato-bisogno'] = async el => {
   const f = farmaco(el.dataset.f);
   if (!f) return;
-  if (!confirm('Segnare che hai dato adesso ' + f.nome + (f.dose ? ' (' + f.dose + ')' : '') + '?')) return;
+  const l = dosiBisogno(f);
+  const oggiN = l.filter(x => x.data === oggi()).length;
+  const ultima = l[0];
+  const oreDa = ultima && ultima.quando ? (Date.now() - Date.parse(ultima.quando)) / 3600000 : null;
+  const att = [];
+  if (f.maxGiorno && oggiN >= f.maxGiorno) att.push('Oggi è già stata data ' + plur(oggiN, 'volta', 'volte') + ': il massimo indicato è ' + f.maxGiorno + '.');
+  if (f.oreTra && oreDa != null && oreDa < f.oreTra) att.push('Sono passate solo ' + (oreDa < 1 ? Math.round(oreDa * 60) + ' minuti' : plur(Math.floor(oreDa), 'ora', 'ore')) + ' dall\'ultima: ne servono almeno ' + f.oreTra + '.');
+  const o = ospite(f.ospiteId);
+  const r = await chiedi({ titolo: 'Dato adesso?', icona: att.length ? 'warn' : 'pill', tono: att.length ? 'rust' : '',
+    testo: '<p><b>' + esc(f.nome) + '</b> a <b>' + esc(o ? o.nome : '') + '</b>: ' + esc(quantoOgniVolta(f)) + (f.dose ? ' — ' + esc(f.dose) : '') + '.</p>' +
+      '<p>' + esc(ultima ? 'Ultima volta: ' + fmtGiorno(ultima.data).toLowerCase() + ' alle ' + fmtOra(ultima.ora) + (ultima.chi ? ' (' + ultima.chi + ')' : '') + ' · oggi ' + plur(oggiN, 'volta', 'volte') : 'Non è ancora mai stata data.') + '</p>' +
+      (att.length ? '<span class="att">' + att.map(esc).join('<br>') + '</span>' : ''),
+    campo: att.length ? { etichetta: 'Perché la dai lo stesso?', ph: 'es. sentito il medico alle 15', obbligatorio: true, errore: 'Scrivi perché (es. chi l\'ha autorizzata).' } : null,
+    scelte: [{ valore: true, testo: att.length ? 'La do lo stesso' : 'Sì, l\'ho data adesso', tipo: att.length ? 'danger' : 'ok' }], annulla: 'No, lascia stare' });
+  if (!r) return;
   const x = nuovaSomm(f, oggi(), oraAdesso(), 'dato');
   x.id = uid();
   x.bisogno = true;
+  if (r && r.nota) x.nota = 'oltre i limiti: ' + r.nota;
   await salva('somministrazioni', x);
   dopoModifica();
   render();
@@ -2021,21 +2575,29 @@ function vNonDato(q) {
   const d = q.get('d');
   const ora = String(q.get('o') || '').replace(/^(\d\d)(\d\d)$/, '$1:$2');
   if (!f || !dataValida(d) || !oraValida(ora)) return nonTrovato();
-  return testata('Non dato', { indietro: true, sub: f.nome + ' · ' + ((ospite(f.ospiteId) || {}).nome || '') + ' · ore ' + fmtOra(ora) }) +
+  if (d > oggi()) return testata('Non dato', { indietro: true }) + '<main class="pad">' + banner('amber', 'Questa dose è di ' + esc(fmtGiorno(d).toLowerCase()) + ': si segna quel giorno.', 'clock') + '</main>' + barra('oggi');
+  return testata('Non dato', { indietro: true, sub: f.nome + ' · ' + ((ospite(f.ospiteId) || {}).nome || '') + ' · ' + (d === oggi() ? '' : fmtGiorno(d).toLowerCase() + ', ') + 'ore ' + fmtOra(ora) }) +
     '<main class="pad"><form data-form="nondato" data-f="' + f.id + '" data-d="' + d + '" data-ora="' + ora + '" novalidate>' +
-    '<div class="field"><span class="lab">Perché?</span>' + chipsRadio('motivo', MOTIVI_NONDATO, 'Rifiutato') + '</div>' +
-    campo('nota', 'Nota (facoltativa)', '<textarea id="f-nota" name="nota" maxlength="300" placeholder="es. avvisato il medico"></textarea>') +
+    '<div class="field"><span class="lab">Perché non è stata data?</span>' + chipsRadio('motivo', MOTIVI_NONDATO, '') + '<p class="err" id="err-motivo"></p></div>' +
+    campo('nota', 'Nota', '<textarea id="f-nota" name="nota" maxlength="300" placeholder="es. avvisato il medico alle 9"></textarea>', 'Se hai avvisato il medico o un familiare, scrivilo qui.') +
     bottoniFine('Segna come non dato') + '</form></main>' + barra('oggi');
 }
 moduli.nondato = async form => {
   const f = farmaco(form.dataset.f);
   if (!f) return;
   const fd = new FormData(form);
-  const x = nuovaSomm(f, form.dataset.d, form.dataset.ora, 'nondato', String(fd.get('motivo') || 'Altro'));
-  x.nota = String(fd.get('nota') || '').trim() || null;
+  const motivo = String(fd.get('motivo') || '');
+  const nota = String(fd.get('nota') || '').trim();
+  if (!motivo) { errore('err-motivo', 'Scegli il motivo.'); return; }
+  if (motivo === 'Altro' && !nota) { errore('err-nota', 'Scrivi cosa è successo.'); return; }
+  const x = nuovaSomm(f, form.dataset.d, form.dataset.ora, 'nondato', motivo);
+  x.nota = nota || null;
+  if (form.dataset.d < oggi()) x.segnataDopo = true;
   await salva('somministrazioni', x);
+  // "finito": la scorta va a zero, così il farmaco compare subito tra quelli da ordinare
+  if (motivo === 'Finito, da ricomprare') { f.inCasa = 0; f.contatoQuando = adesso(); f.contatoIl = oggi(); f.ordinatoIl = null; await salva('farmaci', f); }
   await dopoSomm(form.dataset.d, form.dataset.ora);
-  avvisa('Segnato come non dato');
+  avvisa(motivo === 'Finito, da ricomprare' ? 'Segnato. ' + f.nome + ' è tra le medicine da ordinare' : 'Segnato come non dato');
   indietro();
 };
 
@@ -2048,18 +2610,19 @@ function vRegistroTerapia(q) {
   for (let i = 0; i < giorni; i++) {
     const d = piuGiorni(oggi(), -i);
     const slots = slotDel(d, filtro || undefined);
-    const bisogno = S.somministrazioni.filter(x => x.bisogno && x.data === d && (!filtro || x.ospiteId === filtro));
+    const bisogno = sommDelGiorno(d).filter(x => x.bisogno && (!filtro || x.ospiteId === filtro));
     if (!slots.length && !bisogno.length) continue;
     h += '<div class="giorno-testa">' + esc(fmtGiorno(d)) + '</div><div class="group">';
     for (const s of slots) {
       const nd = s.dosi.filter(x => x.sm && x.sm.esito === 'nondato');
       const mancano = s.mancano && (d < oggi() || s.ora <= oraAdesso());
+      const dopo = s.dosi.filter(x => x.sm && (x.sm.segnataDopo || x.sm.fuoriOrario)).length;
       const chi = [...new Set(s.dosi.filter(x => x.sm).map(x => x.sm.chi).filter(Boolean))].join(', ');
       h += '<a class="gi" href="#/giro/' + d + '/' + s.ora.replace(':', '') + (filtro ? '?ospite=' + filtro : '') + '"><span class="dicon ' + (mancano ? 'rust' : nd.length ? 'amber' : '') + '">' + ic(mancano ? 'warn' : 'check', 20) + '</span>' +
         '<span class="row-main"><span class="row-title">Ore ' + fmtOra(s.ora) + ' · ' + s.dati + ' su ' + s.dosi.length + ' date</span><span class="row-meta">' +
-        esc((mancano ? s.mancano + ' non segnate · ' : '') + (nd.length ? nd.map(x => x.f.nome + ' (' + (x.sm.motivo || 'non dato').toLowerCase() + ')').join(', ') + ' · ' : '') + (chi ? 'segnato da ' + chi : '')) + '</span></span>' + ic('chev', 20) + '</a>';
+        esc((mancano ? s.mancano + ' senza esito · ' : '') + (nd.length ? nd.map(x => x.f.nome + ' (' + (x.sm.motivo || 'non dato').toLowerCase() + ')').join(', ') + ' · ' : '') + (dopo ? plur(dopo, 'fuori orario o segnata dopo', 'fuori orario o segnate dopo') + ' · ' : '') + (chi ? 'segnato da ' + chi : '')) + '</span></span>' + ic('chev', 20) + '</a>';
     }
-    h += bisogno.map(x => '<div class="gi" style="cursor:default"><span class="dicon plum">' + ic('pill', 20) + '</span><span class="row-main"><span class="row-title">Al bisogno · ore ' + fmtOra(x.ora) + '</span><span class="row-meta">' + esc(((farmaco(x.farmacoId) || {}).nome || '') + (filtro ? '' : ' · ' + ((ospite(x.ospiteId) || {}).nome || '')) + (x.chi ? ' · ' + x.chi : '')) + '</span></span></div>').join('');
+    h += bisogno.map(x => '<div class="gi" style="cursor:default"><span class="dicon plum">' + ic('pill', 20) + '</span><span class="row-main"><span class="row-title">Al bisogno · ore ' + fmtOra(x.ora) + '</span><span class="row-meta">' + esc(((farmaco(x.farmacoId) || {}).nome || x.nome || '') + (filtro ? '' : ' · ' + ((ospite(x.ospiteId) || {}).nome || '')) + (x.chi ? ' · ' + x.chi : '') + (x.nota ? ' · ' + x.nota : '')) + '</span></span></div>').join('');
     h += '</div>';
   }
   if (giorni < 90) h += '<a class="btn btn-sm" style="margin-top:12px" href="#/registro-terapia?giorni=' + (giorni === 14 ? 30 : 90) + (filtro ? '&ospite=' + filtro : '') + '">Mostra più giorni</a>';
@@ -2096,8 +2659,11 @@ function vVisita(id) {
     (v.esito ? '<div class="kv"><span class="k">Esito</span><span class="v" style="font-weight:500;white-space:pre-wrap">' + esc(v.esito) + '</span></div>' : '') +
     (v.fattaChi ? '<div class="kv"><span class="k">Segnata da</span><span class="v">' + esc(v.fattaChi) + '</span></div>' : '') + '</div>';
   if (v.stato === 'prevista') {
-    h += '<a class="btn btn-primary" style="margin-top:8px" href="#/esito/' + v.id + '">' + ic('check', 21, 2.6) + ' Fatta: com\'è andata?</a>' +
+    h += '<a class="btn btn-ok" style="margin-top:8px" href="#/esito/' + v.id + '">' + ic('check', 21, 2.6) + ' Fatta: com\'è andata?</a>' +
       '<div class="two"><a class="btn btn-sm" href="#/nuova-visita?id=' + v.id + '">Spostata</a><button class="btn btn-sm" data-action="annulla-visita" data-id="' + v.id + '">Annullata</button></div>';
+  } else if (v.stato === 'fatta') {
+    if (v.terapiaCambiata) h += banner('amber', 'In questa visita il medico ha cambiato la terapia. <a href="#/ospite/' + esc(v.ospiteId) + '/terapia">Vedi le medicine</a>');
+    h += '<a class="btn btn-sm" style="margin-top:8px" href="#/esito/' + v.id + '">' + ic('edit', 20) + ' Correggi l\'esito</a>';
   }
   h += sezione('Referti e documenti', docs.length) + docs.map(rigaDoc).join('') +
     '<a class="btn btn-sm" href="#/nuovo-doc?ospite=' + (v.ospiteId || '') + '&visita=' + v.id + '">' + ic('camera', 20) + ' Aggiungi un referto</a>';
@@ -2164,35 +2730,42 @@ moduli.visita = async form => {
 function vEsitoVisita(id) {
   const v = visita(id);
   if (!v) return nonTrovato();
-  return testata('Com\'è andata?', { indietro: true, sub: (v.tipo || 'Visita') + ' · ' + ((ospite(v.ospiteId) || {}).nome || '') }) +
+  const giaFatta = v.stato === 'fatta';
+  return testata(giaFatta ? 'Correggi l\'esito' : 'Com\'è andata?', { indietro: true, sub: (v.tipo || 'Visita') + ' · ' + ((ospite(v.ospiteId) || {}).nome || '') }) +
     '<main class="pad"><form data-form="esito" data-id="' + v.id + '" novalidate>' +
-    campo('esito', 'Cosa ha detto il medico?', '<textarea id="f-esito" name="esito" maxlength="2000" placeholder="es. tutto bene; cambiata la terapia; rifare gli esami tra 3 mesi">' + esc(v.esito || '') + '</textarea>') +
+    campo('esito', 'Cosa ha detto il medico?', '<textarea id="f-esito" name="esito" maxlength="2000" placeholder="es. tutto bene; rifare gli esami tra 3 mesi">' + esc(v.esito || '') + '</textarea>') +
+    '<div class="field"><span class="lab">Il medico ha cambiato la terapia?</span>' +
+    chipsRadio('terapia', [['no', 'No, è uguale'], ['si', 'Sì, è cambiata']], giaFatta ? (v.terapiaCambiata ? 'si' : 'no') : '') + '<p class="err" id="err-terapia"></p>' +
+    '<span class="hint">Se è cambiata, dopo il salvataggio si apre la terapia dell\'ospite per aggiornarla.</span></div>' +
     campoFile('Foto del referto (facoltativa)') +
-    campo('prossima', 'Prossimo controllo (facoltativo)', '<input type="date" id="f-prossima" name="prossima" min="' + oggi() + '">', 'Se lo scrivi, la nuova visita finisce subito in programma.') +
-    banner('amber', 'Se il medico ha cambiato la terapia, aggiornala anche nella cartella: Terapia → il farmaco → Modifica.') +
+    (giaFatta ? '' : campo('prossima', 'Prossimo controllo (facoltativo)', '<input type="date" id="f-prossima" name="prossima" min="' + oggi() + '">', 'Se lo scrivi, la nuova visita finisce subito in programma.')) +
     bottoniFine('Salva nell\'archivio') + '</form></main>' + barra('ospiti');
 }
 moduli.esito = async form => {
   const v = visita(form.dataset.id);
   if (!v) return;
   const fd = new FormData(form);
+  const terapia = String(fd.get('terapia') || '');
+  if (!terapia) { errore('err-terapia', 'Scegli: la terapia è cambiata o no?'); return; }
+  const primaVolta = v.stato !== 'fatta';
   v.stato = 'fatta';
   v.esito = String(fd.get('esito') || '').trim() || null;
-  v.fattaChi = utente();
-  v.fattaIl = oggi();
+  v.terapiaCambiata = terapia === 'si';
+  if (primaVolta) { v.fattaChi = utente(); v.fattaIl = oggi(); } else v.esitoCorrettoDa = utente();
   await salva('visite', v);
   await salvaFileDelModulo(form, { nome: 'Referto ' + (v.tipo || 'visita') + ' ' + fmt(v.data), tipo: 'Referto', ospiteId: v.ospiteId, visitaId: v.id, data: v.data });
   const prossima = String(fd.get('prossima') || '');
-  if (dataValida(prossima)) {
+  if (primaVolta && dataValida(prossima)) {
     await salva('visite', { id: uid(), ospiteId: v.ospiteId, tipo: v.tipo, data: prossima, ora: null, dove: v.dove, stato: 'prevista', avviso: 1, accompagna: 'Da decidere', creato: adesso() });
   }
   dopoModifica();
-  avvisa('Visita archiviata' + (dataValida(prossima) ? ' · prossima ' + fmt(prossima) : ''));
-  vai('#/visita/' + v.id, true);
+  avvisa((primaVolta ? 'Visita archiviata' : 'Esito corretto') + (primaVolta && dataValida(prossima) ? ' · prossima ' + fmt(prossima) : ''));
+  if (v.terapiaCambiata && primaVolta) vai('#/ospite/' + v.ospiteId + '/terapia?dalla-visita=' + v.id, true);
+  else vai('#/visita/' + v.id, true);
 };
 azioni['annulla-visita'] = async el => {
   const v = visita(el.dataset.id);
-  if (!v || !confirm('Segnare la visita come annullata? Resta nell\'archivio.')) return;
+  if (!v || !(await conferma('La visita è stata annullata?', 'Resta nell\'archivio come «annullata». Se è solo spostata, usa «Spostata».', 'Sì, annullata'))) return;
   v.stato = 'annullata';
   await salva('visite', v);
   dopoModifica();
@@ -2233,8 +2806,9 @@ moduli.controllo = async form => {
   const p = parametro(String(fd.get('tipo')));
   const [n, u] = String(fd.get('ogni') || '1-mesi').split('-');
   const da = dataValida(fd.get('da')) ? String(fd.get('da')) : oggi();
+  const ric = { ogni: parseInt(n, 10), unita: u };
   await salva('voci', { id: uid(), nome: p.nome + ' — ' + o.nome, tipo: 'misura', parametro: p.k, categoria: 'Salute ospiti', ospiteId: o.id, prossima: da,
-    ric: { ogni: parseInt(n, 10), unita: u }, responsabile: 'Entrambi', avviso: 0, chiusura: 'fatto', attiva: true, creato: adesso() });
+    ric, ancora: ancoraDi(da, ric), responsabile: 'Entrambi', avviso: 0, chiusura: 'fatto', attiva: true, creato: adesso() });
   dopoModifica();
   avvisa('Promemoria aggiunto');
   render();
@@ -2266,6 +2840,17 @@ moduli.misura = async form => {
   if (!ospiteId) { errore('err-ospite', 'Scegli l\'ospite.'); return; }
   if (!valore) { errore('err-valore', 'Scrivi il valore.'); return; }
   if (tipo === 'pressione' && !/^\d{2,3}\/\d{2,3}$/.test(valore)) { errore('err-valore', 'Scrivi la pressione come massima/minima, es. 130/80.'); return; }
+  // un valore impossibile è quasi sempre un errore di battitura (366 invece di 36,6)
+  const nums = valoriParametro({ valore });
+  const fuori = tipo === 'pressione' ? nums.some((n, i) => LIMITI_PRESSIONE[i] && (n < LIMITI_PRESSIONE[i][0] || n > LIMITI_PRESSIONE[i][1]))
+    : LIMITI_MISURE[tipo] ? nums.length !== 1 || nums[0] < LIMITI_MISURE[tipo][0] || nums[0] > LIMITI_MISURE[tipo][1] : false;
+  if (fuori) {
+    const p = parametro(tipo);
+    const ok = await chiedi({ titolo: 'Valore insolito', icona: 'warn', tono: 'amber',
+      testo: '<p>Hai scritto <b>' + esc(valore + ' ' + p.u) + '</b> per ' + esc(p.nome.toLowerCase()) + '. Controlla di averlo scritto bene' + (p.ph ? ' (' + esc(p.ph) + ')' : '') + '.</p><p>Se il valore è giusto ed è preoccupante, avvisa il medico.</p>',
+      scelte: [{ valore: true, testo: 'È giusto, salva', tipo: 'primary' }], annulla: 'Correggo' });
+    if (!ok) { const i = document.getElementById('f-valore'); if (i) i.focus(); return; }
+  }
   const data = dataValida(fd.get('data')) ? String(fd.get('data')) : oggi();
   const ora = oraValida(fd.get('ora')) ? String(fd.get('ora')) : null;
   await salva('parametri', { id: uid(), ospiteId, tipo, valore, data, ora, chi: utente(), nota: String(fd.get('nota') || '').trim() || null, creato: adesso() });
@@ -2329,7 +2914,7 @@ azioni['elimina-misura'] = async el => {
 
 function vServizi(q) {
   const mod = q.get('modifica') === '1';
-  const destra = mod ? '<a class="txt-btn on" href="#/casa">Fine</a>' : '';
+  const destra = mod ? '<a class="txt-btn on" href="#/impostazioni">Fine</a>' : '';
   let h = testata('Casa', { sub: mod ? 'Tocca un riquadro per rinominarlo, − per toglierlo, le frecce per spostarlo.' : 'Le cose di tutti i giorni', destra }) + '<main class="pad"><div class="tiles">';
   const lista = serviziOrdinati();
   h += lista.map((sv, i) => {
@@ -2345,8 +2930,8 @@ function vServizi(q) {
   if (!mod) {
     h += '<div class="group" style="margin-top:10px">' +
       '<a class="gi" href="#/archivio?vista=casa">' + ic('folder', 24) + '<span class="row-main"><span class="row-title">Documenti della casa</span><span class="row-meta">Contratti, polizze, ricevute</span></span>' + ic('chev', 20) + '</a>' +
-      '<a class="gi" href="#/scadenze">' + ic('cal', 24) + '<span class="row-main"><span class="row-title">Tutte le scadenze</span><span class="row-meta">Quello che ha una data, in ordine</span></span>' + ic('chev', 20) + '</a></div>' +
-      '<a class="btn btn-sm" style="margin-top:12px" href="#/casa?modifica=1">' + ic('edit', 20) + ' Cambia l\'elenco</a>';
+      '<a class="gi" href="#/scadenze">' + ic('cal', 24) + '<span class="row-main"><span class="row-title">Tutte le scadenze</span><span class="row-meta">Quello che ha una data, in ordine</span></span>' + ic('chev', 20) + '</a></div>';
+    // (i riquadri si cambiano da Impostazioni: per chi lavora la Casa resta sempre uguale)
   }
   return h + '</main>' + barra('casa');
 }
@@ -2476,6 +3061,7 @@ function vServizio(id, q) {
   const sv = servizio(id);
   if (!sv) return nonTrovato();
   const f = { pagamenti: vPagamenti, spesa: vSpesa, lavanderia: vLavanderia, pulizie: vPulizie, rifiuti: vRifiuti, manutenzioni: vManutenzioni, trasporti: vTrasporti, farmacia: vFarmacia }[sv.tipo] || vSemplice;
+  if (sv.tipo === 'spesa' && q.get('scrivi')) setTimeout(() => { const i = document.getElementById('f-testo'); if (i) i.focus(); }, 60);
   return f(sv, q);
 }
 function testaServizio(sv, sub) {
@@ -2600,7 +3186,8 @@ moduli['lista-add'] = async form => {
   const fd = new FormData(form);
   const t = String(fd.get('testo') || '').trim();
   if (!t) { form.querySelector('input').focus(); return; }
-  for (const pezzo of t.split(/\s*[,;]\s*/).filter(Boolean)) await salva('lista', { id: uid(), servizio: form.dataset.servizio, testo: pezzo, preso: false, chi: utente(), creato: adesso() });
+  // si separa con virgola o punto e virgola, ma non dentro i numeri ("1,5 kg farina")
+  for (const pezzo of t.split(/\s*;\s*|\s*,(?!\d)\s*/).map(x => x.trim()).filter(Boolean)) await salva('lista', { id: uid(), servizio: form.dataset.servizio, testo: pezzo, preso: false, chi: utente(), creato: adesso() });
   render();
   const i = document.getElementById('f-testo');
   if (i) i.focus();
@@ -2722,6 +3309,16 @@ function vPulizie(sv) {
   return h + '</main>' + barra('casa');
 }
 azioni['pulizia-fatta'] = async el => {
+  // un secondo tocco sulla spunta verde la toglie (prima ne aggiungeva un'altra)
+  const giaOggi = S.eventi.filter(e => e.tipo === 'pulizia' && sid(e.servizio) === el.dataset.servizio && e.zona === el.dataset.zona && e.data === oggi()).sort(recenti)[0];
+  if (giaOggi) {
+    const copia = Object.assign({}, giaOggi);
+    await togli('eventi', giaOggi.id);
+    dopoModifica();
+    render();
+    avvisa('Tolta la spunta: ' + copia.zona, async () => { await salva('eventi', copia); render(); });
+    return;
+  }
   const e = { id: uid(), tipo: 'pulizia', servizio: el.dataset.servizio, zona: el.dataset.zona, data: oggi(), ora: oraAdesso(), chi: utente(), creato: adesso() };
   await salva('eventi', e);
   dopoModifica();
@@ -2943,7 +3540,7 @@ function vOrdina() {
   if (!(sv.conf && sv.conf.telefono)) return h + banner('amber', 'Prima inserisci il numero della farmacia.') + '<a class="btn btn-primary" href="#/farmacia-conf">Inserisci il numero</a></main>' + barra('casa');
   h += '<form data-form="ordina" novalidate><div class="field"><span class="lab">Cosa ordinare?</span><div class="group">' + tutti.map(f => {
     const o = ospite(f.ospiteId);
-    return '<label class="gi"><input type="checkbox" name="f" value="' + f.id + '"' + (ctrl.has(f.id) ? ' checked' : '') + ' style="width:24px;height:24px;flex:none"><span class="row-main"><span class="row-title">' + esc(f.nome) + '</span><span class="row-meta">' + esc((o ? o.nome + ' · ' : '') + (ctrl.has(f.id) ? 'da ordinare' : 'scorta per ' + plur(scorta(f).giorni || 0, 'giorno', 'giorni'))) + '</span></span>' +
+    return '<label class="gi"><input type="checkbox" name="f" value="' + f.id + '"' + (ctrl.has(f.id) ? ' checked' : '') + ' style="width:24px;height:24px;flex:none"><span class="row-main"><span class="row-title">' + esc(f.nome) + '</span><span class="row-meta">' + esc((o ? o.nome + ' · ' : '') + (ctrl.has(f.id) ? 'da ordinare' : descScorta(f) || 'scorta da contare')) + '</span></span>' +
       '<input type="number" name="q' + f.id + '" value="1" min="1" max="20" inputmode="numeric" aria-label="Confezioni di ' + esc(f.nome) + '" style="width:64px;min-height:46px;flex:none;text-align:center"></label>';
   }).join('') + '</div><span class="hint">Il numero a destra sono le confezioni.</span><p class="err" id="err-f"></p></div>' +
     campo('nota', 'Altro da scrivere (facoltativo)', testo('nota', 'nota', '', 'maxlength="200" placeholder="es. passiamo a ritirare domani mattina"')) +
@@ -2971,7 +3568,7 @@ moduli.ordina = async form => {
   vai('#/servizio/' + sv.id, true);
 };
 
-/* ================================================ Fatto e Note */
+/* ================================================ Diario: fatto, note, consegne */
 
 function testoEvento(e) {
   const v = e.voceId ? voce(e.voceId) : null;
@@ -2979,7 +3576,10 @@ function testoEvento(e) {
   const o = ospite(e.ospiteId);
   const chi = e.chi ? e.chi : '';
   switch (e.tipo) {
-    case 'nota': return { icona: 'note', titolo: e.testo || '', meta: [chi, o ? o.nome : null].filter(Boolean).join(' · '), f: 'note', href: '#/nota?id=' + e.id, lungo: true };
+    case 'nota': return { icona: 'note', titolo: e.testo || '', meta: [chi, o ? o.nome : null, e.modificataDa ? 'modificata da ' + e.modificataDa : null].filter(Boolean).join(' · '), f: 'note', href: '#/nota?id=' + e.id, lungo: true };
+    case 'consegna': return { icona: 'chat', cls: 'amber', titolo: 'Consegne: ' + (e.testo || 'solo il riepilogo'), meta: [chi, o ? o.nome : null].filter(Boolean).join(' · ') + descLetto(e), f: 'note', lungo: true, extra: e.riepilogo || '' };
+    case 'terapia': return { registro: true, icona: 'pill', cls: 'amber', titolo: e.nota || 'Terapia cambiata', meta: [chi, o ? o.nome : null].filter(Boolean).join(' · '), f: 'terapia', href: e.farmacoId && farmaco(e.farmacoId) ? '#/farmaco/' + e.farmacoId : null };
+    case 'correzione': return { registro: true, icona: 'edit', cls: 'amber', titolo: e.nota || 'Correzione', meta: [chi, o ? o.nome : null].filter(Boolean).join(' · '), f: 'terapia' };
     case 'spesa': return { icona: 'cart', titolo: 'Spesa' + (e.articoli && e.articoli.length ? ': ' + e.articoli.join(', ') : ''), meta: [chi, e.importo != null ? euro(e.importo) : null, e.nota].filter(Boolean).join(' · '), f: 'servizi' };
     case 'lavanderia': return { icona: 'shirt', titolo: 'Lavanderia: ' + descCapi(e), meta: [chi, o ? o.nome : 'della casa', e.fuori ? (e.rientrato ? 'rientrato ' + fmt(e.rientrato) : 'ancora fuori') : 'lavato in casa'].filter(Boolean).join(' · '), f: 'servizi' };
     case 'pulizia': return { icona: 'spark', titolo: 'Pulizie: ' + (e.zona || ''), meta: chi, f: 'servizi' };
@@ -3005,11 +3605,11 @@ function rigaDiarioEvento(e) {
   return rigaDiario(Object.assign(t, { ora: e.ora, meta: (giorniTra(e.data, oggi()) ? fmt(e.data) + ' · ' : '') + t.meta }));
 }
 
-// Solo le cose fatte (le note stanno nella loro sezione).
+// Tutto quello che è stato fatto e scritto: cose fatte, medicine, visite, misure, note, consegne.
 function vociFatto(filtroOspite, filtroServizio) {
   const out = [];
   for (const e of S.eventi) {
-    if (e.tipo === 'nota' || (e.tipo === 'trasporto' && !e.fatto) || (e.tipo === 'guasto' && e.stato !== 'risolto')) continue;
+    if ((e.tipo === 'trasporto' && !e.fatto) || (e.tipo === 'guasto' && e.stato !== 'risolto')) continue;
     if (filtroOspite && e.ospiteId !== filtroOspite) continue;
     if (filtroServizio && sid(e.servizio) !== filtroServizio) continue;
     out.push(Object.assign(testoEvento(e), { data: e.data, ora: e.ora, ord: (e.data || '') + (e.ora || '') + (e.creato || '') }));
@@ -3021,7 +3621,7 @@ function vociFatto(filtroOspite, filtroServizio) {
     if (filtroOspite && x.ospiteId !== filtroOspite) continue;
     if (x.bisogno) {
       const f = farmaco(x.farmacoId), o = ospite(x.ospiteId);
-      out.push({ icona: 'pill', titolo: 'Al bisogno: ' + (f ? f.nome : 'farmaco'), meta: [o ? o.nome : null, x.chi].filter(Boolean).join(' · '), f: 'terapia', data: x.data, ora: x.ora, ord: x.data + x.ora, cls: 'plum' });
+      out.push({ icona: 'pill', titolo: 'Al bisogno: ' + (f ? f.nome : x.nome || 'farmaco'), meta: [o ? o.nome : null, x.chi, x.nota].filter(Boolean).join(' · '), f: 'terapia', data: x.data, ora: x.ora, ord: x.data + x.ora, cls: 'plum' });
       continue;
     }
     const k = x.data + 'T' + x.ora;
@@ -3032,15 +3632,16 @@ function vociFatto(filtroOspite, filtroServizio) {
     const [d, ora] = k.split('T');
     const nd = xs.filter(x => x.esito === 'nondato');
     const chi = [...new Set(xs.map(x => x.chi).filter(Boolean))].join(', ');
-    const nomi = nd.map(x => ((farmaco(x.farmacoId) || {}).nome || '') + (filtroOspite ? '' : ' a ' + ((ospite(x.ospiteId) || {}).nome || '')) + ' (' + (x.motivo || '').toLowerCase() + ')');
+    const nomeF = x => (farmaco(x.farmacoId) || {}).nome || x.nome || '';
+    const nomi = nd.map(x => nomeF(x) + (filtroOspite ? '' : ' a ' + ((ospite(x.ospiteId) || {}).nome || '')) + ' (' + (x.motivo || '').toLowerCase() + ')');
     out.push({ icona: 'pill', cls: nd.length ? 'amber' : 'plum', titolo: 'Medicine delle ' + fmtOra(ora) + ': ' + plur(xs.length - nd.length, 'data', 'date') + (nd.length ? ', ' + nd.length + ' non ' + (nd.length === 1 ? 'data' : 'date') : ''),
-      meta: (nomi.length ? nomi.join(', ') + ' · ' : '') + (chi ? 'segnato da ' + chi : ''), extra: xs.map(x => (farmaco(x.farmacoId) || {}).nome + ' ' + ((ospite(x.ospiteId) || {}).nome || '')).join(' '),
+      meta: (nomi.length ? nomi.join(', ') + ' · ' : '') + (chi ? 'segnato da ' + chi : ''), extra: xs.map(x => nomeF(x) + ' ' + ((ospite(x.ospiteId) || {}).nome || '')).join(' '),
       f: 'terapia', data: d, ora, ord: d + ora, href: '#/giro/' + d + '/' + ora.replace(':', '') + (filtroOspite ? '?ospite=' + filtroOspite : '') });
   }
   for (const v of S.visite) {
     if (v.stato !== 'fatta' || (filtroOspite && v.ospiteId !== filtroOspite)) continue;
     const o = ospite(v.ospiteId);
-    out.push({ icona: 'steth', titolo: 'Visita: ' + (v.tipo || '') + (o && !filtroOspite ? ' — ' + o.nome : ''), meta: (v.esito || '') + (v.fattaChi ? ' · ' + v.fattaChi : ''), f: 'salute', data: v.data, ora: v.ora, ord: v.data + (v.ora || ''), href: '#/visita/' + v.id });
+    out.push({ icona: 'steth', titolo: 'Visita: ' + (v.tipo || '') + (o && !filtroOspite ? ' — ' + o.nome : ''), meta: (v.esito || '') + (v.terapiaCambiata ? ' · terapia cambiata' : '') + (v.fattaChi ? ' · ' + v.fattaChi : ''), f: 'salute', data: v.data, ora: v.ora, ord: v.data + (v.ora || ''), href: '#/visita/' + v.id });
   }
   for (const p of S.parametri) {
     if (filtroOspite && p.ospiteId !== filtroOspite) continue;
@@ -3050,7 +3651,7 @@ function vociFatto(filtroOspite, filtroServizio) {
   return out;
 }
 
-const FILTRI_FATTO = [['', 'Tutto'], ['terapia', 'Medicine'], ['salute', 'Visite e misure'], ['pagamenti', 'Pagamenti'], ['servizi', 'Casa']];
+const FILTRI_FATTO = [['', 'Tutto'], ['terapia', 'Medicine'], ['salute', 'Visite e misure'], ['note', 'Note e consegne'], ['pagamenti', 'Pagamenti'], ['servizi', 'Casa']];
 function vStorico(q) {
   const f = q.get('f') === 'casa' ? 'servizi' : q.get('f') || '';
   const filtroOspite = q.get('ospite') || '';
@@ -3061,7 +3662,8 @@ function vStorico(q) {
   items.sort((a, b) => (b.ord || '').localeCompare(a.ord || ''));
   const troppi = items.length > 1500;
   items = items.slice(0, 1500);
-  let h = testata(o ? 'Fatto per ' + o.nome : sv ? 'Fatto: ' + sv.nome : 'Fatto', { sub: 'Cosa è stato fatto, giorno per giorno', indietro: !!(o || sv) }) + '<main class="pad">';
+  let h = testata(o ? 'Diario di ' + o.nome : sv ? 'Fatto: ' + sv.nome : 'Diario', { sub: 'Cosa è stato fatto e scritto, giorno per giorno', indietro: !!(o || sv) }) + '<main class="pad">';
+  if (!sv) h += '<a class="btn btn-primary" href="#/nota' + (filtroOspite ? '?ospite=' + filtroOspite : '') + '">' + ic('note', 22) + ' Scrivi una nota</a>';
   h += ricercaBox('Cerca: lenzuola, luce, un nome…');
   if (!sv) h += '<div class="seg">' + FILTRI_FATTO.map(([k, l]) => '<a class="' + (k === f ? 'on' : '') + '" href="' + base + (k ? 'f=' + k : '') + '">' + l + '</a>').join('') + '</div>';
   let giorno = '', n = 0;
@@ -3070,18 +3672,18 @@ function vStorico(q) {
     h += rigaDiario(it, 'g' + n);
   }
   if (giorno) h += '</div>';
-  if (!items.length) h += '<p class="empty">Ancora niente. Quando segnate qualcosa come fatto, compare qui.</p>';
+  if (!items.length) h += '<p class="empty">Ancora niente. Quando segnate qualcosa come fatto, o scrivete una nota, compare qui.</p>';
   h += '<p class="empty hidden" id="nessun-risultato">Nessun risultato. Prova con un\'altra parola.</p>';
   if (troppi) h += '<p class="hint">Sono mostrate le 1500 cose più recenti.</p>';
   h += '<a class="btn btn-sm" style="margin-top:14px" href="#/gia-fatto">' + ic('plus', 20) + ' Aggiungi una cosa fatta nei giorni passati</a>';
-  return h + '</main>' + barra(o || sv ? '' : 'fatto');
+  return h + '</main>' + barra(o || sv ? '' : 'diario');
 }
 
 function vNote(q) {
   const filtro = q.get('ospite') || '';
   const o = ospite(filtro);
-  const note = S.eventi.filter(e => e.tipo === 'nota' && (!filtro || e.ospiteId === filtro)).sort(recenti);
-  let h = testata(o ? 'Note su ' + o.nome : 'Note', { sub: 'Appunti, fatti, cose da ricordare', indietro: !!o }) + '<main class="pad">';
+  const note = S.eventi.filter(e => (e.tipo === 'nota' || e.tipo === 'consegna') && (!filtro || e.ospiteId === filtro)).sort(recenti);
+  let h = testata(o ? 'Note su ' + o.nome : 'Note e consegne', { sub: 'Appunti, fatti, cose da ricordare', indietro: true }) + '<main class="pad">';
   h += '<a class="btn btn-primary" href="#/nota' + (filtro ? '?ospite=' + filtro : '') + '">' + ic('plus', 22) + ' Scrivi una nota</a>';
   if (note.length > 4) h += ricercaBox('Cerca nelle note');
   if (!o) {
@@ -3090,24 +3692,29 @@ function vNote(q) {
   }
   h += note.length ? note.map(e => {
     const os = ospite(e.ospiteId);
-    return '<a class="nota-card" href="#/nota?id=' + e.id + '" data-cerca="' + esc(semplifica(e.testo + ' ' + (os ? os.nome : '') + ' ' + (e.chi || ''))) + '">' +
-      (os && !o ? '<span class="tag plum" style="margin-bottom:6px">' + esc(os.nome) + '</span>' : '') +
-      '<div class="testo">' + esc(e.testo) + '</div><div class="chi">' + esc((e.chi || '—') + ' · ' + fmtGiorno(e.data).toLowerCase() + (e.ora ? ' alle ' + fmtOra(e.ora) : '')) + '</div></a>';
+    const consegna = e.tipo === 'consegna';
+    return '<a class="nota-card" href="' + (consegna ? '#/consegne' : '#/nota?id=' + e.id) + '" data-cerca="' + esc(semplifica((e.testo || '') + ' ' + (e.riepilogo || '') + ' ' + (os ? os.nome : '') + ' ' + (e.chi || ''))) + '"' + (consegna ? ' style="background:var(--amberbg);border-color:var(--amberline)"' : '') + '>' +
+      (consegna ? '<span class="tag amber" style="margin-bottom:6px">Consegne</span> ' : '') + (os && !o ? '<span class="tag plum" style="margin-bottom:6px">' + esc(os.nome) + '</span>' : '') +
+      '<div class="testo">' + esc(e.testo || '(solo il riepilogo)') + '</div><div class="chi">' + esc((e.chi || '—') + ' · ' + fmtGiorno(e.data).toLowerCase() + (e.ora ? ' alle ' + fmtOra(e.ora) : '') +
+      (consegna ? descLetto(e) : e.modificataDa ? ' · modificata da ' + e.modificataDa : '')) + '</div></a>';
   }).join('') : '<p class="empty">Nessuna nota. Scrivi qui le cose da ricordare o da far sapere agli altri.</p>';
   h += '<p class="empty hidden" id="nessun-risultato">Nessuna nota trovata.</p>';
-  return h + '</main>' + barra(o ? '' : 'note');
+  return h + '</main>' + barra('diario');
 }
 
 function vNota(q) {
   const e = q.get('id') ? evento(q.get('id')) : null;
   if (q.get('id') && !e) return nonTrovato();
-  return testata(e ? 'Nota' : 'Scrivi una nota', { indietro: true, sub: e ? 'Scritta da ' + (e.chi || '—') + ' · ' + fmtGiorno(e.data) : 'Un fatto accaduto, una cosa da ricordare' }) +
+  const versioni = e && Array.isArray(e.versioni) ? e.versioni : [];
+  return testata(e ? 'Nota' : 'Scrivi una nota', { indietro: true, sub: e ? 'Scritta da ' + (e.chi || '—') + ' · ' + fmtGiorno(e.data) + (e.modificataDa ? ' · modificata da ' + e.modificataDa : '') : 'Un fatto accaduto, una cosa da ricordare' }) +
     '<main class="pad"><form data-form="nota"' + (e ? ' data-id="' + e.id + '"' : '') + ' novalidate>' +
     campo('testo', 'Cosa vuoi scrivere?', '<textarea id="f-testo" name="testo" maxlength="4000" style="min-height:160px" placeholder="es. Giovanni oggi ha mangiato poco; ha chiamato la figlia di Maria">' + esc(e ? e.testo : '') + '</textarea>') +
     '<div class="field"><label for="f-ospite">Riguarda un ospite? (facoltativo)</label><select name="ospite" id="f-ospite">' + opzioniOspiti(e ? e.ospiteId : q.get('ospite') || '') + '</select></div>' +
     altreOpzioni('<div class="two"><div class="field"><label for="f-data">Giorno</label><input type="date" id="f-data" name="data" value="' + esc(e ? e.data : oggi()) + '" max="' + oggi() + '"></div>' +
     '<div class="field"><label for="f-ora">Ora</label><input type="time" id="f-ora" name="ora" value="' + esc(e ? e.ora || '' : oraAdesso()) + '"></div></div>', 'Un altro giorno o un\'altra ora') +
-    bottoniFine() + (e ? '<div class="actions"><button type="button" class="btn btn-sm btn-danger" data-action="elimina-evento" data-id="' + e.id + '">Elimina la nota</button></div>' : '') + '</form></main>' + barra('note');
+    bottoniFine() + '</form>' +
+    (versioni.length ? sezione('Com\'era prima') + versioni.slice().reverse().map(v => '<div class="nota-card"><div class="testo">' + esc(v.testo) + '</div><div class="chi">' + esc('scritta da ' + (v.da || '—') + (v.quando ? ' · cambiata il ' + fmt(giornoDi(v.quando)) : '')) + '</div></div>').join('') : '') +
+    (e ? '<div class="actions"><button type="button" class="btn btn-sm btn-danger" data-action="elimina-evento" data-id="' + e.id + '">Elimina la nota</button></div>' : '') + '</main>' + barra('diario');
 }
 moduli.nota = async form => {
   const fd = new FormData(form);
@@ -3118,7 +3725,11 @@ moduli.nota = async form => {
   const e = Object.assign({}, vecchia || { id: uid(), tipo: 'nota', chi: utente(), creato: adesso() }, {
     testo: t, ospiteId: String(fd.get('ospite') || '') || null, data, ora: oraValida(fd.get('ora')) ? String(fd.get('ora')) : null
   });
-  if (vecchia && vecchia.testo !== t) e.modificataDa = utente();
+  // chi cambia una nota non cancella quello che c'era scritto: la versione di prima resta sotto
+  if (vecchia && vecchia.testo !== t) {
+    e.modificataDa = utente();
+    e.versioni = (vecchia.versioni || []).concat([{ testo: vecchia.testo, da: vecchia.modificataDa || vecchia.chi || null, quando: adesso() }]);
+  }
   await salva('eventi', e);
   avvisa(vecchia ? 'Nota aggiornata' : 'Nota salvata');
   indietro();
@@ -3174,7 +3785,7 @@ function vDoc(id) {
     '<div class="kv"><span class="k">Ospite</span><span class="v">' + (o ? '<a href="#/ospite/' + o.id + '">' + esc(o.nome) + '</a>' : (d.daSmistare ? 'da smistare' : '—')) + '</span></div>' +
     (v ? '<div class="kv"><span class="k">Collegato a</span><span class="v"><a href="#/voce/' + v.id + '">' + esc(v.nome) + '</a></span></div>' : '') +
     (vis ? '<div class="kv"><span class="k">Visita</span><span class="v"><a href="#/visita/' + vis.id + '">' + esc((vis.tipo || 'Visita') + ' · ' + fmt(vis.data)) + '</a></span></div>' : '') +
-    '<div class="kv"><span class="k">Caricato</span><span class="v">' + esc(fmt((d.creato || '').slice(0, 10)) + (d.da ? ' da ' + d.da : '')) + '</span></div></div>' +
+    '<div class="kv"><span class="k">Caricato</span><span class="v">' + esc(fmt(giornoDi(d.creato)) + (d.da ? ' da ' + d.da : '')) + '</span></div></div>' +
     '<form class="box" data-form="doc-modifica" data-id="' + d.id + '" novalidate style="margin-top:8px"><h3>Sistema il documento</h3>' +
     campo('nome', 'Nome', testo('nome', 'nome', d.nome, 'maxlength="80"')) +
     '<div class="field"><label for="f-tipo">Tipo</label>' + selezione('tipo', TIPI_DOC, d.tipo) + '</div>' +
@@ -3253,6 +3864,7 @@ function vImpostazioni() {
   h += boxSync();
   h += '<div class="box"><h3>Notifiche</h3><p class="hint" style="margin:0 0 10px">Su questo dispositivo: <b>' + esc(statoNotifiche()) + '</b>. ' +
     (collegato() ? 'Arrivano agli orari della terapia, la mattina e la sera prima dei rifiuti.' : 'Senza sincronizzazione il riepilogo arriva quando decide il telefono; collegando il dispositivo arriva all\'orario giusto.') + '</p>' +
+    (suIPhone() && !installata() ? '<p class="hint" style="margin:0 0 10px"><b>Su iPhone:</b> gli avvisi arrivano solo aprendo Kenosis dalla schermata Home (Condividi → «Aggiungi alla schermata Home»).</p>' : '') +
     '<div class="two"><button class="btn btn-sm" data-action="attiva-notifiche">Attiva</button><button class="btn btn-sm" data-action="prova-notifica">Prova</button></div></div>';
   let altre = '';
   altre += '<div class="box"><h3>PIN dell\'app</h3>';
@@ -3260,29 +3872,35 @@ function vImpostazioni() {
   else if (S.kv.pin) altre += '<p class="hint" style="margin:0 0 10px">Il PIN è attivo: l\'app lo chiede all\'apertura e dopo 5 minuti in background.</p><button class="btn btn-sm" data-action="togli-pin">Togli il PIN</button>';
   else altre += '<p class="hint" style="margin:0 0 6px">Impedisce a chi prende il telefono di aprire l\'app. La protezione principale resta il blocco schermo del telefono.</p>' +
     '<form data-form="imposta-pin" novalidate>' + campo('nuovopin', 'Nuovo PIN (da 4 a 8 cifre)', '<input type="password" id="f-nuovopin" name="pin" inputmode="numeric" autocomplete="off">') +
+    campo('nuovopin2', 'Ripeti il PIN', '<input type="password" id="f-nuovopin2" name="pin2" inputmode="numeric" autocomplete="off">', 'Scrivilo anche su un foglio da tenere in cooperativa: se si dimentica non si recupera.') +
     '<div class="actions" style="margin-top:10px"><button class="btn btn-sm btn-primary" type="submit">Attiva il PIN</button></div></form>';
   altre += '</div>';
-  altre += '<div class="box"><h3>Copia di sicurezza</h3><p class="hint" style="margin:0 0 10px">Ultima copia: <b>' + esc(S.kv.ultimoBackup ? fmtLungo(S.kv.ultimoBackup) : 'mai') + '</b>. Il file finisce nella cartella Download: tienine una copia sul PC della comunità.</p>' +
+  altre += '<div class="box"><h3>Copia di sicurezza</h3><p class="hint" style="margin:0 0 10px">Ultima copia: <b>' + esc(S.kv.ultimoBackup ? fmtLungo(S.kv.ultimoBackup) : 'mai') + '</b>. Salvala sul PC della comunità o in una cartella sicura: contiene dati sanitari, non mandarla in chat.</p>' +
     '<div class="actions" style="margin-top:0"><button class="btn btn-sm btn-primary" data-action="esporta">Salva una copia</button>' +
     '<label class="btn btn-sm" style="position:relative;overflow:hidden">Ripristina da una copia<input type="file" name="importa" accept="application/json,.json" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label></div></div>';
-  if (!collegato()) altre += '<div class="box"><h3>Dati di esempio</h3><p class="hint" style="margin:0 0 10px">Ospiti, terapie, scadenze inventate, per provare.</p><button class="btn btn-sm" data-action="carica-esempio">Carica dati di esempio</button></div>';
+  altre += '<div class="box"><h3>Riquadri della Casa</h3><p class="hint" style="margin:0 0 10px">Rinomina, sposta, togli o aggiungi i riquadri (vale per tutti i telefoni collegati).</p><a class="btn btn-sm" href="#/casa?modifica=1">' + ic('edit', 20) + ' Cambia i riquadri</a></div>';
+  const esempio = datiDiEsempio();
+  if (esempio.length) altre += '<div class="box"><h3>Dati di esempio</h3><p class="hint" style="margin:0 0 10px">Ci sono ' + plur(esempio.length, 'cosa di esempio', 'cose di esempio') + ' (ospiti, terapie, scadenze inventate). Toglierle non tocca i dati veri.</p><button class="btn btn-sm" data-action="togli-esempio">Togli i dati di esempio</button></div>';
+  else if (!collegato()) altre += '<div class="box"><h3>Dati di esempio</h3><p class="hint" style="margin:0 0 10px">Ospiti, terapie, scadenze inventate, per provare.</p><button class="btn btn-sm" data-action="carica-esempio">Carica dati di esempio</button></div>';
   altre += '<div class="box"><h3>Cancella tutto</h3><p class="hint" style="margin:0 0 10px">Toglie tutti i dati da questo telefono. Prima salva una copia.</p><button class="btn btn-sm btn-danger" data-action="cancella-tutto">Cancella tutti i dati</button></div>';
-  h += altreOpzioni('<div style="display:flex;flex-direction:column;gap:9px">' + altre + '</div>', 'Altre impostazioni: PIN, copia di sicurezza, dati di prova');
+  h += altreOpzioni('<div style="display:flex;flex-direction:column;gap:9px">' + altre + '</div>', 'Altre impostazioni: PIN, copie, riquadri, dati di prova');
   h += '<div style="text-align:center;margin:16px 0 4px">' + effieSvg(44) + '</div><p class="hint" style="text-align:center;margin:0 0 10px">Kenosis · versione ' + VERSIONE + '<br>' +
     (collegato() ? 'I dati sono su questo dispositivo e, cifrati, nello spazio condiviso.' : 'I dati restano solo su questo dispositivo.') + '</p>';
   return h + '</main>' + barra('oggi');
 }
 
 moduli['imposta-pin'] = async form => {
-  const pin = String(new FormData(form).get('pin') || '');
+  const fd = new FormData(form);
+  const pin = String(fd.get('pin') || '');
   if (!/^\d{4,8}$/.test(pin)) { errore('err-nuovopin', 'Servono da 4 a 8 cifre.'); return; }
+  if (String(fd.get('pin2') || '') !== pin) { errore('err-nuovopin2', 'I due PIN non sono uguali: riscrivilo.'); return; }
   const sale = uid();
   await setKV('pin', { sale, hash: await hashPin(pin, sale) });
   avvisa('PIN attivato');
   render();
 };
 azioni['togli-pin'] = async () => {
-  if (!confirm('Togliere il PIN? Chiunque prenda il telefono sbloccato potrà aprire l\'app.')) return;
+  if (!(await conferma('Togliere il PIN?', 'Chiunque prenda il telefono sbloccato potrà aprire l\'app e le cartelle degli ospiti.', 'Sì, togli il PIN'))) return;
   await DB.del('kv', 'pin');
   delete S.kv.pin;
   avvisa('PIN tolto');
@@ -3303,15 +3921,42 @@ azioni['prova-notifica'] = async () => {
   await mostraNotifica('Kenosis', 'Le notifiche funzionano su questo telefono.');
 };
 azioni.esporta = async () => { await esportaCopia(); };
+// I dati di esempio: segnati come tali (o, nelle versioni vecchie, con "(esempio)" nel testo) e tutto ciò che li riguarda.
+function datiDiEsempio() {
+  const ha = x => /\(esempio\)/.test(JSON.stringify(Object.assign({}, x, { blob: undefined, foto: undefined })));
+  const ospitiEs = new Set(S.ospiti.filter(o => o.esempio || ha(o)).map(o => o.id));
+  const farmaciEs = new Set(S.farmaci.filter(f => f.esempio || ha(f) || ospitiEs.has(f.ospiteId)).map(f => f.id));
+  const out = [];
+  for (const st of STORES_CONDIVISI) {
+    if (st === 'servizi') continue;
+    for (const x of S[st]) {
+      if (x.esempio || (st === 'ospiti' && ospitiEs.has(x.id)) || (st === 'farmaci' && farmaciEs.has(x.id)) ||
+        (x.ospiteId && ospitiEs.has(x.ospiteId)) || (x.farmacoId && farmaciEs.has(x.farmacoId)) || ha(x)) out.push([st, x]);
+    }
+  }
+  return out;
+}
+azioni['togli-esempio'] = async () => {
+  const l = datiDiEsempio();
+  if (!l.length) { avvisa('Non ci sono dati di esempio'); return; }
+  const conta = st => l.filter(x => x[0] === st).length;
+  if (!(await conferma('Togliere i dati di esempio?', 'Tolgo ' + [conta('ospiti') ? plur(conta('ospiti'), 'ospite', 'ospiti') : null, conta('farmaci') ? plur(conta('farmaci'), 'medicina', 'medicine') : null,
+    conta('voci') ? plur(conta('voci'), 'scadenza', 'scadenze') : null].filter(Boolean).join(', ') + ' e tutto ciò che li riguarda (' + l.length + ' cose in tutto). I dati veri restano.', 'Sì, togli gli esempi'))) return;
+  await eliminaConAnnulla(l, 'Tolti i dati di esempio', () => vai('#/oggi', true));
+};
 azioni['carica-esempio'] = async () => {
-  if ((S.voci.length || S.ospiti.length) && !confirm('Aggiungo i dati di esempio a quelli che ci sono già?')) return;
+  if (datiDiEsempio().length) { avvisa('I dati di esempio ci sono già'); return; }
+  if ((S.voci.length || S.ospiti.length) && !(await conferma('Aggiungere i dati di esempio?', 'Si aggiungono a quelli che ci sono già. Poi li togli da qui con «Togli i dati di esempio».', 'Sì, aggiungi'))) return;
   await caricaEsempio();
   avvisa('Dati di esempio caricati');
   vai('#/oggi');
 };
 azioni['cancella-tutto'] = async () => {
-  if (!confirm('Cancellare TUTTI i dati da questo telefono? Se non hai una copia di sicurezza, non si possono recuperare.' + (collegato() ? '\n\nIl telefono verrà anche scollegato: i dati nello spazio condiviso restano e gli altri non perdono niente.' : ''))) return;
-  if (!confirm('Sei sicuro? Questa operazione non si può annullare.')) return;
+  const r = await chiedi({ titolo: 'Cancellare tutti i dati da questo telefono?', icona: 'warn', tono: 'rust',
+    testo: '<p>' + (collegato() ? 'Il telefono verrà anche scollegato: i dati nello spazio condiviso restano e gli altri non perdono niente.' : '<b>Questo telefono non è collegato:</b> senza una copia di sicurezza i dati non si recuperano più.') + '</p>',
+    campo: { etichetta: 'Per confermare scrivi CANCELLA', ph: 'CANCELLA', controlla: t => t.trim().toUpperCase() === 'CANCELLA' ? '' : 'Scrivi CANCELLA, tutto attaccato.' },
+    scelte: [{ valore: true, testo: 'Cancella tutto', tipo: 'danger' }], annulla: 'No, lascia stare' });
+  if (!r) return;
   if (collegato()) await scollegaDispositivo();
   for (const s of STORES) await DB.clear(s);
   await carica();
@@ -3335,39 +3980,76 @@ async function esportaCopia() {
       }
     } else contenuto[s] = S[s];
   }
+  const nome = 'kenosis-copia-' + oggi() + '.json';
   const blob = new Blob([JSON.stringify(contenuto)], { type: 'application/json' });
+  // Sul telefono si usa "Condividi → Salva su File": così si sa se la copia è stata salvata davvero.
+  try {
+    const file = new File([blob], nome, { type: 'application/json' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: 'Copia di sicurezza Kenosis' });
+      await setKV('ultimoBackup', oggi());
+      avvisa('Copia salvata');
+      render();
+      return;
+    }
+  } catch (e) {
+    if (e && e.name === 'AbortError') { avvisa('Copia non salvata'); return; }
+    /* altrimenti si scarica come file, qui sotto */
+  }
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'kenosis-copia-' + oggi() + '.json';
+  a.download = nome;
   document.body.appendChild(a);
   a.click();
   setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
-  await setKV('ultimoBackup', oggi());
-  avvisa('Copia salvata nei Download');
+  // l'app non può sapere se il file è stato salvato: lo chiede, invece di darlo per fatto
+  if (await conferma('Hai trovato il file?', 'Si chiama «' + nome + '» e dovrebbe essere nella cartella Download. Portane una copia sul PC della comunità.', 'Sì, c\'è', { no: 'No, non lo trovo' })) {
+    await setKV('ultimoBackup', oggi());
+    avvisa('Bene: copia fatta');
+  } else avvisa('Riprova, o chiedi a Vincenzo');
   render();
 }
 async function importaCopia(file) {
   let j;
   try { j = JSON.parse(await file.text()); } catch (e) { avvisa('Questo file non è una copia valida'); return; }
   if (!j || j.app !== 'kenosis') { avvisa('Questo file non è una copia di Kenosis'); return; }
-  const quando = j.creato ? fmtLungo(j.creato.slice(0, 10)) : 'data sconosciuta';
-  if (!confirm('Ripristinare la copia del ' + quando + '? I dati attuali su questo telefono verranno sostituiti.' +
-    (collegato() ? '\n\nIl dispositivo è collegato: la copia sostituirà i dati anche sugli ALTRI dispositivi.' : ''))) return;
+  // Prima si controlla e si prepara tutto: se qualcosa non va, i dati attuali restano intatti.
+  const nuovi = {};
+  try {
+    for (const s of STORES_CONDIVISI) {
+      if (j[s] != null && !Array.isArray(j[s])) throw new Error('formato');
+      if (s === 'documenti') {
+        nuovi.documenti = [];
+        for (const d of (j.documenti || [])) {
+          const copia = Object.assign({}, d);
+          const b64 = copia.b64;
+          delete copia.b64;
+          copia.blob = b64 ? await base64InBlob(b64) : null;
+          nuovi.documenti.push(copia);
+        }
+      } else nuovi[s] = (j[s] || []).filter(o => o && o.id);
+    }
+  } catch (e) { avvisa('La copia è rovinata: non ho cambiato niente'); return; }
+  const quando = j.creato ? fmtLungo(giornoDi(j.creato)) : 'data sconosciuta';
+  const n = STORES_CONDIVISI.reduce((a, s) => a + nuovi[s].length, 0);
+  if (!(await conferma('Ripristinare la copia del ' + quando + '?', 'Contiene ' + n + ' elementi. I dati attuali su questo telefono verranno sostituiti.' +
+    (collegato() ? '\n\nATTENZIONE: il telefono è collegato, quindi la copia sostituirà i dati anche sugli ALTRI telefoni. Quello che è stato segnato dopo il ' + quando + ' andrà perso.' : ''), 'Sì, ripristina', { pericolo: true }))) return;
   const prima = {};
-  for (const s of STORES_CONDIVISI) prima[s] = S[s].map(x => x.id);
-  for (const s of STORES_CONDIVISI) await DB.clear(s);
-  for (const s of STORES_CONDIVISI) {
-    if (s === 'documenti') continue;
-    for (const o of (j[s] || [])) await DB.put(s, o);
+  for (const s of STORES_CONDIVISI) prima[s] = S[s].slice();
+  const scrivi = async dati => {
+    for (const s of STORES_CONDIVISI) await DB.clear(s);
+    for (const s of STORES_CONDIVISI) for (const o of dati[s]) await DB.put(s, o);
+  };
+  try { await scrivi(nuovi); }
+  catch (e) {
+    // memoria piena o altro errore a metà: si rimettono i dati di prima
+    try { await scrivi(prima); } catch (e2) { /* restano quelli in memoria fino alla chiusura */ }
+    await carica();
+    avvisa('Ripristino non riuscito: ho rimesso i dati di prima');
+    render();
+    return;
   }
-  for (const d of (j.documenti || [])) {
-    const copia = Object.assign({}, d);
-    const b64 = copia.b64;
-    delete copia.b64;
-    copia.blob = b64 ? await base64InBlob(b64) : null;
-    await DB.put('documenti', copia);
-  }
-  if (!(j.servizi || []).length) { await DB.del('kv', 'seminato'); }
+  if (!nuovi.servizi.length) { await DB.del('kv', 'seminato'); }
   await carica();
   if (collegato()) {
     const t = adesso();
@@ -3378,7 +4060,7 @@ async function importaCopia(file) {
         await DB.put(st, o);
       }
       const ora = new Set(S[st].map(x => x.id));
-      for (const id of prima[st]) if (!ora.has(id)) await DB.put('coda', { id: st + ':' + id, s: st, rid: id, x: true, t, n: uid() });
+      for (const o of prima[st]) if (!ora.has(o.id)) await DB.put('coda', { id: st + ':' + o.id, s: st, rid: o.id, x: true, t, n: uid() });
     }
     await accodaTutto();
     programmaSync(500);
@@ -3387,7 +4069,6 @@ async function importaCopia(file) {
   avvisa('Copia ripristinata');
   vai('#/oggi', true);
 }
-
 /* ========================================================== PIN */
 
 async function hashPin(pin, sale) {
@@ -3399,7 +4080,7 @@ let nascostoDa = 0;
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) { nascostoDa = Date.now(); return; }
   // Non si ridisegna al ritorno: chi torna dalla fotocamera perderebbe la foto appena scelta.
-  if (S.kv.pin && nascostoDa && Date.now() - nascostoDa > 5 * 60 * 1000) { bloccato = true; render(); }
+  if (S.kv.pin && nascostoDa && Date.now() - nascostoDa > 5 * 60 * 1000) { bloccato = true; chiudiFinestre(); render(); }
 });
 
 /* ========================================================== avvisi */
@@ -3529,15 +4210,21 @@ function perInvio(store, o) {
   return c;
 }
 
+// I file partono dopo i dati e uno alla volta: se uno non passa (rete debole, file grosso)
+// non blocca più il resto, e le medicine segnate arrivano comunque agli altri telefoni.
 async function caricaFileMancanti() {
+  let falliti = 0;
   for (const d of S.documenti.slice()) {
     if (!d.blob || d.fileSu || d.fileGrande) continue;
     if (d.blob.size > MAX_FILE_SYNC) { d.fileGrande = true; await salva('documenti', d); continue; }
-    const testo = await CIFRA.bytes(S.kv.syncChiave, new Uint8Array(await d.blob.arrayBuffer()), 'file:' + d.id);
-    await api('PUT', '/api/file/' + d.id, testo, { testo: true, attesa: 120000 });
-    d.fileSu = true;
-    await salva('documenti', d);
+    try {
+      const testo = await CIFRA.bytes(S.kv.syncChiave, new Uint8Array(await d.blob.arrayBuffer()), 'file:' + d.id);
+      await api('PUT', '/api/file/' + d.id, testo, { testo: true, attesa: 120000 });
+      d.fileSu = true;
+      await salva('documenti', d);
+    } catch (e) { falliti++; }
   }
+  SY.fileInAttesa = falliti;
 }
 
 async function applicaRemoto(rec) {
@@ -3575,7 +4262,6 @@ async function sincronizza() {
   aggiornaStatoSync();
   let cambiato = false;
   try {
-    await caricaFileMancanti();
     await inviaChiusure();
     const coda = await DB.all('coda');
     const pacchi = [];
@@ -3609,6 +4295,8 @@ async function sincronizza() {
     SY.stato = 'ok';
     SY.errore = '';
     aggiornaDispositivo().catch(() => {});
+    await caricaFileMancanti();
+    if (SY.fileInAttesa) SY.errore = plur(SY.fileInAttesa, 'file non ancora inviato', 'file non ancora inviati') + ': riprovo più tardi';
   } catch (e) {
     SY.stato = e.status === 401 ? 'password' : (e.name === 'AbortError' || e instanceof TypeError) ? 'rete' : 'errore';
     SY.errore = e.message || String(e);
@@ -3638,8 +4326,14 @@ async function scollegaDispositivo() {
   SY.stato = ''; SY.inCoda = 0; SY.push = null;
 }
 
+// Mai ridisegnare sotto le dita: se qualcuno ha appena toccato lo schermo, o c'è una domanda
+// aperta, si aspetta un attimo (un pulsante che si sposta mentre lo tocchi fa segnare la cosa sbagliata).
+let ultimoTocco = 0, timerRidisegno = null;
+document.addEventListener('pointerdown', () => { ultimoTocco = Date.now(); }, true);
 function ridisegnaSePossibile() {
   if (bloccato || !utente()) return;
+  clearTimeout(timerRidisegno);
+  if (document.querySelector('.velo') || Date.now() - ultimoTocco < 2500) { timerRidisegno = setTimeout(ridisegnaSePossibile, 1500); return; }
   // si ridisegna, tranne se qualcuno sta scrivendo in un modulo
   if (formSporco) avvisa('Sono arrivati aggiornamenti dagli altri dispositivi');
   else render();
@@ -3804,11 +4498,17 @@ moduli.collega = async function (form) {
       }
       let invia = true;
       if (ciSonoDati) {
-        if (primo) {
-          invia = confirm('Su questo dispositivo ci sono già dei dati.\n\nOK = li metto nello spazio condiviso, li vedranno tutti.\nAnnulla = sono solo dati di prova: li tolgo e si parte da zero.');
-        } else {
-          invia = !confirm('Su questo dispositivo ci sono già dei dati.\n\nOK = li sostituisco con quelli dello spazio condiviso (scegli questo se sono dati di prova).\nAnnulla = li aggiungo allo spazio condiviso, insieme a quelli degli altri.');
-        }
+        // Una domanda con le risposte scritte per esteso: con OK/Annulla era facile mandare
+        // a tutti i dati di prova premendo "Annulla" per tornare indietro.
+        const esempi = datiDiEsempio().length;
+        const scelta = await chiedi({ titolo: 'Su questo telefono ci sono già dei dati', icona: 'info',
+          testo: '<p>Cosa sono?' + (esempi ? ' (Tra questi ci sono ' + plur(esempi, 'cosa di esempio', 'cose di esempio') + '.)' : '') + '</p>',
+          scelte: primo
+            ? [{ valore: 'veri', testo: 'Sono dati veri: mettili nello spazio condiviso', tipo: 'primary' }, { valore: 'prova', testo: 'Sono di prova: cancellali da questo telefono', tipo: 'danger' }]
+            : [{ valore: 'prova', testo: 'Sono di prova: tieni solo quelli condivisi', tipo: 'primary' }, { valore: 'veri', testo: 'Sono dati veri: aggiungili a quelli condivisi' }],
+          annulla: 'Non collegare adesso' });
+        if (!scelta) { errore('password', 'Collegamento annullato: non è cambiato niente.'); return; }
+        invia = scelta === 'veri';
       }
       await setKV('syncChiave', chiave);
       await setKV('syncToken', token);
@@ -3861,10 +4561,9 @@ azioni['sync-ora'] = async function () {
 
 azioni.scollega = async function () {
     const n = SY.inCoda;
-    const msg = 'Scollegare questo dispositivo dallo spazio condiviso?' +
-      (n ? '\n\nATTENZIONE: ' + plur(n, 'modifica non è ancora stata inviata', 'modifiche non sono ancora state inviate') + ' e resterebbero solo qui.' : '') +
-      '\n\nI dati restano su questo dispositivo ma non si aggiornano più. Per ricollegarlo servirà la password.';
-    if (!confirm(msg)) return;
+    const msg = (n ? 'ATTENZIONE: ' + plur(n, 'modifica non è ancora stata inviata', 'modifiche non sono ancora state inviate') + ' e resterebbero solo qui.\n\n' : '') +
+      'I dati restano su questo telefono ma non si aggiornano più. Per ricollegarlo servirà la password.';
+    if (!(await conferma('Scollegare questo telefono?', msg, 'Sì, scollega', { pericolo: !!n }))) return;
     await scollegaDispositivo();
     avvisa('Dispositivo scollegato');
     render();
@@ -3883,7 +4582,8 @@ const VISTE = {
   impostazioni: () => vImpostazioni(),
   aggiungi: () => vAggiungi(),
   ospiti: (p, q) => vOspiti(q),
-  ospite: p => vOspite(p[1], p[2]),
+  ospite: (p, q) => vOspite(p[1], p[2], q),
+  consegne: () => vConsegne(),
   'nuovo-ospite': (p, q) => vFormOspite(q),
   farmaco: p => vFarmaco(p[1]),
   'nuovo-farmaco': (p, q) => vFormFarmaco(q),
@@ -3923,7 +4623,6 @@ const VISTE = {
   doc: p => vDoc(p[1]),
   'nuovo-doc': (p, q) => vFormDoc(q)
 };
-const PRINCIPALI = ['', 'oggi', 'ospiti', 'ospite', 'casa', 'servizi', 'servizio', 'fatto', 'archivio', 'scadenze', 'farmaco', 'visita', 'voce', 'prossimi'];
 
 let ultimaRotta = '';
 let formSporco = false;   // qualcuno sta scrivendo: non ridisegnare sotto le dita
@@ -3941,7 +4640,6 @@ function render() {
     const f = VISTE[parti[0]] || VISTE.oggi;
     try { html = f(parti, q); } catch (e) { console.error(e); html = nonTrovato(); }
   }
-  if (!bloccato && utente() && PRINCIPALI.includes(parti[0] || '') && !q.get('modifica')) html += '<a class="fab" href="#/aggiungi">' + ic('plus', 24, 2.6) + ' Aggiungi</a>';
   app.innerHTML = html;
   if (fileInSospeso) {
     if (!app.querySelector('input[type=file]') && parti[0] !== 'aggiungi') fileInSospeso = null;
@@ -4077,7 +4775,7 @@ document.addEventListener('change', async e => {
   if (t.name === 'pag') mostra('box-altro-pag', t.value === 'Altro');
   if (t.name === 'ric') mostra('ric-altro', t.value === 'altro');
   if (t.name === 'pagato') mostra('box-importo', t.checked);
-  if (t.name === 'giorni_tipo') { mostra('box-giorni', t.value === 'alcuni'); mostra('box-orari', t.value !== 'bisogno'); }
+  if (t.name === 'giorni_tipo') { mostra('box-giorni', t.value === 'alcuni'); mostra('box-orari', t.value !== 'bisogno'); mostra('box-bisogno', t.value === 'bisogno'); }
   if (t.name === 'tipo_visita') mostra('box-altro-visita', t.value === 'Altro');
   if (t.name === 'tipo_par') { mostra('box-altro-par', t.value === 'altro'); const p = parametro(t.value); const i = document.getElementById('f-valore'); if (i) i.placeholder = p.ph || ''; const u = document.getElementById('unita-par'); if (u) u.textContent = p.u || ''; }
   if (t.type === 'file' && t.name !== 'importa') {
@@ -4092,6 +4790,12 @@ document.addEventListener('change', async e => {
   }
   if (t.name === 'importa' && t.files[0]) { await importaCopia(t.files[0]); t.value = ''; }
   if (t.name === 'utente-set') {
+    const prima = utente();
+    if (!(await conferma('Questo telefono adesso è di ' + t.value + '?', 'Da ora quello che segni da qui risulterà fatto da ' + t.value + '.', 'Sì, sono ' + t.value, { no: 'No, resta di ' + (prima || 'nessuno') }))) {
+      const r = document.querySelector('input[name="utente-set"][value="' + prima + '"]');
+      if (r) r.checked = true; else t.checked = false;
+      return;
+    }
     await setKV('utente', t.value);
     avvisa('Ora questo telefono è di ' + t.value);
     if (collegato()) aggiornaDispositivo(true).catch(() => {});
@@ -4136,7 +4840,10 @@ async function caricaEsempio() {
   const t = oggi();
   const ora = oraAdesso();
   const ieri = piuGiorni(t, -1);
-  const nuovo = (store, o) => salva(store, Object.assign({ id: uid(), creato: adesso() }, o));
+  const nuovo = (store, o) => salva(store, Object.assign({ id: uid(), creato: adesso(), esempio: true }, o));
+  // le medicine di esempio sono "nell'app" da tre giorni: c'è un po' di storico da vedere
+  const inizio = new Date(); inizio.setDate(inizio.getDate() - 3); inizio.setHours(7, 0, 0, 0);
+  const inizioIso = inizio.toISOString();
   const ospiti = [
     { codice: 'OSP-01', nome: 'Giovanni P.', nascita: '1951-03-14', medico: 'Dott. Bianchi (esempio)', note: 'Allergia alla penicillina (esempio). Cammina con il bastone.', info: [{ k: 'Familiare', v: 'Anna, figlia — 333 000 0001 (esempio)' }, { k: 'Taglia', v: 'L' }] },
     { codice: 'OSP-02', nome: 'Maria R.', nascita: '1946-11-02', medico: 'Dott.ssa Verdi (esempio)', note: null, info: [{ k: 'Familiare', v: 'Luca, nipote — 333 000 0002 (esempio)' }] },
@@ -4157,18 +4864,23 @@ async function caricaEsempio() {
   ];
   const farmaci = [];
   for (const f of fa) {
-    const x = Object.assign({ id: uid(), giorni: 'tutti', soglia: 7, dal: piuGiorni(t, -60), contatoIl: t, contatoQuando: adesso(), medico: 'Medico di base (esempio)', creato: adesso() }, f);
+    const x = Object.assign({ id: uid(), giorni: 'tutti', soglia: 7, dal: piuGiorni(t, -60), contatoIl: t, contatoQuando: adesso(), medico: 'Medico di base (esempio)', creato: inizioIso, versioneDa: inizioIso, esempio: true }, f);
     await salva('farmaci', x);
     farmaci.push(x);
   }
-  // ieri: tutto dato tranne una dose rifiutata; oggi: segnato quello già passato, tranne Antonio
-  const ieriTs = new Date(Date.now() - 86400000).toISOString();
-  for (const f of farmaci) for (const o of f.orari) {
-    const x = nuovaSomm(f, ieri, o, f.nome.startsWith('Farmaco D') ? 'nondato' : 'dato', f.nome.startsWith('Farmaco D') ? 'Rifiutato' : null);
-    x.quando = ieriTs; x.chi = o < '14:00' ? 'Rita' : 'Michele';
-    await salva('somministrazioni', x);
-    if (o <= ora && f.ospiteId !== a) await salva('somministrazioni', Object.assign(nuovaSomm(f, t, o, 'dato'), { chi: 'Rita' }));
+  // gli ultimi tre giorni: tutto dato, tranne una dose rifiutata e una mai segnata (ieri sera, Antonio: "da chiarire")
+  for (let g2 = 3; g2 >= 1; g2--) {
+    const d = piuGiorni(t, -g2);
+    for (const f of farmaci) for (const o of f.orari) {
+      if (g2 === 1 && f.ospiteId === a && o === '20:00') continue;
+      const rifiutata = g2 === 1 && f.nome.startsWith('Farmaco D');
+      const x = nuovaSomm(f, d, o, rifiutata ? 'nondato' : 'dato', rifiutata ? 'Rifiutato' : null);
+      const q = aData(d); q.setHours(Number(o.slice(0, 2)), Number(o.slice(3)) + 4); x.quando = q.toISOString(); x.chi = o < '14:00' ? 'Rita' : 'Michele'; x.esempio = true;
+      await salva('somministrazioni', x);
+    }
   }
+  // oggi: segnato quello già passato, tranne Antonio
+  for (const f of farmaci) for (const o of f.orari) if (o <= ora && f.ospiteId !== a) await salva('somministrazioni', Object.assign(nuovaSomm(f, t, o, 'dato'), { chi: 'Rita', esempio: true }));
 
   await nuovo('visite', { ospiteId: g, tipo: 'Cardiologo', data: piuGiorni(t, 1), ora: '10:30', dove: 'Ospedale, ambulatorio 3 (esempio)', accompagna: 'Rita', portare: 'Impegnativa, tessera sanitaria, ultimo elettrocardiogramma', avviso: 1, stato: 'prevista' });
   await nuovo('visite', { ospiteId: g, tipo: 'Cardiologo', data: piuMesi(t, -6), ora: '09:00', dove: 'Ospedale (esempio)', stato: 'fatta', esito: 'Tutto stabile. Continuare la terapia. Controllo tra 6 mesi. (esempio)', fattaChi: 'Rita' });
@@ -4229,6 +4941,8 @@ async function caricaEsempio() {
 
 (async function avvio() {
   persistente = await apriDB();
+  // Si chiede al telefono di non cancellare mai l'archivio dell'app quando la memoria si riempie.
+  try { if (persistente && navigator.storage && navigator.storage.persist && !(await navigator.storage.persisted())) await navigator.storage.persist(); } catch (e) { /* non supportato */ }
   await carica();
   bloccato = !!S.kv.pin;
   render();
@@ -4243,7 +4957,7 @@ async function caricaEsempio() {
   setInterval(() => {
     if (document.hidden || bloccato) return;
     if (oggi() !== giornoVisto) { giornoVisto = oggi(); dopoModifica(); }
-    if (!document.querySelector('form[data-form]') && ['', 'oggi'].includes(rotta().parti[0] || '')) render();
+    if (!document.querySelector('form[data-form]') && ['', 'oggi'].includes(rotta().parti[0] || '')) ridisegnaSePossibile();
   }, 60 * 1000);
 })();
 window.addEventListener('online', () => programmaSync(500));
