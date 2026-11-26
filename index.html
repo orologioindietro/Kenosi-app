@@ -310,6 +310,78 @@ nav.bottom a.agg span{margin-top:-2px}
 .dose .esito small{display:block;font-weight:600;color:var(--ink2);margin-top:2px}
 .storia{display:flex;flex-direction:column;gap:0}
 .altre-domani{display:block;text-align:center;font-weight:700;padding:10px;text-decoration:none}
+/* 0.6 — la data di una scadenza, grande e colorata: si vede prima di tutto il resto */
+.bdata{width:60px;min-height:64px;flex:none;border-radius:14px;background:var(--greenbg);color:var(--greenink);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;padding:5px 2px;text-align:center}
+.bdata b{font-size:25px;font-weight:850;letter-spacing:-.02em}
+.bdata span{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.03em}
+.bdata small{font-size:12px;font-weight:700;opacity:.85}
+.bdata.rust{background:var(--rust);color:#fff}
+.bdata.amber{background:#F6D88A;color:#4A3505}
+.bdata.oggi{background:var(--green);color:#fff}
+.bdata.grigia{background:var(--line2);color:var(--ink2)}
+.quando-scade{font-weight:800}
+.quando-scade.rust{color:var(--rust)}
+.quando-scade.amber{color:var(--amber)}
+.row.con-data{padding:10px 12px 10px 10px}
+/* schede dei pagamenti */
+.pagcard{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card);border:1px solid var(--line);border-radius:18px;min-height:88px}
+.pagcard.rust{background:var(--rustbg);border-color:var(--rustline)}
+.pagcard .pc-link{flex:1;min-width:0;display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+.pc-importo{display:block;font-size:21px;font-weight:850;letter-spacing:-.01em;margin-top:2px}
+.chip-stato{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:800;padding:4px 9px;border-radius:8px;background:var(--plumbg);color:var(--plum);margin-top:5px}
+.chip-stato.mio{background:var(--okbg);color:var(--ok)}
+.chip-stato.rust{background:var(--rust);color:#fff}
+.sommario{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.sommario a,.sommario div{display:flex;flex-direction:column;gap:2px;padding:12px 10px;border-radius:16px;background:var(--card);border:1px solid var(--line);text-decoration:none;color:inherit;min-height:92px}
+.sommario b{font-size:26px;font-weight:850;line-height:1.1}
+.sommario span{font-size:14px;font-weight:700;color:var(--ink2);line-height:1.25}
+.sommario small{font-size:13px;font-weight:700;color:var(--ink2)}
+.sommario .rust{background:var(--rustbg);border-color:var(--rustline)}
+.sommario .rust b,.sommario .rust span{color:var(--rust)}
+.sommario .ok b{color:var(--ok)}
+.hero{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;gap:14px;align-items:center}
+.hero .h-importo{font-size:34px;font-weight:850;letter-spacing:-.02em;line-height:1.1}
+.hero .h-sub{font-size:16px;font-weight:700;margin-top:4px}
+.hero.rust{background:var(--rustbg);border-color:var(--rustline)}
+.hero .bdata{width:72px;min-height:78px}
+.hero .bdata b{font-size:30px}
+.btn-grande{min-height:62px;font-size:19px;border-radius:16px}
+.riga-pagato{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);text-decoration:none;color:inherit}
+.riga-pagato .rp-importo{font-weight:850;font-size:17px;flex:none}
+.mese-testa{display:flex;justify-content:space-between;align-items:baseline;margin:16px 2px 2px;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--ink2)}
+/* collegamento tra i telefoni */
+.sync-pill{display:inline-flex;align-items:center;gap:8px;margin:0 16px 8px;padding:8px 13px;border-radius:20px;font-size:15px;font-weight:750;text-decoration:none;background:var(--okbg);color:var(--ok);border:1px solid var(--okline);align-self:flex-start}
+.sync-pill::before{content:"";width:10px;height:10px;border-radius:5px;background:currentColor;flex:none}
+.sync-pill.rete{background:var(--amberbg);color:var(--amber);border-color:var(--amberline)}
+.sync-pill.errore{background:var(--rustbg);color:var(--rust);border-color:var(--rustline)}
+.non-collegato{margin:0 16px 10px;padding:14px;border-radius:18px;background:var(--rustbg);border:2px solid var(--rust);color:var(--rustink)}
+.non-collegato b{display:block;font-size:18px;color:var(--rust);margin-bottom:4px}
+.non-collegato .btn{margin-top:10px}
+.codice{font:800 25px/1.35 ui-monospace,"SF Mono",Menlo,Consolas,monospace;letter-spacing:.02em;text-align:center;padding:18px 12px;border-radius:16px;background:var(--card);border:2px dashed var(--green);color:var(--ink);overflow-wrap:anywhere;user-select:all;-webkit-user-select:all}
+input.codice-in{font:700 21px/1.3 ui-monospace,"SF Mono",Menlo,Consolas,monospace;min-height:60px;text-align:center}
+.passi{display:flex;flex-direction:column;gap:6px;margin:4px 2px 0;padding:0;list-style:none;counter-reset:p}
+.passi li{counter-increment:p;display:flex;gap:10px;font-size:16px;line-height:1.4}
+.passi li::before{content:counter(p);width:28px;height:28px;flex:none;border-radius:14px;background:var(--green);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:15px}
+/* campo della scadenza: in primo piano, con le scorciatoie */
+.campo-data{background:var(--amberbg);border:2px solid #E9C76A;border-radius:16px;padding:12px 12px 14px}
+.campo-data>label,.campo-data>.lab{font-size:18px!important;display:flex;align-items:center;gap:8px}
+.campo-data input[type=date]{font-size:20px;font-weight:750;min-height:56px;background:#fff}
+.rapide{display:flex;flex-wrap:wrap;gap:6px}
+.rapide button{min-height:44px;padding:0 13px;border-radius:12px;border:1px solid #E1C77E;background:#fff;font-weight:750;font-size:15px;cursor:pointer;color:var(--ink)}
+.rapide button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.data-letta{font-size:15px;font-weight:800;color:var(--amber)}
+/* gruppi di scelte con un titolo (pagamenti) */
+.gruppo-scelte{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.gruppo-scelte .gs-tit{font-size:14px;font-weight:800;color:var(--ink2);text-transform:uppercase;letter-spacing:.04em;margin-top:6px;display:flex;align-items:center;gap:6px}
+/* chi sta facendo cosa (spesa, lavanderia) */
+.incorso{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;background:var(--plumbg);border:1px solid #E5CDAF;color:var(--plum)}
+.incorso b{font-size:17px}
+.incorso.mio{background:var(--okbg);border-color:var(--okline);color:var(--ok)}
+.due-grandi{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.due-grandi a,.due-grandi button{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:14px;min-height:104px;border-radius:18px;background:var(--card);border:1px solid var(--line);text-decoration:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.due-grandi b{font-size:18px;line-height:1.2}
+.due-grandi small{font-size:14px;color:var(--ink2)}
+.due-grandi .dicon{width:46px;height:46px}
 </style>
 </head>
 <body>
@@ -324,7 +396,7 @@ const moduli = {};   // gestori dei moduli (data-form)
 const azioni = {};   // gestori dei pulsanti (data-action)
 
 
-const VERSIONE = '0.5 (prova)';
+const VERSIONE = '0.6 (prova)';
 const UTENTI = ['Rita', 'Michele', 'Vincenzo'];
 const RESPONSABILI = ['Rita', 'Michele', 'Entrambi'];
 const CATEGORIE = ['Pagamenti', 'Servizi della casa', 'Salute ospiti', 'Personale', 'Autorizzazioni e certificati', 'Ospiti', 'Altro'];
@@ -338,7 +410,23 @@ const RICORRENZE = [
   ['1-anni', 'Ogni anno'], ['altro', 'Altro…']
 ];
 const AVVISI = [[0, 'Il giorno stesso'], [1, '1 giorno prima'], [3, '3 giorni prima'], [7, '1 settimana prima'], [30, '1 mese prima']];
-const CAT_PAG = ['Luce', 'Gas', 'Acqua', 'Telefono e internet', 'Rifiuti (TARI)', 'Assicurazione', 'Commercialista', 'Confcooperative', 'Stipendi e contributi', 'Tasse', 'Affitto', 'Altro'];
+// I pagamenti divisi per sezione: ognuna ha la sua pagina, con "da pagare" e "pagati" separati.
+const GRUPPI_PAG = [
+  { k: 'bollette', nome: 'Bollette e utenze', icona: 'bolt', tipi: ['Luce', 'Gas', 'Acqua', 'Telefono e internet', 'Rifiuti (TARI)'] },
+  { k: 'assicurazioni', nome: 'Assicurazioni', icona: 'scudo', tipi: ['Assicurazione', 'Assicurazione pulmino'] },
+  { k: 'personale', nome: 'Personale', icona: 'user', tipi: ['Stipendi e contributi', 'Rimborso spese'] },
+  { k: 'tasse', nome: 'Tasse e quote', icona: 'doc', tipi: ['Tasse', 'F24', 'Confcooperative', 'Quote e adesioni'] },
+  { k: 'fornitori', nome: 'Fornitori e casa', icona: 'home', tipi: ['Affitto', 'Commercialista', 'Manutenzione', 'Fornitore'] },
+  { k: 'altro', nome: 'Altri pagamenti', icona: 'euro', tipi: ['Altro'] }
+];
+const CAT_PAG = GRUPPI_PAG.flatMap(g => g.tipi);
+function gruppoPag(v) {
+  const p = typeof v === 'string' ? v : (v && v.pag) || '';
+  return (GRUPPI_PAG.find(g => g.tipi.includes(p)) || GRUPPI_PAG[GRUPPI_PAG.length - 1]).k;
+}
+const gruppoDi = k => GRUPPI_PAG.find(g => g.k === k) || null;
+const COME_PAGATO = ['Bonifico', 'Bollettino o PagoPA', 'Carta', 'Contanti', 'Addebito in banca'];
+const SOLDI_SPESA = [['cassa', 'Cassa della comunità'], ['carta', 'Carta della cooperativa'], ['miei', 'Soldi miei: da rimborsare']];
 const MOTIVI_NONDATO = ['Rifiutato', 'Fuori casa', 'Ricoverato', 'Sospeso dal medico', 'Finito, da ricomprare', 'Altro'];
 // Valori fuori da questi limiti sono quasi sempre errori di battitura: l'app chiede di ricontrollare.
 const LIMITI_MISURE = { glicemia: [20, 600], peso: [20, 250], saturazione: [50, 100], temperatura: [33, 43], battito: [25, 220] };
@@ -431,7 +519,12 @@ const ICONS = {
   clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
   chat: '<path d="M4 18.5l1.2-3.6A7.5 7.5 0 1112 19.5a7.6 7.6 0 01-4-1.1z"/>',
   note: '<path d="M6 3.5h12v17H6z"/><path d="M9 8h6M9 12h6M9 16h3"/>',
-  gauge: '<path d="M4 16a8 8 0 1116 0"/><path d="M12 16l4-5"/>'
+  gauge: '<path d="M4 16a8 8 0 1116 0"/><path d="M12 16l4-5"/>',
+  scudo: '<path d="M12 3.5l7 2.8v5.4c0 4.3-2.9 7.4-7 8.8-4.1-1.4-7-4.5-7-8.8V6.3z"/>',
+  link: '<path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/>',
+  share: '<path d="M12 3.5v11"/><path d="M8 7.5l4-4 4 4"/><path d="M5.5 12v7a1.5 1.5 0 001.5 1.5h10a1.5 1.5 0 001.5-1.5v-7"/>',
+  ricevuta: '<path d="M6.5 3.5h11v17l-2.75-1.8L12 20.5l-2.75-1.8L6.5 20.5z"/><path d="M9.5 8h5M9.5 11.5h5M9.5 15h3"/>',
+  lavatrice: '<rect x="4.5" y="3.5" width="15" height="17" rx="2.5"/><circle cx="12" cy="13" r="4.2"/><path d="M8 6.8h.01M10.8 6.8h.01"/>'
 };
 function ic(name, size = 22, sw = 2) {
   return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + sw +
@@ -669,7 +762,9 @@ const perData = (a, b) => (a.prossima || '').localeCompare(b.prossima || '');
 const recenti = (a, b) => ((b.data || '') + (b.ora || '') + (b.creato || '')).localeCompare((a.data || '') + (a.ora || '') + (a.creato || ''));
 const perNome = (a, b) => (a.nome || '').localeCompare(b.nome || '', 'it');
 const ospitiAttivi = () => S.ospiti.filter(o => o.attivo !== false).sort(perNome);
-const serviziOrdinati = () => [...S.servizi].sort((a, b) => (a.ordine || 0) - (b.ordine || 0) || perNome(a, b));
+// Nell'archivio dei servizi ci sono anche le "vostre voci" di Aggiungi (tipo "modello"): non sono riquadri della Casa.
+const serviziOrdinati = () => S.servizi.filter(s => s.tipo !== 'modello').sort((a, b) => (a.ordine || 0) - (b.ordine || 0) || perNome(a, b));
+const modelliAggiungi = () => S.servizi.filter(s => s.tipo === 'modello').sort((a, b) => (a.ordine || 0) - (b.ordine || 0) || perNome(a, b));
 const servizioDiTipo = tipo => serviziOrdinati().find(s => s.tipo === tipo) || null;
 function categoria(v) { return CATEGORIE_VECCHIE[v.categoria] || v.categoria || 'Altro'; }
 const ePagamento = v => v.chiusura === 'pagato';
@@ -930,7 +1025,6 @@ function rifiutiDi(d) {
 }
 // La sera prima del passaggio si mette fuori.
 const rifiutiStasera = d => rifiutiDi(piuGiorni(d || oggi(), 1));
-const lavanderiaFuori = () => S.eventi.filter(e => e.tipo === 'lavanderia' && e.fuori && !e.rientrato).sort(recenti);
 const guastiAperti = () => S.eventi.filter(e => e.tipo === 'guasto' && e.stato !== 'risolto').sort(recenti);
 const trasportiPrevisti = () => S.eventi.filter(e => e.tipo === 'trasporto' && !e.fatto).sort((a, b) => (a.data + (a.ora || '')).localeCompare(b.data + (b.ora || '')));
 
@@ -1072,20 +1166,61 @@ azioni.effie = el => {
   setTimeout(() => e.classList.remove('saluta'), 1000);
 };
 
+// La data di una scadenza come su un calendario da muro: giorno grande, mese, giorno della settimana.
+// Rossa se è passata, gialla se manca una settimana o meno, scura se è oggi.
+function urgenzaData(d) {
+  const n = giorniTra(oggi(), d);
+  return n < 0 ? 'rust' : n === 0 ? 'oggi' : n <= 7 ? 'amber' : '';
+}
+function bloccoData(d, cls) {
+  if (!dataValida(d)) return '<span class="bdata grigia" aria-hidden="true"><b>–</b></span>';
+  const x = aData(d);
+  return '<span class="bdata ' + (cls === undefined ? urgenzaData(d) : cls) + '" aria-hidden="true"><b>' + x.getDate() + '</b><span>' + MESI[x.getMonth()] + '</span><small>' + GIORNI_BREVI[x.getDay()].toLowerCase() + '</small></span>';
+}
+// Il tempo che resta, in parole: "Scade tra 3 giorni", "Scaduto da 2 giorni", "Domani".
+function quantoManca(d, pag) {
+  const n = giorniTra(oggi(), d);
+  if (n === 0) return { t: pag ? 'Scade oggi' : 'Da fare oggi', cls: 'amber' };
+  if (n === 1) return { t: pag ? 'Scade domani' : 'Domani', cls: 'amber' };
+  if (n > 1) return { t: (pag ? 'Scade tra ' : 'Tra ') + plur(n, 'giorno', 'giorni'), cls: n <= 7 ? 'amber' : '' };
+  return { t: (pag ? 'Scaduto da ' : 'In ritardo di ') + plur(-n, 'giorno', 'giorni'), cls: 'rust' };
+}
+function daQuando(isoT) {
+  const d = giornoDi(isoT);
+  const g = giorniTra(d, oggi());
+  return g === 0 ? 'da oggi alle ' + fmtOra(oraDi(isoT)) : g === 1 ? 'da ieri' : 'dal ' + fmtD(d);
+}
+// Chi ha detto "me ne occupo io": lo vedono tutti, così nessuno paga due volte.
+function chipIncarico(v) {
+  if (!v || !v.incarico || !v.incarico.chi || v.attiva === false) return '';
+  const mio = v.incarico.chi === utente();
+  return '<span class="chip-stato' + (mio ? ' mio' : '') + '">' + ic('user', 14, 2.4) + esc((mio ? 'Te ne occupi tu' : 'Se ne occupa ' + v.incarico.chi) + (v.incarico.quando ? ' ' + daQuando(v.incarico.quando) : '')) + '</span>';
+}
 function rigaVoce(v, opz = {}) {
-  const st = stato(v);
-  const rit = st === 'ritardo' && v.attiva !== false;
+  const chiusa = v.attiva === false;
+  const pag = ePagamento(v);
   const o = ospite(v.ospiteId);
-  const etichetta = ePagamento(v) ? (v.pag || 'Pagamento') : categoria(v);
-  const meta = [semplifica(v.nome).startsWith(semplifica(etichetta)) ? null : etichetta, v.importo != null ? euro(v.importo) : null, v.domiciliato ? 'si paga da solo' : v.responsabile, o ? o.nome : null].filter(Boolean).join(' · ');
-  let quando = fmt(v.prossima);
-  if (v.attiva === false) quando = 'chiusa';
-  else if (rit) quando = plur(-giorniTra(oggi(), v.prossima), 'giorno', 'giorni') + ' fa';
-  const check = opz.check !== false && v.attiva !== false
-    ? '<a class="check" href="#/segna?voce=' + v.id + '" aria-label="' + (ePagamento(v) ? 'Segna come pagato: ' : 'Segna come fatto: ') + esc(v.nome) + '">' + ic('check', 22, 2.6) + '</a>' : '';
-  return '<div class="row ' + (rit ? 'row-rust' : '') + (v.attiva === false ? ' row-done' : '') + '">' +
-    '<a class="row-main" href="#/voce/' + v.id + '"><span class="row-title">' + esc(v.nome) + '</span><span class="row-meta">' + esc(meta) + '</span></a>' +
-    '<span class="row-when ' + (rit ? 't-rust' : '') + '">' + esc(quando) + '</span>' + check + '</div>';
+  const etichetta = pag ? (v.pag || 'Pagamento') : categoria(v);
+  const q = quantoManca(v.prossima, pag);
+  const pezzi = [semplifica(v.nome).startsWith(semplifica(etichetta)) ? null : etichetta, v.importo != null ? euro(v.importo) : null,
+    v.domiciliato ? 'si paga da solo' : (v.responsabile && v.responsabile !== 'Entrambi' ? v.responsabile : null), o && !String(v.nome).includes(o.nome) ? o.nome : null].filter(Boolean);
+  const quando = chiusa ? 'Chiusa' + (v.chiusaIl ? ' il ' + fmtD(v.chiusaIl) : '') : '<span class="quando-scade ' + q.cls + '">' + esc(q.t) + '</span>';
+  const check = opz.check !== false && !chiusa
+    ? '<a class="check" href="#/segna?voce=' + v.id + '" aria-label="' + (pag ? 'Segna come pagato: ' : 'Segna come fatto: ') + esc(v.nome) + '">' + ic('check', 22, 2.6) + '</a>' : '';
+  return '<div class="row con-data ' + (q.cls === 'rust' && !chiusa ? 'row-rust' : '') + (chiusa ? ' row-done' : '') + '">' + bloccoData(v.prossima, chiusa ? 'grigia' : undefined) +
+    '<a class="row-main" href="#/voce/' + v.id + '"><span class="row-title">' + esc(v.nome) + '</span><span class="row-meta">' + quando + (pezzi.length ? ' · ' + esc(pezzi.join(' · ')) : '') + '</span>' + chipIncarico(v) + '</a>' + check + '</div>';
+}
+// Un pagamento da fare: data, importo grande, quanto manca, chi se ne occupa, e il pulsante.
+function cardPagamento(v) {
+  const q = quantoManca(v.prossima, true);
+  const o = ospite(v.ospiteId);
+  const altro = [v.domiciliato ? 'si paga da solo: controlla l\'addebito' : null, o && !String(v.nome).includes(o.nome) ? o.nome : null].filter(Boolean).join(' · ');
+  // un addebito in banca si controlla solo quando la data è passata: prima non c'è niente da toccare
+  const az = v.domiciliato ? (v.prossima <= oggi() ? '<a class="cosa-az p" href="#/segna?voce=' + v.id + '">Controllato</a>' : '')
+    : '<a class="cosa-az ok" href="#/segna?voce=' + v.id + '">Pagato</a>';
+  return '<div class="pagcard ' + (q.cls === 'rust' && !v.domiciliato ? 'rust' : '') + '"><a class="pc-link" href="#/voce/' + v.id + '">' + bloccoData(v.prossima) +
+    '<span class="row-main"><span class="row-title">' + esc(v.nome) + '</span>' + (v.importo != null ? '<span class="pc-importo">' + esc(euro(v.importo)) + '</span>' : '') +
+    '<span class="row-meta"><span class="quando-scade ' + q.cls + '">' + esc(q.t) + '</span>' + (altro ? ' · ' + esc(altro) : '') + '</span>' + chipIncarico(v) + '</span></a>' + az + '</div>';
 }
 function rigaFarmaco(f, opz = {}) {
   const s = scorta(f);
@@ -1185,6 +1320,33 @@ function campoRic(ricSel, ricAltro) {
     '<div id="ric-altro" class="inline ' + (ricSel === 'altro' ? '' : 'hidden') + '"><span class="lbl">Ogni</span><input type="number" name="ric_n" min="1" max="365" value="' + esc(ricAltro.ogni) + '" aria-label="Ogni quanti">' +
     selezione('ric_u', [['giorni', 'giorni'], ['settimane', 'settimane'], ['mesi', 'mesi'], ['anni', 'anni']], ricAltro.unita) + '</div></div>';
 }
+// La scadenza in primo piano: riquadro giallo, data grande e scorciatoie da un tocco.
+// Sotto, la data scritta per intero ("venerdì 12 dicembre"): niente dubbi tra giorno e mese.
+function campoData(id, nome, etichetta, valore, opz = {}) {
+  const rapide = [[0, 'Oggi'], [1, 'Domani'], [7, 'Tra 7 giorni'], [30, 'Tra 30 giorni'], ['fine', 'Fine mese']];
+  return '<div class="field campo-data"><label for="f-' + id + '">' + ic('cal', 22, 2.2) + ' ' + esc(etichetta) + '</label>' +
+    '<input type="date" id="f-' + id + '" name="' + nome + '" value="' + esc(valore || '') + '" data-data-letta="dl-' + id + '"' + (opz.max ? ' max="' + esc(opz.max) + '"' : '') + '>' +
+    (opz.senzaRapide ? '' : '<div class="rapide">' + rapide.map(([g, t]) => '<button type="button" data-action="data-rapida" data-per="f-' + id + '" data-g="' + g + '">' + t + '</button>').join('') + '</div>') +
+    '<span class="data-letta" id="dl-' + id + '">' + (dataValida(valore) ? esc(fmtLungo(valore)) : '') + '</span>' +
+    (opz.hint ? '<span class="hint">' + opz.hint + '</span>' : '') + '<p class="err" id="err-' + id + '"></p></div>';
+}
+function dataRapida(g) {
+  if (g === 'fine') { const d = new Date(); return iso(new Date(d.getFullYear(), d.getMonth() + 1, 0)); }
+  return piuGiorni(oggi(), Number(g) || 0);
+}
+azioni['data-rapida'] = el => {
+  const i = document.getElementById(el.dataset.per);
+  if (!i) return;
+  i.value = dataRapida(el.dataset.g);
+  i.dispatchEvent(new Event('change', { bubbles: true }));
+  el.parentNode.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === el));
+};
+document.addEventListener('change', ev => {
+  const i = ev.target;
+  if (!i || !i.dataset || !i.dataset.dataLetta) return;
+  const out = document.getElementById(i.dataset.dataLetta);
+  if (out) out.textContent = dataValida(i.value) ? fmtLungo(i.value) : '';
+});
 // Le opzioni che servono di rado: chiuse, si aprono con un tocco.
 function altreOpzioni(html, titolo = 'Altre opzioni') {
   return '<details class="altre"><summary>' + esc(titolo) + '</summary><div class="altre-in">' + html + '</div></details>';
@@ -1260,7 +1422,8 @@ function chiedi(opz) {
       (opz.icona ? '<div class="fin-ic ' + (opz.tono || '') + '">' + ic(opz.icona, 30) + '</div>' : '') +
       '<h2 id="fin-t">' + esc(opz.titolo || '') + '</h2>' + (opz.testo ? '<div class="fin-testo">' + opz.testo + '</div>' : '') +
       (opz.campo ? '<div class="field" style="margin-top:8px"><label for="fin-campo">' + esc(opz.campo.etichetta) + '</label>' +
-        '<textarea id="fin-campo" maxlength="300" style="min-height:76px" placeholder="' + esc(opz.campo.ph || '') + '"></textarea><p class="err" id="fin-err"></p></div>' : '') +
+        (opz.campo.tipo === 'pin' ? '<input type="password" id="fin-campo" inputmode="numeric" autocomplete="off" maxlength="8">'
+          : '<textarea id="fin-campo" maxlength="300" style="min-height:76px" placeholder="' + esc(opz.campo.ph || '') + '"></textarea>') + '<p class="err" id="fin-err"></p></div>' : '') +
       '<div class="fin-bottoni">' + scelte.map((s, i) => '<button type="button" class="btn ' + cls(s.tipo) + '" data-i="' + i + '">' + esc(s.testo) + '</button>').join('') + '</div></div>';
     const tasto = e => { if (e.key === 'Escape' && !opz.senzaAnnulla) { e.preventDefault(); chiudi(null); } };
     function chiudi(v) {
@@ -1310,8 +1473,8 @@ function vBenvenuto() {
     '<main class="pad"><form data-form="benvenuto" novalidate>' +
     '<div class="field"><span class="lab">Chi usa questo telefono?</span>' + chipsRadio('utente', UTENTI, '') +
     '<span class="hint">Quello che segnerai da qui risulterà fatto da questa persona.</span><p class="err" id="err-utente"></p></div>' +
-    '<div class="field"><span class="lab">Come vuoi partire?</span>' + chipsRadio('dati', [['esempio', 'Con dati di esempio'], ['vuota', 'App vuota']], 'esempio') +
-    '<span class="hint">Con i dati di esempio vedi subito come funziona. Poi li togli da Impostazioni → «Togli i dati di esempio», senza toccare quelli veri.</span></div>' +
+    '<div class="field"><span class="lab">Come vuoi partire?</span>' + chipsRadio('dati', [['collega', 'Collego questo telefono agli altri'], ['esempio', 'Con dati di esempio'], ['vuota', 'App vuota']], 'collega') +
+    '<span class="hint"><b>Collego agli altri:</b> ti servirà il codice della comunità (se è il primo telefono, lo crea l\'app). <b>Dati di esempio:</b> per vedere come funziona; poi si tolgono da Impostazioni, senza toccare quelli veri.</span></div>' +
     '<div class="actions"><button class="btn btn-primary" type="submit">Inizia</button></div></form></main>';
 }
 moduli.benvenuto = async form => {
@@ -1319,6 +1482,7 @@ moduli.benvenuto = async form => {
   if (!fd.get('utente')) { errore('err-utente', 'Tocca il tuo nome.'); return; }
   await setKV('utente', String(fd.get('utente')));
   if (fd.get('dati') === 'esempio') await caricaEsempio();
+  if (fd.get('dati') === 'collega') { vai('#/oggi', true); vai('#/collega'); return; }
   vai('#/oggi', true);
 };
 
@@ -1368,8 +1532,9 @@ function coseDiOggi() {
   for (const v of attive().filter(v => v.prossima <= t)) {
     const rit = v.prossima < t;
     const o = ospite(v.ospiteId);
+    const inc = v.incarico && v.incarico.chi ? (v.incarico.chi === utente() ? 'te ne occupi tu' : 'se ne occupa ' + v.incarico.chi) : null;
     const meta = [v.importo != null ? euro(v.importo) : null, rit ? (ePagamento(v) ? 'scadeva ' : 'era per ') + fmt(v.prossima) : null,
-      v.domiciliato ? 'addebito in banca: controlla che ci sia' : (v.responsabile && v.responsabile !== 'Entrambi' ? v.responsabile : null), o && !v.nome.includes(o.nome) ? o.nome : null].filter(Boolean).join(' · ');
+      v.domiciliato ? 'addebito in banca: controlla che ci sia' : inc || (v.responsabile && v.responsabile !== 'Entrambi' ? v.responsabile : null), o && !v.nome.includes(o.nome) ? o.nome : null].filter(Boolean).join(' · ');
     let azione;
     if (v.tipo === 'misura') azione = { href: '#/misura?voce=' + v.id, testo: 'Scrivi', tipo: 'p' };
     else if (v.domiciliato) azione = { href: '#/segna?voce=' + v.id, testo: 'Controllato' };
@@ -1422,10 +1587,11 @@ function vOggi() {
   const nome = utente() && utente() !== 'Vincenzo' ? ', ' + utente() : '';
   const destra = '<a class="icon-btn" href="#/impostazioni" aria-label="Impostazioni">' + ic('gear', 24) + '</a>';
   let h = testata(saluto() + nome, { kicker: fmtLungo(t).replace(/ \d{4}$/, ''), destra });
+  if (collegato()) h += '<a class="sync-pill ' + classeStatoSync() + '" href="#/collega" data-stato-sync>' + esc(testoStatoSync()) + '</a>';
   const daFare = tutte + chiarire.length;
   h += effie(daFare ? 'Oggi ci sono <b>' + plur(daFare, 'cosa', 'cose') + '</b> da fare. Quando ne finisci una, tocca il suo pulsante.'
     : 'Per oggi è <b>tutto fatto</b>. Se arriva qualcosa di nuovo, tocca <b>Aggiungi</b>.');
-  h += bannerUnico() + '<main class="pad">';
+  h += bannerNonCollegato() + bannerUnico() + '<main class="pad">';
   if (chiarire.length) {
     h += sezione('Da chiarire', chiarire.length, 'rust') +
       '<p class="hint" style="margin:0 2px">Medicine dei giorni scorsi senza «Dato» né «Non dato». Chiedi al collega e segna cosa è successo.</p>' +
@@ -1435,23 +1601,29 @@ function vOggi() {
   if (consegne.length) h += sezione('Consegne da leggere', consegne.length, 'amber') + consegne.map(cardConsegna).join('');
   if (adesso.length) h += sezione('Adesso') + adesso.map(cosaOggi).join('');
   if (dopo.length) h += sezione('Più tardi') + dopo.map(cosaOggi).join('');
+  // Le scadenze della settimana, con la data grande: si vedono in tempo, non il giorno stesso.
+  const inArrivo = attive().filter(v => v.prossima > t && giorniTra(t, v.prossima) <= 7 && v.tipo !== 'misura').sort(perData);
+  if (inArrivo.length) h += sezione('Scadenze dei prossimi 7 giorni', inArrivo.length, 'amber', '<a class="destra" href="#/scadenze">Tutte</a>') +
+    inArrivo.slice(0, 6).map(v => ePagamento(v) ? cardPagamento(v) : rigaVoce(v)).join('') +
+    (inArrivo.length > 6 ? '<a class="altre-domani" href="#/scadenze">Ancora ' + (inArrivo.length - 6) + ' →</a>' : '');
+  const doppi = bannerDoppi();
+  if (doppi) h += sezione('Da controllare', null, 'rust') + doppi;
   const n = fatteOggi();
   h += '<a class="gia" href="#/fatto" style="margin-top:14px"><span class="tondo">' + ic('check', 24, 2.8) + '</span><b>Già fatto oggi: ' + n + '</b>' + ic('chev', 22) + '</a>';
-  const domani = coseDelGiorno(piuGiorni(t, 1));
+  const domani = coseDelGiorno(piuGiorni(t, 1), true);
   if (domani.length) {
     h += sezione('Domani') + domani.slice(0, 3).map(c => cosaOggi(Object.assign({}, c, { azione: null }))).join('');
     if (domani.length > 3) h += '<a class="altre-domani" href="#/prossimi">' + (domani.length === 4 ? 'Ancora 1 cosa domani' : 'Ancora ' + (domani.length - 3) + ' cose domani') + ' →</a>';
   }
   h += '<div class="two" style="margin-top:12px"><a class="btn btn-sm" href="#/prossimi">' + ic('cal', 22) + ' Prossimi giorni</a>' +
     '<a class="btn btn-sm" href="#/consegne">' + ic('chat', 22) + ' Fine turno</a></div>';
-  if (collegato()) h += '<a class="syncline" href="#/impostazioni" data-stato-sync>' + esc(testoStatoSync()) + '</a>';
   h += bannerProva().replace('mx', '');
   return h + '</main>' + barra('oggi');
 }
 // Le cose di un giorno futuro (senza le medicine di tutti i giorni).
-function coseDelGiorno(d) {
+function coseDelGiorno(d, senzaScadenze) {
   const cose = [];
-  for (const v of attive().filter(v => v.prossima === d)) cose.push({ titolo: (ePagamento(v) && !v.domiciliato ? 'Pagare: ' : '') + v.nome, meta: [v.importo != null ? euro(v.importo) : null, (ospite(v.ospiteId) || {}).nome].filter(Boolean).join(' · '), href: '#/voce/' + v.id });
+  if (!senzaScadenze) for (const v of attive().filter(v => v.prossima === d)) cose.push({ titolo: (ePagamento(v) && !v.domiciliato ? 'Pagare: ' : '') + v.nome, meta: [v.importo != null ? euro(v.importo) : null, (ospite(v.ospiteId) || {}).nome].filter(Boolean).join(' · '), href: '#/voce/' + v.id });
   for (const v of visitePreviste().filter(v => v.data === d)) cose.push({ ora: v.ora, titolo: 'Visita: ' + (v.tipo || ''), meta: [(ospite(v.ospiteId) || {}).nome, v.accompagna && v.accompagna !== 'Da decidere' ? 'accompagna ' + v.accompagna : null, daSapereVisita(v)].filter(Boolean).join(' · '), href: '#/visita/' + v.id, cls: /digiun/i.test((v.portare || '') + (v.note || '')) ? 'amber' : '' });
   for (const e of trasportiPrevisti().filter(e => e.data === d)) cose.push({ ora: e.ora, titolo: 'Uscita: ' + (e.dove || ''), meta: (ospite(e.ospiteId) || {}).nome || '', href: '#/trasporto?id=' + e.id });
   return cose.sort((a, b) => (a.ora || '00').localeCompare(b.ora || '00'));
@@ -1588,16 +1760,68 @@ function vAggiungi() {
       scelta('#/avviso-pagamento', 'euro', 'Un pagamento', 'Bolletta, assicurazione, commercialista…') +
       scelta('#/trasporto', 'car', 'Un\'uscita o un accompagnamento', 'Chi va, dove, quando') +
       scelta('#/nuovo-doc', 'camera', 'Una foto o un documento', 'Va nell\'archivio');
+    h += scelta('#/nuova-voce?libera=1', 'edit', 'Un\'altra cosa', 'La scrivi tu, con la sua scadenza');
+    const mod = modelliAggiungi();
+    if (mod.length) h += sezione('Le vostre voci', null, '', '<a class="destra" href="#/aggiungi-elenco">Modifica</a>') +
+      mod.map(m => scelta('#/nuova-voce?modello=' + m.id, m.icona || 'cal', m.nome, (m.cosa === 'pagamento' ? 'Un pagamento' : 'Con la sua data') + (m.ric ? ' · ' + descRic(m.ric).toLowerCase() : ''))).join('');
+    h += '<a class="btn btn-sm" href="#/aggiungi-elenco">' + ic('plus', 20) + ' Aggiungi una voce a questo elenco</a>';
     h += '<a class="btn" style="margin-top:6px" href="#/oggi">Annulla</a>';
   }
   return h + '</main>' + barra('aggiungi');
 }
+// Le voci che la comunità aggiunge all'elenco di "Aggiungi" (es. «Bombola del gas»): valgono su tutti i telefoni.
+async function salvaModello(m) {
+  const esiste = modelliAggiungi().find(x => semplifica(x.nome) === semplifica(m.nome));
+  if (esiste) return esiste;
+  const x = Object.assign({ id: uid(), tipo: 'modello', icona: m.cosa === 'pagamento' ? 'euro' : 'cal', ordine: modelliAggiungi().length + 1, creato: adesso() }, m);
+  await salva('servizi', x);
+  return x;
+}
+function vAggiungiElenco() {
+  const mod = modelliAggiungi();
+  let h = testata('Le vostre voci', { indietro: true, sub: 'Compaiono in «Aggiungi», su tutti i telefoni collegati' }) + '<main class="pad">';
+  h += mod.length ? '<div class="group">' + mod.map((m, i) => '<div class="gi" style="cursor:default"><span class="dicon">' + ic(m.icona || 'cal', 22) + '</span>' +
+    '<span class="row-main"><span class="row-title">' + esc(m.nome) + '</span><span class="row-meta">' + esc((m.cosa === 'pagamento' ? 'Pagamento' : 'Cosa da fare') + (m.ric ? ' · ' + descRic(m.ric).toLowerCase() : '')) + '</span></span>' +
+    (i > 0 ? '<button class="icon-btn" data-action="mod-su" data-id="' + m.id + '" aria-label="Sposta più su">' + ic('up', 18) + '</button>' : '') +
+    '<button class="icon-btn" data-action="mod-togli" data-id="' + m.id + '" aria-label="Togli ' + esc(m.nome) + '" style="color:var(--rust)">' + ic('minus', 18, 3) + '</button></div>').join('') + '</div>'
+    : '<p class="empty">Ancora nessuna. Aggiungine una qui sotto: per esempio «Bombola del gas» o «Revisione del pulmino».</p>';
+  h += '<form class="box" data-form="modello" novalidate><h3>Nuova voce</h3>' +
+    campo('mnome', 'Come si chiama?', testo('mnome', 'nome', '', 'maxlength="60" autocomplete="off" placeholder="es. Bombola del gas"')) +
+    '<div class="field"><span class="lab">Che cos\'è?</span>' + chipsRadio('cosa', [['scadenza', 'Una cosa da fare'], ['pagamento', 'Un pagamento']], 'scadenza') + '</div>' +
+    '<div class="field"><span class="lab">Si ripete?</span>' + chipsRadio('ric', RICORRENZE.filter(r => r[0] !== 'altro'), '') + '</div>' +
+    '<div class="field"><span class="lab">Icona</span><div class="chips">' + ICONE_SERVIZIO.map(i => '<label><input type="radio" name="icona" value="' + i + '"' + (i === 'cal' ? ' checked' : '') + '><span aria-label="' + i + '">' + ic(i, 22) + '</span></label>').join('') + '</div></div>' +
+    '<div class="actions"><button class="btn btn-primary" type="submit">' + ic('plus', 21) + ' Metti nell\'elenco</button></div></form>';
+  return h + '</main>' + barra('aggiungi');
+}
+moduli.modello = async form => {
+  const fd = new FormData(form);
+  const nome = String(fd.get('nome') || '').trim();
+  if (!nome) { errore('err-mnome', 'Scrivi come si chiama.'); return; }
+  if (modelliAggiungi().some(x => semplifica(x.nome) === semplifica(nome))) { errore('err-mnome', 'C\'è già una voce con questo nome.'); return; }
+  const cosa = String(fd.get('cosa') || 'scadenza');
+  await salvaModello({ nome, cosa, ric: leggiRic(fd), icona: String(fd.get('icona') || 'cal'), pag: cosa === 'pagamento' ? nome : null, categoria: cosa === 'pagamento' ? 'Pagamenti' : 'Altro' });
+  avvisa('Messa nell\'elenco: la trovi in «Aggiungi»');
+  render();
+};
+azioni['mod-su'] = async el => {
+  const l = modelliAggiungi();
+  const i = l.findIndex(m => m.id === el.dataset.id);
+  if (i <= 0) return;
+  [l[i - 1], l[i]] = [l[i], l[i - 1]];
+  for (let k = 0; k < l.length; k++) if (l[k].ordine !== k + 1) { l[k].ordine = k + 1; await salva('servizi', l[k]); }
+  render();
+};
+azioni['mod-togli'] = async el => {
+  const m = servizio(el.dataset.id);
+  if (m) await eliminaConAnnulla([['servizi', m]], 'Tolta dall\'elenco: ' + m.nome, () => render());
+};
 // Per un ospite: prima chi, poi cosa.
 function vPerOspite(q) {
   const o = ospite(q.get('o'));
   if (!o) {
-    let h = testata('Per quale ospite?', { indietro: true }) + '<main class="pad">';
-    h += ospitiAttivi().map(x => '<a class="scelta" href="#/per-ospite?o=' + x.id + '">' + avatar(x, 56) + '<span class="row-main"><span class="row-title">' + esc(x.nome) + '</span></span>' + ic('chev', 22) + '</a>').join('');
+    const farmaco = q.get('poi') === 'farmaco';   // dalla Farmacia: si sceglie l'ospite e si va dritti al farmaco
+    let h = testata(farmaco ? 'Il farmaco è per…' : 'Per quale ospite?', { indietro: true }) + '<main class="pad">';
+    h += ospitiAttivi().map(x => '<a class="scelta" href="' + (farmaco ? '#/nuovo-farmaco?ospite=' + x.id : '#/per-ospite?o=' + x.id) + '">' + avatar(x, 56) + '<span class="row-main"><span class="row-title">' + esc(x.nome) + '</span></span>' + ic('chev', 22) + '</a>').join('');
     h += scelta('#/nuovo-ospite', 'plus', 'Un ospite nuovo', '');
     return h + '</main>' + barra('');
   }
@@ -1665,6 +1889,7 @@ function calendario(eventi) {
 function vVoce(id) {
   const v = voce(id);
   if (!v) return nonTrovato();
+  if (ePagamento(v)) return vVocePagamento(v);
   const o = ospite(v.ospiteId);
   const sv = servizio(v.servizio);
   const st = stato(v);
@@ -1703,30 +1928,39 @@ function vFormVoce(q) {
   const id = q.get('id');
   const v = id ? voce(id) : null;
   if (id && !v) return nonTrovato();
+  const mod = !v && q.get('modello') ? servizio(q.get('modello')) : null;   // una delle "vostre voci" di Aggiungi
+  const libera = !v && !mod && q.get('libera') === '1';                      // "Un'altra cosa": la scrive chi la usa
   const servizioId = v ? sid(v.servizio) || '' : q.get('servizio') || '';
   const sv = servizio(servizioId);
-  const pag = v ? ePagamento(v) : (q.get('pag') === '1' || (sv && sv.tipo === 'pagamenti'));
-  const cat = v ? categoria(v) : q.get('cat') || (pag ? 'Pagamenti' : sv ? 'Servizi della casa' : q.get('ospite') ? 'Ospiti' : 'Altro');
-  // una cosa nuova di solito si fa una volta sola: chi vuole la ripete con un tocco
-  const ricSel = v ? chiaveRic(v.ric) : (pag ? '1-anni' : '');
-  const titolo = v ? 'Modifica' : pag ? 'Pagamento che si ripete' : 'Una cosa da fare';
-  let h = testata(titolo, { indietro: true, sub: v ? v.nome : pag ? 'Es. assicurazione, quota, commercialista' : 'Te la ricordo io' }) +
-    '<main class="pad"><form data-form="voce"' + (v ? ' data-id="' + v.id + '"' : '') + ' novalidate>' +
-    campo('nome', 'Cosa?', testo('nome', 'nome', v ? v.nome : (sv && sv.tipo !== 'pagamenti' ? sv.nome : ''), 'maxlength="80" autocomplete="off" placeholder="' + (pag ? 'es. Polizza RC struttura' : 'es. Revisione estintori') + '"'));
-  if (pag) h += '<div class="field"><span class="lab">Di che tipo?</span>' + chipsRadio('pag', CAT_PAG, v ? (CAT_PAG.includes(v.pag) ? v.pag : 'Altro') : 'Assicurazione') + '</div>' +
-    campo('importo', 'Quanto? (se lo sai)', testo('importo', 'importo', v && v.importo != null ? numIt(v.importo) : '', 'inputmode="decimal" placeholder="es. 450,00"'));
-  h += campo('prossima', pag ? 'Quando scade?' : 'Quando?', '<input type="date" id="f-prossima" name="prossima" value="' + esc(v ? v.prossima : oggi()) + '">') +
-    campoRic(ricSel, v && v.ric && ricSel === 'altro' ? v.ric : null);
+  const pag = v ? ePagamento(v) : (q.get('pag') === '1' || (sv && sv.tipo === 'pagamenti') || !!(mod && mod.cosa === 'pagamento'));
+  const puoPag = pag || libera;
+  const cat = v ? categoria(v) : q.get('cat') || (mod && mod.categoria) || (pag ? 'Pagamenti' : sv ? 'Servizi della casa' : q.get('ospite') ? 'Ospiti' : 'Altro');
+  const ricSel = v ? chiaveRic(v.ric) : mod ? chiaveRic(mod.ric) : (pag ? '1-anni' : '');
+  const ricAltro = v && v.ric && ricSel === 'altro' ? v.ric : mod && mod.ric && ricSel === 'altro' ? mod.ric : null;
+  const pagDi = x => x && x.pag ? (CAT_PAG.includes(x.pag) ? x.pag : 'Altro') : '';
+  const pagSel = v ? pagDi(v) : mod ? pagDi(mod) : (pag ? 'Assicurazione' : '');
+  const titolo = v ? 'Modifica' : mod ? mod.nome : libera ? 'Un\'altra cosa' : pag ? 'Pagamento che si ripete' : 'Una cosa da fare';
+  const sub = v ? v.nome : mod ? 'Scegli la data: a ricordarla ci pensa l\'app' : libera ? 'La scrivi tu: a ricordarla ci penso io' : pag ? 'Es. assicurazione, quota, commercialista' : 'Te la ricordo io';
+  let h = testata(titolo, { indietro: true, sub }) +
+    '<main class="pad"><form data-form="voce"' + (v ? ' data-id="' + v.id + '"' : '') + (mod ? ' data-modello="' + mod.id + '"' : '') + ' novalidate>' +
+    campo('nome', 'Cosa?', testo('nome', 'nome', v ? v.nome : mod ? mod.nome : (sv && sv.tipo !== 'pagamenti' ? sv.nome : ''), 'maxlength="80" autocomplete="off" placeholder="' + (pag ? 'es. Polizza RC struttura' : 'es. Revisione estintori') + '"'));
+  h += campoData('prossima', 'prossima', pag ? 'Entro quando va pagato?' : 'Entro quando?', v ? v.prossima : (pag || mod ? '' : oggi()));
+  if (libera) h += '<div class="field"><div class="chips"><label><input type="checkbox" name="epag" data-mostra="box-pag box-dom"><span>È un pagamento</span></label></div></div>';
+  if (puoPag) h += '<div id="box-pag" class="' + (pag ? '' : 'hidden') + '"><div class="field"><span class="lab">Di che tipo?</span>' + chipsPagamento(pagSel) + '</div>' +
+    campo('importo', 'Quanto? (se lo sai)', testo('importo', 'importo', v && v.importo != null ? numIt(v.importo) : '', 'inputmode="decimal" placeholder="es. 450,00"')) + '</div>';
+  h += campoRic(ricSel, ricAltro);
   let altre = '';
-  if (pag) altre += '<div class="field"><div class="chips"><label><input type="checkbox" name="domiciliato"' + (v && v.domiciliato ? ' checked' : '') + '><span>Si paga da solo (addebito in banca)</span></label></div><span class="hint">Così nessuno lo paga a mano per sbaglio.</span></div>';
-  else altre += '<div class="field"><label for="f-categoria">Che genere di cosa?</label>' + selezione('categoria', CATEGORIE, cat) + '</div>' +
+  if (puoPag) altre += '<div class="field' + (pag ? '' : ' hidden') + '" id="box-dom"><div class="chips"><label><input type="checkbox" name="domiciliato"' + (v && v.domiciliato ? ' checked' : '') + '><span>Si paga da solo (addebito in banca)</span></label></div><span class="hint">Così nessuno lo paga a mano per sbaglio.</span></div>';
+  if (!pag) altre += '<div class="field"><label for="f-categoria">Che genere di cosa?</label>' + selezione('categoria', CATEGORIE, cat) + '</div>' +
     '<div class="field"><label for="f-servizio">Mostrala anche in Casa, nel riquadro</label>' + selezione('servizio', [['', 'Nessuno']].concat(serviziOrdinati().map(x => [x.id, x.nome])), servizioId) + '</div>';
   altre += '<div class="field"><label for="f-ospite">Riguarda un ospite?</label><select name="ospite" id="f-ospite">' + opzioniOspiti(v ? v.ospiteId : q.get('ospite')) + '</select></div>' +
     '<div class="field"><span class="lab">Chi se ne occupa?</span>' + chipsRadio('responsabile', RESPONSABILI, v ? v.responsabile : 'Entrambi') + '</div>' +
     '<div class="field"><span class="lab">Avvisami</span>' + chipsRadio('avviso', AVVISI, v ? v.avviso || 0 : (pag ? 7 : 1)) + '</div>' +
-    (pag ? '' : '<div class="field"><span class="lab">Per chiuderla serve</span>' + chipsRadio('chiusura', [['fatto', 'Segnarla fatta'], ['pagato', 'Pagarla']], v ? v.chiusura : 'fatto') + '</div>') +
+    (pag || libera ? '' : '<div class="field"><span class="lab">Per chiuderla serve</span>' + chipsRadio('chiusura', [['fatto', 'Segnarla fatta'], ['pagato', 'Pagarla']], v ? v.chiusura : 'fatto') + '</div>') +
     '<div class="field"><label for="f-note">Note</label><textarea id="f-note" name="note" maxlength="1000" placeholder="es. numero del tecnico, codice cliente, IBAN">' + esc(v ? v.note || '' : '') + '</textarea></div>';
-  h += altreOpzioni(altre) + (pag ? '<input type="hidden" name="chiusura" value="pagato">' : '') + bottoniFine() + '</form></main>';
+  h += altreOpzioni(altre);
+  if (libera) h += '<div class="field"><div class="chips"><label><input type="checkbox" name="salvamodello"><span>Mettila nell\'elenco di «Aggiungi», per la prossima volta</span></label></div></div>';
+  h += (pag ? '<input type="hidden" name="chiusura" value="pagato">' : '') + bottoniFine() + '</form></main>';
   return h + barra('');
 }
 moduli.voce = async form => {
@@ -1734,25 +1968,33 @@ moduli.voce = async form => {
   const nome = String(fd.get('nome') || '').trim();
   const prossima = String(fd.get('prossima') || '');
   if (!nome) { errore('err-nome', 'Scrivi cos\'è, anche in due parole.'); return; }
-  if (!dataValida(prossima)) { errore('err-prossima', 'Scegli una data.'); return; }
+  if (!dataValida(prossima)) { errore('err-prossima', 'Scegli la data: tocca una scorciatoia (Oggi, Domani…) o il calendario.'); document.getElementById('f-prossima').scrollIntoView({ block: 'center' }); return; }
   const vecchia = form.dataset.id ? voce(form.dataset.id) : null;
-  const pag = fd.get('chiusura') === 'pagato';
-  const p = fd.has('pag') ? String(fd.get('pag')) : (vecchia ? vecchia.pag : null);
+  const pag = fd.get('chiusura') === 'pagato' || fd.get('epag') === 'on';
+  const p = pag && fd.has('pag') ? String(fd.get('pag')) : null;
   const v = Object.assign({}, vecchia || { creato: adesso(), attiva: true }, {
     id: vecchia ? vecchia.id : uid(), nome, prossima, ric: leggiRic(fd),
-    categoria: fd.has('categoria') ? String(fd.get('categoria')) : 'Pagamenti',
-    servizio: fd.has('servizio') ? String(fd.get('servizio') || '') || null : (servizioDiTipo('pagamenti') || {}).id || null,
+    categoria: pag ? 'Pagamenti' : String(fd.get('categoria') || 'Altro'),
+    servizio: pag ? ((servizioDiTipo('pagamenti') || {}).id || null) : (String(fd.get('servizio') || '') || null),
     ospiteId: String(fd.get('ospite') || '') || null,
     responsabile: String(fd.get('responsabile') || 'Entrambi'),
     avviso: parseInt(fd.get('avviso'), 10) || 0,
     chiusura: pag ? 'pagato' : 'fatto',
     note: String(fd.get('note') || '').trim() || null
   });
-  if (fd.has('pag')) { v.pag = p === 'Altro' ? nome : p; v.importo = numero(fd.get('importo')); v.domiciliato = fd.get('domiciliato') === 'on'; }
+  if (pag) {
+    // un tipo scritto a mano ("Condominio") resta com'era, se non si sceglie uno dell'elenco
+    v.pag = p && p !== 'Altro' ? p : (vecchia && vecchia.pag && !CAT_PAG.includes(vecchia.pag) ? vecchia.pag : nome);
+    if (fd.has('importo')) v.importo = numero(fd.get('importo'));
+    v.domiciliato = fd.get('domiciliato') === 'on';
+  }
   v.ancora = ancoraDi(prossima, v.ric);
   await salva('voci', v);
+  const m = form.dataset.modello ? servizio(form.dataset.modello) : null;
+  if (m && pag && v.pag && m.pag !== v.pag) { m.pag = v.pag; await salva('servizi', m); }   // la prossima volta il tipo è già scelto
+  if (fd.get('salvamodello') === 'on') await salvaModello({ nome, cosa: pag ? 'pagamento' : 'scadenza', pag: pag ? v.pag : null, ric: v.ric, categoria: v.categoria, icona: pag ? 'euro' : 'cal' });
   dopoModifica();
-  avvisa(vecchia ? 'Modifiche salvate' : 'Salvata: te la ricordo io');
+  avvisa(vecchia ? 'Modifiche salvate' : fd.get('salvamodello') === 'on' ? 'Salvata, e messa nell\'elenco di Aggiungi' : 'Salvata: te la ricordo io');
   vai('#/voce/' + v.id, true);
 };
 azioni['sospendi-voce'] = async el => {
@@ -1778,6 +2020,7 @@ function vSegna(q) {
   const k = q.get('servizio');
   if (q.get('voce') && !v) return nonTrovato();
   if (v && v.tipo === 'misura') return vMisura(new URLSearchParams('voce=' + v.id));
+  if (v && ePagamento(v) && v.attiva !== false) return vSegnaPagamento(v);
   if (!v && !k) return vServizi(new URLSearchParams());
   const sv = servizio(k);
   const pagato = v ? ePagamento(v) : sv && sv.tipo === 'pagamenti';
@@ -1803,34 +2046,59 @@ function vSegna(q) {
 }
 moduli.segna = async form => {
   const fd = new FormData(form);
-  const v = form.dataset.voce ? voce(form.dataset.voce) : null;
+  let v = form.dataset.voce ? voce(form.dataset.voce) : null;
   const servizioId = v ? sid(v.servizio) : form.dataset.servizio || null;
   const data = dataValida(fd.get('data')) ? String(fd.get('data')) : oggi();
   const pagato = v ? ePagamento(v) : (servizio(servizioId) || {}).tipo === 'pagamenti';
   const importo = pagato ? numero(fd.get('importo')) : null;
-  if (v && pagato && fd.get('conferma') !== 'on') {
-    const avvisi = controlliPagamento(v, importo, data);
-    if (avvisi.length) {
-      document.getElementById('avvisi-doppio').innerHTML = avvisi.map(a => banner('rust', esc(a), 'warn')).join('');
-      document.getElementById('box-conferma').classList.remove('hidden');
-      errore('err-conferma', 'Controlla gli avvisi qui sopra prima di confermare.');
+  if (v && pagato) {
+    // Prima di segnare si chiede agli altri telefoni: se nel frattempo un collega l'ha pagato, ci si ferma qui.
+    const pulsante = form.querySelector('button[type=submit]');
+    if (pulsante) pulsante.disabled = true;
+    const agg = await aggiornaPrima(0);
+    if (pulsante && pulsante.isConnected) pulsante.disabled = false;
+    const scad = form.dataset.scadenza || v.prossima;
+    const fresca = voce(v.id);
+    if (!fresca || fresca.attiva === false || fresca.prossima !== scad) {
+      const e = S.eventi.filter(x => x.tipo === 'pagato' && x.voceId === v.id && x.scadenza === scad).sort(recenti)[0];
+      await chiedi({ titolo: 'Risulta già ' + (v.domiciliato ? 'controllato' : 'pagato'), icona: 'warn', tono: 'rust',
+        testo: '<p>' + esc(e ? (e.chi || 'Un collega') + ' l\'ha segnato ' + fmtGiorno(e.data).toLowerCase() + (e.ora ? ' alle ' + fmtOra(e.ora) : '') + (e.importo != null ? ' (' + euro(e.importo) + ')' : '') + '.' : 'Nel frattempo un collega l\'ha segnato.') + '</p>' +
+          '<p class="att">Non pagarlo di nuovo.</p>', scelte: [], annulla: 'Ho capito' });
+      dopoModifica();
+      vai('#/voce/' + v.id, true);
       return;
+    }
+    v = fresca;
+    if (fd.get('conferma') !== 'on') {
+      const avvisi = controlliPagamento(v, importo, data).concat(avvisiIncarico(v));
+      if (agg.stato === 'rete' || agg.stato === 'errore') avvisi.push('Senza internet non posso controllare se un collega l\'ha appena pagato: se hai un dubbio, chiediglielo prima.');
+      if (avvisi.length) {
+        const box = document.getElementById('avvisi-doppio');
+        box.innerHTML = avvisi.map(a => banner('rust', esc(a), 'warn')).join('');
+        document.getElementById('box-conferma').classList.remove('hidden');
+        errore('err-conferma', 'Leggi gli avvisi qui sopra: se va bene, spunta la casella e conferma.');
+        box.scrollIntoView({ block: 'center' });
+        return;
+      }
     }
   }
   const cosa = String(fd.get('cosa') || '').trim();
-  const nota = [cosa, fd.get('come') && pagato ? 'pagato con ' + String(fd.get('come')).toLowerCase() : '', String(fd.get('nota') || '').trim()].filter(Boolean).join(' — ') || null;
+  const come = pagato && fd.get('come') ? String(fd.get('come')) : null;
+  const nota = [cosa, String(fd.get('nota') || '').trim()].filter(Boolean).join(' — ') || null;
   const docId = await salvaFileDelModulo(form, {
     nome: (pagato ? 'Ricevuta ' : 'Foto ') + (v ? v.nome : cosa || (servizio(servizioId) || {}).nome || '') + ' ' + fmt(data),
     tipo: pagato ? 'Ricevuta' : 'Altro', ospiteId: v ? v.ospiteId || null : null, voceId: v ? v.id : null, data
   });
   await salva('eventi', {
     id: uid(), voceId: v ? v.id : null, servizio: servizioId, ospiteId: v ? v.ospiteId || null : null, data, ora: data === oggi() ? oraAdesso() : null,
-    chi: String(fd.get('chi') || utente()), tipo: pagato ? 'pagato' : 'fatto', importo, nota, docId, scadenza: v ? v.prossima : null, creato: adesso()
+    chi: String(fd.get('chi') || utente()), tipo: pagato ? 'pagato' : 'fatto', importo, come, nota, docId, scadenza: v ? v.prossima : null,
+    nome: v ? v.nome : null, pag: v && pagato ? v.pag || null : null, creato: adesso()
   });
   let msg = v && v.domiciliato ? 'Segnato: addebitato' : pagato ? 'Segnato come pagato' : 'Segnato come fatto';
   if (v) {
     if (v.ric) { v.prossima = prossimaDopo(v, data); msg += ' · prossima ' + fmt(v.prossima); }
     else { v.attiva = false; v.chiusaIl = data; }
+    v.incarico = null;
     await salva('voci', v);
   }
   dopoModifica();
@@ -2493,10 +2761,27 @@ async function controllaOrario(fs, d, ora, singolo) {
   if (v === 'nondato') return { nondato: true };
   return v === 'inorario' ? { segnataDopo: true } : { fuoriOrario: 'ritardo' };
 }
+// Prima di "Dato": la dose risulta già segnata (lo schermo non era ancora aggiornato)? Se no, e l'ultimo
+// aggiornamento non è di pochi secondi fa, si chiede agli altri telefoni. Se qualcuno l'ha già segnata,
+// lo si dice chiaramente e non si segna una seconda volta: il registro resta quello di chi l'ha data.
+async function giaSegnataDaAltri(fs, d, ora) {
+  const gia = () => fs.map(f => ({ f, sm: trova('somministrazioni', smId(f, d, ora)) })).filter(x => x.sm);
+  let l = gia();
+  if (!l.length && collegato()) { await aggiornaPrima(3000); l = gia(); }
+  if (!l.length) return false;
+  render();
+  const chi = x => x.sm.chi === utente() ? 'te' : (x.sm.chi || 'un collega');
+  await chiedi({ titolo: l.length === 1 ? 'È già stata segnata' : 'Sono già state segnate', icona: 'warn', tono: 'rust',
+    testo: '<p>' + l.map(x => '<b>' + esc(x.f.nome) + '</b>: ' + (x.sm.esito === 'dato' ? 'data' : 'non data' + (x.sm.motivo ? ' (' + esc(String(x.sm.motivo).toLowerCase()) + ')' : '')) + ' da ' + esc(chi(x)) +
+      (x.sm.quando ? ' alle ' + esc(fmtOra(oraDi(x.sm.quando))) : '')).join('<br>') + '</p>' +
+      '<p class="att">Non darla di nuovo. Se hai un dubbio, chiedi al collega.</p>', scelte: [], annulla: 'Ho capito' });
+  return true;
+}
 azioni.dato = async el => {
   const f = farmaco(el.dataset.f);
   const d = el.dataset.d, ora = el.dataset.ora;
   if (!f) return;
+  if (await giaSegnataDaAltri([f], d, ora)) return;
   const extra = await controllaOrario([f], d, ora, true);
   if (!extra) return;
   if (extra.nondato) { vai('#/nondato?f=' + f.id + '&d=' + d + '&o=' + ora.replace(':', '')); return; }
@@ -2514,10 +2799,11 @@ azioni['tutti-dati'] = async el => {
   if (!s) return;
   const mancano = s.dosi.filter(x => !x.sm && !x.f.eliminato);
   if (!mancano.length) return;
+  if (await giaSegnataDaAltri(mancano.map(x => x.f), d, ora)) return;
   let extra = {};
   if (d === oggi() && Math.abs(scartoMinuti(ora)) <= FINESTRA_DOSE) {
     const ok = await chiedi({ titolo: 'Tutte date?', icona: 'pill',
-      testo: '<p>Segno come date le medicine delle <b>' + fmtOra(ora) + '</b>' + (o ? ' di <b>' + esc(o.nome) + '</b>' : '') + ':</p><ul>' + mancano.map(x => '<li>' + esc(x.f.nome) + ' — ' + esc(quantoOgniVolta(x.f)) + '</li>').join('') + '</ul>',
+      testo: '<p>Segno come date le medicine delle <b>' + fmtOra(ora) + '</b>' + (o ? ' di <b>' + esc(o.nome) + '</b>' : '') + ':</p><ul>' + mancano.map(x => '<li><span>' + esc(x.f.nome) + ' — ' + esc(quantoOgniVolta(x.f)) + '</span></li>').join('') + '</ul>',
       scelte: [{ valore: true, testo: 'Sì, le ho date tutte', tipo: 'ok' }], annulla: 'No, le segno una per una' });
     if (!ok) return;
   } else {
@@ -2545,6 +2831,7 @@ azioni['annulla-somm'] = async el => {
 azioni['dato-bisogno'] = async el => {
   const f = farmaco(el.dataset.f);
   if (!f) return;
+  await aggiornaPrima(3000);   // l'ultima volta e quante oggi: anche quelle segnate dagli altri telefoni
   const l = dosiBisogno(f);
   const oggiN = l.filter(x => x.data === oggi()).length;
   const ultima = l[0];
@@ -2947,11 +3234,12 @@ function riassuntoServizio(sv) {
     }
     case 'spesa': {
       const n = S.lista.filter(x => x.servizio === sv.id && !x.preso).length;
-      return { testo: n ? plur(n, 'cosa da comprare', 'cose da comprare') : 'lista vuota' };
+      const g = giroSpesa(sv);
+      return { testo: (g ? (g.chi === utente() ? 'la stai facendo tu' : g.chi + ' è a fare la spesa') + (n ? ' · ' : '') : '') + (n ? plur(n, 'cosa da comprare', 'cose da comprare') : g ? '' : 'lista vuota') };
     }
     case 'lavanderia': {
-      const n = lavanderiaFuori().filter(e => e.servizio === sv.id).length;
-      return { testo: n ? plur(n, 'consegna fuori', 'consegne fuori') : 'niente fuori' };
+      const n = lavanderiaInCorso().filter(e => sid(e.servizio) === sv.id).length;
+      return { testo: n ? plur(n, 'bucato da finire', 'bucati da finire') : 'niente in corso' };
     }
     case 'rifiuti': {
       const r = rifiutiStasera();
@@ -3088,41 +3376,234 @@ function vSemplice(sv) {
   return h + '</main>' + barra('casa');
 }
 
-/* ---------- pagamenti */
-function vPagamenti(sv, q) {
-  const cat = q.get('cat') || '';
-  const tutti = attive().filter(ePagamento).filter(v => !cat || (v.pag || 'Altro') === cat).sort(perData);
-  const manuali = tutti.filter(v => !v.domiciliato);
-  const rit = manuali.filter(v => v.prossima < oggi());
-  const presto = manuali.filter(v => v.prossima >= oggi() && giorniTra(oggi(), v.prossima) <= 30);
+/* ---------- pagamenti: una piccola app dentro la Casa */
+
+const pagamentiAttivi = () => attive().filter(ePagamento);
+const eventiPagati = () => S.eventi.filter(e => e.tipo === 'pagato').sort(recenti);
+function gruppoEvento(e) {
+  const v = e.voceId ? voce(e.voceId) : null;
+  return v ? gruppoPag(v) : e.pag ? gruppoPag(e.pag) : 'altro';
+}
+// Lo stesso avviso risulta pagato due volte? Lo si mostra in rosso finché qualcuno non controlla.
+function pagamentiDoppi() {
+  const per = {};
+  for (const e of S.eventi) if (e.tipo === 'pagato' && e.voceId && e.scadenza) (per[e.voceId + '|' + e.scadenza] = per[e.voceId + '|' + e.scadenza] || []).push(e);
+  return Object.values(per).filter(l => l.length > 1 && !l.some(e => e.doppioVisto)).map(l => l.sort(recenti));
+}
+function bannerDoppi() {
+  return pagamentiDoppi().map(l => {
+    const v = voce(l[0].voceId);
+    return '<div class="banner rust">' + ic('warn', 19) + '<div><b>Pagato due volte?</b> ' + esc((v ? v.nome : l[0].nome || 'Un pagamento') + ': ' +
+      l.map(e => (e.chi || '—') + ' ' + fmtGiorno(e.data).toLowerCase() + (e.importo != null ? ' (' + euro(e.importo) + ')' : '')).join(', ')) +
+      '. Controllate in banca.<div style="margin-top:8px"><button class="txt-btn" style="min-height:44px" data-action="doppio-visto" data-id="' + l[0].id + '">Controllato</button></div></div></div>';
+  }).join('');
+}
+azioni['doppio-visto'] = async el => {
+  const e = evento(el.dataset.id);
+  if (!e) return;
+  e.doppioVisto = utente() + ' ' + oggi();
+  await salva('eventi', e);
+  render();
+};
+function avvisiIncarico(v) {
+  return v && v.incarico && v.incarico.chi && v.incarico.chi !== utente() ? ['Se ne sta occupando ' + v.incarico.chi + ' (' + daQuando(v.incarico.quando) + '): prima chiedi se l\'ha già pagato.'] : [];
+}
+
+function vPagamenti(sv) {
+  const att = pagamentiAttivi();
+  const manuali = att.filter(v => !v.domiciliato).sort(perData);
+  const scaduti = manuali.filter(v => v.prossima < oggi());
+  const prossimi = manuali.filter(v => v.prossima >= oggi() && giorniTra(oggi(), v.prossima) <= 30);
   const dopo = manuali.filter(v => giorniTra(oggi(), v.prossima) > 30);
-  const dom = tutti.filter(v => v.domiciliato);
-  const totale = presto.concat(rit).reduce((a, v) => a + (v.importo || 0), 0);
-  const cats = [...new Set(attive().filter(ePagamento).map(v => v.pag || 'Altro'))].sort();
-  let h = testaServizio(sv, rit.length ? plur(rit.length, 'pagamento in ritardo', 'pagamenti in ritardo') : presto.length ? presto.length + ' da pagare entro 30 giorni' + (totale ? ' · ' + euro(totale) : '') : 'Niente da pagare a breve') + '<main class="pad">';
-  h += '<a class="btn btn-primary" href="#/avviso-pagamento">' + ic('plus', 21) + ' È arrivato un avviso di pagamento</a>' +
-    '<a class="btn btn-sm" href="#/nuova-voce?servizio=' + sv.id + '&pag=1">' + ic('cal', 20) + ' Pagamento che si ripete (assicurazione, quote…)</a>';
-  if (cats.length > 1) h += '<div class="seg" style="margin-top:6px"><a class="' + (cat ? '' : 'on') + '" href="#/servizio/' + sv.id + '">Tutti</a>' + cats.map(c => '<a class="' + (c === cat ? 'on' : '') + '" href="#/servizio/' + sv.id + '?cat=' + encodeURIComponent(c) + '">' + esc(c) + '</a>').join('') + '</div>';
-  if (rit.length) h += sezione('In ritardo', rit.length, 'rust') + rit.map(v => rigaVoce(v)).join('');
-  h += sezione('Da pagare entro 30 giorni', presto.length) + (presto.length ? presto.map(v => rigaVoce(v)).join('') : '<p class="empty">Niente.</p>');
-  if (dopo.length) h += sezione('Più avanti', dopo.length) + dopo.map(v => rigaVoce(v)).join('');
-  if (dom.length) h += sezione('Si pagano da soli', dom.length) + '<p class="hint" style="margin:0 2px">Addebito in banca: non vanno pagati a mano. Basta controllare che l\'addebito ci sia.</p>' + dom.map(v => rigaVoce(v)).join('');
-  const pagati = S.eventi.filter(e => e.tipo === 'pagato').sort(recenti);
-  h += sezione('Pagati di recente', null, '', '<a class="destra" href="#/fatto?f=pagamenti">Tutti</a>') + (pagati.length ? pagati.slice(0, 8).map(rigaDiarioEvento).join('') : '<p class="empty">Ancora nessuno.</p>');
-  h += '<a class="btn btn-sm" href="#/gia-fatto?servizio=' + sv.id + '">' + ic('plus', 20) + ' Aggiungi un pagamento già fatto</a>';
+  const dom = att.filter(v => v.domiciliato).sort(perData);
+  const daPagare = scaduti.concat(prossimi);
+  const tot = daPagare.reduce((a, v) => a + (v.importo || 0), 0);
+  const mese = oggi().slice(0, 7);
+  const pagatiMese = eventiPagati().filter(e => String(e.data).slice(0, 7) === mese);
+  const totMese = pagatiMese.reduce((a, e) => a + (e.importo || 0), 0);
+  let h = testaServizio(sv, scaduti.length ? plur(scaduti.length, 'pagamento scaduto', 'pagamenti scaduti') : daPagare.length ? daPagare.length + ' da pagare entro 30 giorni' : 'Niente da pagare a breve') + '<main class="pad">';
+  h += '<div class="sommario"><div><b>' + daPagare.length + '</b><span>da pagare</span><small>' + esc(tot ? euro(tot) : 'nei prossimi 30 giorni') + '</small></div>' +
+    '<div class="' + (scaduti.length ? 'rust' : 'ok') + '"><b>' + scaduti.length + '</b><span>' + (scaduti.length === 1 ? 'scaduto' : 'scaduti') + '</span><small>' + (scaduti.length ? 'da pagare subito' : 'tutto in regola') + '</small></div>' +
+    '<a class="ok" href="#/pagamenti?v=pagati"><b>' + pagatiMese.length + '</b><span>pagati a ' + MESI_L[aData(oggi()).getMonth()] + '</span><small>' + esc(totMese ? euro(totMese) : 'vedi tutti') + '</small></a></div>';
+  h += '<a class="btn btn-primary btn-grande" href="#/avviso-pagamento">' + ic('plus', 24) + ' Aggiungi un pagamento</a>';
+  h += bannerDoppi();
+  h += sezione('Da pagare', daPagare.length, scaduti.length ? 'rust' : '') + (daPagare.length ? daPagare.map(cardPagamento).join('') : '<p class="empty">Niente da pagare nei prossimi 30 giorni.</p>');
+  if (dopo.length) h += '<details class="altre"><summary>Più avanti (' + dopo.length + ')</summary><div class="altre-in" style="display:flex;flex-direction:column;gap:9px;padding-top:4px">' + dopo.map(cardPagamento).join('') + '</div></details>';
+  h += sezione('Sezioni') + '<div class="tiles">' + GRUPPI_PAG.map(g => {
+    const vs = manuali.filter(v => gruppoPag(v) === g.k);
+    const sc = vs.filter(v => v.prossima < oggi()).length;
+    const testoT = sc ? plur(sc, 'scaduto', 'scaduti') : vs.length ? plur(vs.length, 'da pagare', 'da pagare') + ' · prossimo: ' + fmt(vs[0].prossima) : 'niente da pagare';
+    return '<a class="riq ' + (sc ? 'rust' : '') + '" href="#/pagamenti?g=' + g.k + '"><span class="dicon">' + ic(g.icona, 28) + '</span><b>' + esc(g.nome) + '</b><small>' + esc(testoT) + '</small></a>';
+  }).join('') + '</div>';
+  if (dom.length) h += sezione('Si pagano da soli', dom.length) + '<p class="hint" style="margin:0 2px">Addebito in banca: non vanno pagati a mano. Passata la data, controlla che l\'addebito ci sia e tocca «Controllato».</p>' + dom.map(cardPagamento).join('');
+  h += '<div class="two" style="margin-top:14px"><a class="btn btn-sm" href="#/pagamenti?v=pagati">' + ic('check', 20) + ' Pagati</a><a class="btn btn-sm" href="#/pagamenti?v=ricevute">' + ic('ricevuta', 20) + ' Ricevute</a></div>';
+  h += '<a class="btn btn-sm" href="#/gia-fatto?servizio=' + sv.id + '">' + ic('plus', 20) + ' Segna un pagamento già fatto</a>';
   return h + '</main>' + barra('casa');
+}
+// Le pagine interne: una sezione (bollette, assicurazioni…), tutti i pagati, le ricevute.
+function vPagamentiPagina(q) {
+  if (q.get('v') === 'pagati') return vPagati(q);
+  if (q.get('v') === 'ricevute') return vRicevute();
+  const g = gruppoDi(q.get('g'));
+  if (!g) return nonTrovato();
+  const vista = q.get('vista') === 'pagati' ? 'pagati' : 'da';
+  const att = pagamentiAttivi().filter(v => gruppoPag(v) === g.k).sort(perData);
+  const manuali = att.filter(v => !v.domiciliato);
+  const dom = att.filter(v => v.domiciliato);
+  const pagati = eventiPagati().filter(e => gruppoEvento(e) === g.k);
+  let h = testata(g.nome, { indietro: true, sub: manuali.length ? plur(manuali.length, 'da pagare', 'da pagare') : 'Niente da pagare', destra: '<a class="icon-btn primary" href="#/avviso-pagamento?g=' + g.k + '" aria-label="Aggiungi">' + ic('plus') + '</a>' });
+  h += '<div class="pad" style="margin-bottom:6px"><div class="seg"><a class="' + (vista === 'da' ? 'on' : '') + '" href="#/pagamenti?g=' + g.k + '">Da pagare (' + manuali.length + ')</a>' +
+    '<a class="' + (vista === 'pagati' ? 'on' : '') + '" href="#/pagamenti?g=' + g.k + '&vista=pagati">Pagati (' + pagati.length + ')</a></div></div><main class="pad">';
+  if (vista === 'pagati') h += listaPagati(pagati);
+  else {
+    h += manuali.length ? manuali.map(cardPagamento).join('') : '<p class="empty">Niente da pagare in questa sezione.</p>';
+    if (dom.length) h += sezione('Si pagano da soli', dom.length) + dom.map(cardPagamento).join('');
+    h += '<a class="btn btn-primary" href="#/avviso-pagamento?g=' + g.k + '">' + ic('plus', 21) + ' Aggiungi in «' + esc(g.nome) + '»</a>';
+  }
+  return h + '</main>' + barra('casa');
+}
+function rigaPagato(e) {
+  const v = e.voceId ? voce(e.voceId) : null;
+  const nome = (v && v.nome) || e.nome || e.nota || 'Pagamento';
+  const doc = e.docId ? documento(e.docId) : null;
+  // i pagamenti segnati con la 0.5 avevano il modo dentro la nota ("pagato con bonifico")
+  const come = e.come || ((/pagato con ([^—]+)/.exec(e.nota || '') || [])[1] || '').trim() || null;
+  const meta = [fmtGiorno(e.data), e.chi ? (come === 'Addebito in banca' ? 'controllato da ' : 'pagato da ') + e.chi : null, come && come !== 'Addebito in banca' ? come.toLowerCase() : come ? 'addebito in banca' : null, doc ? 'ricevuta' : null].filter(Boolean).join(' · ');
+  return '<a class="riga-pagato" href="' + (doc ? '#/doc/' + doc.id : v ? '#/voce/' + v.id : '#/fatto?f=pagamenti') + '"><span class="dicon">' + ic(doc ? 'ricevuta' : 'check', 21) + '</span>' +
+    '<span class="row-main"><span class="row-title">' + esc(nome) + '</span><span class="row-meta">' + esc(meta) + '</span></span>' + (e.importo != null ? '<span class="rp-importo">' + esc(euro(e.importo)) + '</span>' : '') + '</a>';
+}
+function listaPagati(lista) {
+  if (!lista.length) return '<p class="empty">Ancora nessun pagamento segnato.</p>';
+  const mesi = {};
+  lista.forEach(e => { const k = String(e.data).slice(0, 7); (mesi[k] = mesi[k] || []).push(e); });
+  return Object.keys(mesi).sort().reverse().map(k => {
+    const l = mesi[k];
+    const tot = l.reduce((a, e) => a + (e.importo || 0), 0);
+    const [y, m] = k.split('-').map(Number);
+    return '<div class="mese-testa"><span>' + esc(MESI_L[m - 1] + ' ' + y) + '</span><span>' + esc(tot ? euro(tot) : '') + '</span></div>' + l.map(rigaPagato).join('');
+  }).join('');
+}
+function vPagati(q) {
+  const g = q.get('g') || '';
+  const lista = eventiPagati().filter(e => !g || gruppoEvento(e) === g);
+  const anno = String(aData(oggi()).getFullYear());
+  const totAnno = lista.filter(e => String(e.data).startsWith(anno)).reduce((a, e) => a + (e.importo || 0), 0);
+  let h = testata('Pagati', { indietro: true, sub: 'Nel ' + anno + ': ' + (totAnno ? euro(totAnno) : 'niente') + (g ? ' · ' + gruppoDi(g).nome.toLowerCase() : '') });
+  h += '<div class="pad" style="margin-bottom:6px"><div class="seg"><a class="' + (!g ? 'on' : '') + '" href="#/pagamenti?v=pagati">Tutti</a>' +
+    GRUPPI_PAG.map(x => '<a class="' + (g === x.k ? 'on' : '') + '" href="#/pagamenti?v=pagati&g=' + x.k + '">' + esc(x.nome) + '</a>').join('') + '</div></div><main class="pad">';
+  return h + listaPagati(lista) + '</main>' + barra('casa');
+}
+function vRicevute() {
+  const pag = new Set(S.voci.filter(ePagamento).map(v => v.id));
+  const docs = S.documenti.filter(d => d.tipo === 'Ricevuta' || d.tipo === 'Bolletta' || (d.voceId && pag.has(d.voceId))).sort((a, b) => (b.data || '').localeCompare(a.data || ''));
+  return testata('Ricevute e bollette', { indietro: true, sub: plur(docs.length, 'documento', 'documenti') }) + '<main class="pad">' +
+    (docs.length ? docs.map(rigaDoc).join('') : '<p class="empty">Ancora niente. Quando segni un pagamento, fotografa la ricevuta: la ritrovi qui.</p>') + '</main>' + barra('casa');
+}
+
+// Il dettaglio di un pagamento: quanto, entro quando, chi se ne occupa, e i due pulsanti.
+function vVocePagamento(v) {
+  const chiusa = v.attiva === false;
+  const q = quantoManca(v.prossima, true);
+  const o = ospite(v.ospiteId);
+  const g = gruppoDi(gruppoPag(v));
+  let h = testata(v.nome, { indietro: true, destra: '<a class="icon-btn" href="#/nuova-voce?id=' + v.id + '" aria-label="Modifica">' + ic('edit', 20) + '</a>' }) + '<main class="pad">';
+  h += '<div class="hero ' + (q.cls === 'rust' && !chiusa && !v.domiciliato ? 'rust' : '') + '">' + bloccoData(v.prossima, chiusa ? 'grigia' : undefined) +
+    '<div style="min-width:0"><div class="h-importo">' + esc(v.importo != null ? euro(v.importo) : 'Importo da vedere') + '</div>' +
+    '<div class="h-sub"><span class="quando-scade ' + (chiusa ? '' : q.cls) + '">' + esc(chiusa ? 'Chiuso' + (v.chiusaIl ? ' il ' + fmtD(v.chiusaIl) : '') : q.t) + '</span></div>' +
+    '<div class="hint" style="margin-top:2px">' + esc((chiusa ? 'Era per ' : 'Scadenza: ') + fmtLungo(v.prossima)) + '</div></div></div>';
+  if (!chiusa) {
+    if (v.domiciliato) h += banner('green', '<b>Si paga da solo</b> (addebito in banca). Passata la data, controlla in banca che l\'addebito ci sia.');
+    if (v.incarico && v.incarico.chi) {
+      const mio = v.incarico.chi === utente();
+      h += '<div class="incorso' + (mio ? ' mio' : '') + '">' + ic('user', 24) + '<div><b>' + esc(mio ? 'Te ne stai occupando tu' : v.incarico.chi + ' se ne sta occupando') + '</b><div>' +
+        esc(daQuando(v.incarico.quando) + (mio ? '. Quando hai pagato, tocca «Pagato».' : '. Prima di pagarlo, chiedi a ' + v.incarico.chi + '.')) + '</div></div></div>';
+    }
+    h += '<a class="btn btn-ok btn-grande" href="#/segna?voce=' + v.id + '">' + ic('check', 24, 2.6) + (v.domiciliato ? ' Controllato: addebitato' : ' Pagato') + '</a>';
+    if (!v.domiciliato) h += '<button class="btn" data-action="incarico" data-id="' + v.id + '">' + (v.incarico && v.incarico.chi === utente() ? 'Non me ne occupo più' : ic('user', 20) + ' Me ne occupo io') + '</button>';
+  }
+  h += '<div class="card" style="margin-top:6px">' +
+    '<div class="kv"><span class="k">Sezione</span><span class="v"><a href="#/pagamenti?g=' + g.k + '">' + esc(g.nome) + '</a>' + (v.pag && v.pag !== 'Altro' && !g.tipi.includes(v.nome) ? ' · ' + esc(v.pag) : '') + '</span></div>' +
+    '<div class="kv"><span class="k">Si ripete</span><span class="v">' + esc(descRic(v.ric)) + '</span></div>' +
+    '<div class="kv"><span class="k">Chi lo paga</span><span class="v">' + esc(v.domiciliato ? 'Addebito in banca' : v.responsabile || 'Entrambi') + '</span></div>' +
+    '<div class="kv"><span class="k">Avviso</span><span class="v">' + esc(descAvviso(v.avviso || 0)) + '</span></div>' +
+    (o ? '<div class="kv"><span class="k">Ospite</span><span class="v"><a href="#/ospite/' + o.id + '">' + esc(o.nome) + '</a></span></div>' : '') +
+    (v.note ? '<div class="kv"><span class="k">Note</span><span class="v" style="font-weight:500;white-space:pre-wrap">' + esc(v.note) + '</span></div>' : '') + '</div>';
+  const docs = S.documenti.filter(d => d.voceId === v.id).sort((a, b) => (b.data || '').localeCompare(a.data || ''));
+  h += sezione('Foglio e ricevute', docs.length) + docs.map(rigaDoc).join('') + '<a class="btn btn-sm" href="#/nuovo-doc?voce=' + v.id + '">' + ic('camera', 20) + ' Aggiungi una foto</a>';
+  const storico = S.eventi.filter(e => e.voceId === v.id).sort(recenti);
+  h += sezione('Già pagati', storico.length) + (storico.length ? storico.map(rigaPagato).join('') : '<p class="empty">Ancora nessuno.</p>') +
+    '<a class="btn btn-sm" href="#/gia-fatto?voce=' + v.id + '">' + ic('plus', 20) + ' Segna un pagamento passato</a>';
+  h += '<div class="actions"><button class="btn btn-sm" data-action="sospendi-voce" data-id="' + v.id + '">' + (chiusa ? 'Riattiva' : 'Sospendi (non ricordarlo più)') + '</button>' +
+    '<button class="btn btn-sm btn-danger" data-action="elimina-voce" data-id="' + v.id + '">Elimina</button></div>';
+  return h + '</main>' + barra('casa');
+}
+// "Me ne occupo io": lo vedono subito tutti. Prima si controlla che nessuno l'abbia già pagato o preso.
+azioni.incarico = async el => {
+  const v = voce(el.dataset.id);
+  if (!v) return;
+  if (v.incarico && v.incarico.chi === utente()) {
+    v.incarico = null;
+    await salva('voci', v);
+    avvisa('Va bene: torna da pagare per tutti');
+    render();
+    return;
+  }
+  const scad = v.prossima;
+  await aggiornaPrima(0);
+  const f = voce(v.id);
+  if (!f || f.attiva === false || f.prossima !== scad) { render(); avvisa('Nel frattempo è stato segnato come pagato'); return; }
+  if (f.incarico && f.incarico.chi && f.incarico.chi !== utente()) {
+    if (!(await conferma('Se ne occupa già ' + f.incarico.chi, f.incarico.chi + ' l\'ha detto ' + daQuando(f.incarico.quando) + '. Vuoi occupartene tu al suo posto? Avvisa ' + f.incarico.chi + '.', 'Sì, me ne occupo io'))) return;
+  }
+  f.incarico = { chi: utente(), quando: adesso() };
+  await salva('voci', f);
+  avvisa('Ora tutti vedono che te ne occupi tu');
+  render();
+};
+
+// Segnare un pagamento: chi, quanto, come, quando, ricevuta. Prima si chiede agli altri telefoni.
+function vSegnaPagamento(v) {
+  const avvisi = controlliPagamento(v, v.importo, oggi()).concat(avvisiIncarico(v));
+  let h = testata(v.domiciliato ? 'Addebito controllato?' : 'Pagato?', { indietro: true, sub: v.nome }) + '<main class="pad">';
+  h += '<div class="hero">' + bloccoData(v.prossima) + '<div style="min-width:0"><div class="h-importo">' + esc(v.importo != null ? euro(v.importo) : '') + '</div><div class="h-sub">' + esc(v.nome) + '</div></div></div>';
+  h += '<form data-form="segna" data-voce="' + v.id + '" data-scadenza="' + esc(v.prossima) + '" novalidate>' +
+    '<div id="avvisi-doppio" style="display:flex;flex-direction:column;gap:8px">' + avvisi.map(a => banner('rust', esc(a), 'warn')).join('') + '</div>' +
+    '<div class="field ' + (avvisi.length ? '' : 'hidden') + '" id="box-conferma"><div class="chips"><label><input type="checkbox" name="conferma"><span>Ho controllato: va segnato lo stesso</span></label></div><p class="err" id="err-conferma"></p></div>';
+  h += campo('importo', v.domiciliato ? 'Quanto è stato addebitato?' : 'Quanto hai pagato?', testo('importo', 'importo', v.importo != null ? numIt(v.importo) : '', 'inputmode="decimal" placeholder="es. 184,50"'));
+  h += '<div class="field"><span class="lab">' + (v.domiciliato ? 'Chi ha controllato?' : 'Chi ha pagato?') + '</span>' + chipsRadio('chi', UTENTI, utente()) + '</div>';
+  h += v.domiciliato ? '<input type="hidden" name="come" value="Addebito in banca">'
+    : '<div class="field"><span class="lab">Come?</span>' + chipsRadio('come', COME_PAGATO.filter(c => c !== 'Addebito in banca'), 'Bonifico') + '</div>';
+  h += campo('data', 'Quando?', '<input type="date" id="f-data" name="data" value="' + oggi() + '" max="' + oggi() + '">');
+  h += campoFile(v.domiciliato ? 'Foto dell\'estratto conto (facoltativa)' : 'Foto della ricevuta (consigliata)');
+  h += altreOpzioni('<div class="field"><label for="f-nota">Nota</label><textarea id="f-nota" name="nota" maxlength="500"></textarea></div>', 'Aggiungi una nota');
+  if (v.ric) h += banner('green', 'Dopo, l\'app prepara da sola il prossimo: <b>' + esc(fmtLungo(prossimaDopo(v, oggi()))) + '</b>.');
+  h += '<div class="actions"><button class="btn btn-ok btn-grande" type="submit">' + ic('check', 22, 2.6) + (v.domiciliato ? ' Sì, è stato addebitato' : ' Sì, l\'ho pagato') + '</button>' +
+    '<button class="btn" type="button" data-action="indietro">Annulla</button></div></form></main>';
+  return h + barra('');
+}
+
+// Le scelte "di cosa è il pagamento", divise per sezione.
+function chipsPagamento(sel) {
+  const tutti = CAT_PAG;
+  const personale = sel && !tutti.includes(sel);
+  return '<div class="gruppo-scelte">' + GRUPPI_PAG.map(g => '<div class="gs-tit">' + ic(g.icona, 16) + ' ' + esc(g.nome) + '</div>' +
+    chipsRadio('pag', g.tipi.map(t => [t, t === 'Altro' ? 'Altro…' : t]), personale && g.k === 'altro' ? 'Altro' : sel)).join('') + '</div>';
 }
 function vAvvisoPagamento(q) {
   const sv = servizioDiTipo('pagamenti');
+  const g = gruppoDi(q.get('g'));
+  const sel = g && g.tipi.length === 1 ? g.tipi[0] : '';
   return testata('Un pagamento da fare', { indietro: true, sub: 'Copia i dati dal foglio: a ricordarlo ci pensa l\'app.' }) +
     '<main class="pad"><form data-form="avviso-pagamento"' + (q.get('ospite') ? ' data-ospite="' + esc(q.get('ospite')) + '"' : '') + ' novalidate>' +
-    '<div class="field"><span class="lab">Di cosa?</span>' + chipsRadio('pag', CAT_PAG, 'Luce') +
-    '<div id="box-altro-pag" class="hidden"><input type="text" name="altro" maxlength="60" placeholder="es. Condominio" aria-label="Di cosa è il pagamento"></div></div>' +
-    campo('scadenza', 'Quando scade?', '<input type="date" id="f-scadenza" name="scadenza">', 'È scritta sul foglio.') +
+    '<div class="field"><span class="lab">Di cosa?</span>' + chipsPagamento(sel) +
+    '<div id="box-altro-pag" class="' + (sel === 'Altro' ? '' : 'hidden') + '"><input type="text" name="altro" maxlength="60" placeholder="es. Condominio" aria-label="Di cosa è il pagamento"></div><p class="err" id="err-pag"></p></div>' +
+    campoData('scadenza', 'scadenza', 'Entro quando va pagato?', '', { hint: 'La scadenza scritta sul foglio.' }) +
     campo('importo', 'Quanto?', testo('importo', 'importo', '', 'inputmode="decimal" placeholder="es. 184,50"')) +
+    campo('chi_emette', 'Da chi arriva? (facoltativo)', testo('chi_emette', 'emittente', '', 'maxlength="60" placeholder="es. Enel, Generali, Studio Bianchi"')) +
     campoFile('Fotografa il foglio (consigliato)') +
-    altreOpzioni(campo('chi_emette', 'Da chi arriva?', testo('chi_emette', 'emittente', '', 'maxlength="60" placeholder="es. Enel, Generali, Studio Bianchi"')) +
-      '<div class="field"><label for="f-ospite">Riguarda un ospite?</label><select name="ospite" id="f-ospite">' + opzioniOspiti(q.get('ospite') || '') + '</select></div>' +
+    '<div class="field"><span class="lab">Si ripete?</span>' + chipsRadio('ricpag', [['', 'No, una volta'], ['1-mesi', 'Ogni mese'], ['2-mesi', 'Ogni 2 mesi'], ['3-mesi', 'Ogni 3 mesi'], ['1-anni', 'Ogni anno']], '') +
+    '<span class="hint">Le bollette di solito no: ogni volta arriva un foglio nuovo, con un importo diverso.</span></div>' +
+    altreOpzioni('<div class="field"><label for="f-ospite">Riguarda un ospite?</label><select name="ospite" id="f-ospite">' + opzioniOspiti(q.get('ospite') || '') + '</select></div>' +
       '<div class="field"><div class="chips"><label><input type="checkbox" name="domiciliato"><span>Si paga da solo (addebito in banca)</span></label></div></div>' +
       '<div class="field"><span class="lab">Chi lo paga?</span>' + chipsRadio('responsabile', RESPONSABILI, 'Entrambi') + '</div>' +
       '<div class="field"><span class="lab">Avvisami</span>' + chipsRadio('avviso', AVVISI.slice(0, 4), 3) + '</div>') +
@@ -3132,9 +3613,10 @@ function vAvvisoPagamento(q) {
 }
 moduli['avviso-pagamento'] = async form => {
   const fd = new FormData(form);
+  if (!fd.get('pag')) { errore('err-pag', 'Tocca di cosa si tratta (luce, assicurazione…).'); document.getElementById('err-pag').scrollIntoView({ block: 'center' }); return; }
   const scad = String(fd.get('scadenza') || '');
-  if (!dataValida(scad)) { errore('err-scadenza', 'Inserisci la scadenza scritta sul foglio.'); return; }
-  let pag = String(fd.get('pag') || 'Altro');
+  if (!dataValida(scad)) { errore('err-scadenza', 'Scegli la scadenza scritta sul foglio.'); document.getElementById('f-scadenza').scrollIntoView({ block: 'center' }); return; }
+  const pag = String(fd.get('pag') || 'Altro');
   const altro = String(fd.get('altro') || '').trim();
   const emittente = String(fd.get('emittente') || '').trim();
   const importo = numero(fd.get('importo'));
@@ -3147,40 +3629,78 @@ moduli['avviso-pagamento'] = async form => {
     box.scrollIntoView({ block: 'center' });
     return;
   }
+  const rp = String(fd.get('ricpag') || '');
+  const ric = rp ? { ogni: parseInt(rp.split('-')[0], 10), unita: rp.split('-')[1] } : null;
   const nomeBase = pag === 'Altro' ? (altro || 'Pagamento') : pag === 'Rifiuti (TARI)' ? 'TARI' : pag;
   const ospiteId = String(fd.get('ospite') || '') || null;
   const v = {
     id: uid(), nome: nomeBase + (emittente ? ' — ' + emittente : ''), pag: pag === 'Altro' ? (altro || 'Altro') : pag, categoria: 'Pagamenti', servizio: String(fd.get('servizio') || '') || null,
-    ospiteId, prossima: scad, ric: null, responsabile: String(fd.get('responsabile') || 'Entrambi'), domiciliato: fd.get('domiciliato') === 'on',
+    ospiteId, prossima: scad, ric, responsabile: String(fd.get('responsabile') || 'Entrambi'), domiciliato: fd.get('domiciliato') === 'on',
     avviso: parseInt(fd.get('avviso'), 10) || 0, chiusura: 'pagato', importo, note: null, attiva: true, creato: adesso()
   };
+  v.ancora = ancoraDi(scad, ric);
   await salva('voci', v);
-  await salvaFileDelModulo(form, { nome: v.nome + ' (scade ' + fmt(scad) + ')', tipo: 'Bolletta', ospiteId, voceId: v.id, data: oggi() });
+  await salvaFileDelModulo(form, { nome: v.nome + ' (scade ' + fmtD(scad) + ')', tipo: 'Bolletta', ospiteId, voceId: v.id, data: oggi() });
   dopoModifica();
   avvisa('Salvato: te lo ricordo io');
   vai('#/voce/' + v.id, true);
 };
 
-/* ---------- spesa */
+/* ---------- spesa: chi ci va, chi ha preso cosa, con quali soldi */
+
+// "Vado io a fare la spesa" dura al massimo fino al giorno dopo: poi si considera finita.
+function giroSpesa(sv) { return sv && sv.giro && sv.giro.chi && giorniTra(giornoDi(sv.giro.dal), oggi()) <= 1 ? sv.giro : null; }
+const DESC_SOLDI = { cassa: 'cassa della comunità', carta: 'carta della cooperativa', miei: 'soldi suoi' };
+const daRimborsare = () => S.eventi.filter(e => e.tipo === 'spesa' && e.rimborso && !e.rimborso.fatto).sort(recenti);
+function rigaSpesaFatta(e) {
+  const doc = e.docId ? documento(e.docId) : null;
+  const meta = [e.chi ? 'fatta da ' + e.chi : null, e.importo != null ? euro(e.importo) : null, e.soldi ? 'con ' + DESC_SOLDI[e.soldi] : null, doc ? 'scontrino' : null].filter(Boolean).join(' · ');
+  const cose = e.articoli && e.articoli.length ? e.articoli.slice(0, 6).join(', ') + (e.articoli.length > 6 ? '…' : '') : (e.nota || '');
+  return '<a class="riga-pagato" href="' + (doc ? '#/doc/' + doc.id : '#/fatto?f=servizi') + '"><span class="dicon">' + ic(doc ? 'ricevuta' : 'cart', 21) + '</span>' +
+    '<span class="row-main"><span class="row-title">Spesa di ' + esc(fmtGiorno(e.data).toLowerCase()) + '</span><span class="row-meta">' + esc(meta) + '</span>' + (cose ? '<span class="row-meta">' + esc(cose) + '</span>' : '') + '</span></a>';
+}
 function vSpesa(sv) {
   const lista = S.lista.filter(x => x.servizio === sv.id);
-  const daPrendere = lista.filter(x => !x.preso).sort((a, b) => (a.creato || '').localeCompare(b.creato || ''));
-  const presi = lista.filter(x => x.preso);
+  const daPrendere = lista.filter(x => !x.preso).sort((a, b) => (b.urgente ? 1 : 0) - (a.urgente ? 1 : 0) || (a.creato || '').localeCompare(b.creato || ''));
+  const presi = lista.filter(x => x.preso).sort((a, b) => (b.presoQuando || '').localeCompare(a.presoQuando || ''));
+  const giro = giroSpesa(sv);
+  const mio = !!giro && giro.chi === utente();
   const nomi = new Set(lista.map(x => semplifica(x.testo)));
   const conta = {};
   S.eventi.filter(e => e.tipo === 'spesa' && Array.isArray(e.articoli)).forEach(e => e.articoli.forEach(a => { const k = String(a).trim(); if (k && !nomi.has(semplifica(k))) conta[k] = (conta[k] || 0) + 1; }));
-  const suggeriti = Object.keys(conta).sort((a, b) => conta[b] - conta[a]).slice(0, 10);
-  let h = testaServizio(sv, daPrendere.length ? plur(daPrendere.length, 'cosa da comprare', 'cose da comprare') : 'La lista è vuota') + '<main class="pad">';
-  h += '<form data-form="lista-add" data-servizio="' + sv.id + '" novalidate class="two"><input type="text" name="testo" id="f-testo" placeholder="Cosa serve? es. latte, 2 kg mele" maxlength="80" autocomplete="off" aria-label="Cosa serve"><button class="btn btn-primary" type="submit" style="flex:none;width:auto">' + ic('plus', 22) + '</button></form>';
+  const suggeriti = Object.keys(conta).sort((a, b) => conta[b] - conta[a]).slice(0, 8);
+  let h = testaServizio(sv, giro ? (mio ? 'Stai facendo tu la spesa' : giro.chi + ' sta facendo la spesa') : daPrendere.length ? plur(daPrendere.length, 'cosa da comprare', 'cose da comprare') : 'La lista è vuota') + '<main class="pad">';
+  if (giro) h += '<div class="incorso' + (mio ? ' mio' : '') + '">' + ic('cart', 26) + '<div style="flex:1"><b>' + esc(mio ? 'Stai facendo tu la spesa' : giro.chi + ' sta facendo la spesa') + '</b><div>' +
+    esc(daQuando(giro.dal) + (mio ? '. Tocca ✓ su quello che metti nel carrello.' : '. Quello che aggiungi alla lista lo vede subito.')) + '</div></div></div>';
+  else h += '<button class="btn btn-grande" data-action="spesa-vado" data-id="' + sv.id + '">' + ic('cart', 24) + ' Vado io a fare la spesa</button>';
+  const rimb = daRimborsare();
+  if (rimb.length) h += sezione('Da rimborsare', rimb.length, 'amber') + rimb.map(e => '<div class="row row-amber"><span class="dicon amber">' + ic('euro', 21) + '</span><span class="row-main"><span class="row-title">' +
+    esc((e.rimborso.chi || e.chi || '—') + ': ' + euro(e.rimborso.importo != null ? e.rimborso.importo : e.importo)) + '</span><span class="row-meta">' + esc('anticipati per la spesa di ' + fmtGiorno(e.data).toLowerCase()) + '</span></span>' +
+    '<button class="cosa-az ok" data-action="rimborsato" data-id="' + e.id + '">Rimborsato</button></div>').join('');
+  h += sezione('Da comprare', daPrendere.length) +
+    '<form data-form="lista-add" data-servizio="' + sv.id + '" novalidate class="two"><input type="text" name="testo" id="f-testo" placeholder="Cosa serve? es. latte, 2 kg mele" maxlength="80" autocomplete="off" aria-label="Cosa serve"><button class="btn btn-primary" type="submit" style="flex:none;width:auto" aria-label="Aggiungi alla lista">' + ic('plus', 22) + '</button></form>';
   if (suggeriti.length) h += '<div class="chips">' + suggeriti.map(s => '<button class="txt-btn" style="color:var(--ink)" data-action="lista-sugg" data-servizio="' + sv.id + '" data-t="' + esc(s) + '">+ ' + esc(s) + '</button>').join('') + '</div>';
-  const riga = x => '<div class="row ' + (x.preso ? 'row-done' : '') + '"><button class="check ' + (x.preso ? 'on' : '') + '" data-action="lista-toggle" data-id="' + x.id + '" aria-label="' + (x.preso ? 'Non ancora preso: ' : 'Preso: ') + esc(x.testo) + '">' + ic('check', 22, 2.6) + '</button>' +
-    '<span class="row-main"><span class="row-title" style="' + (x.preso ? 'text-decoration:line-through' : '') + '">' + esc(x.testo) + '</span>' + (x.chi ? '<span class="row-meta">aggiunto da ' + esc(x.chi) + '</span>' : '') + '</span>' +
-    '<button class="icon-btn" data-action="lista-del" data-id="' + x.id + '" aria-label="Togli ' + esc(x.testo) + '">' + ic('x', 18) + '</button></div>';
-  h += sezione('Da comprare', daPrendere.length) + (daPrendere.length ? daPrendere.map(riga).join('') : '<p class="empty">Niente. Scrivi qui sopra quello che manca: lo vedono tutti.</p>');
-  if (presi.length) h += sezione('Già nel carrello', presi.length, 'green') + presi.map(riga).join('') +
-    '<a class="btn btn-primary" href="#/spesa-fatta?servizio=' + sv.id + '">' + ic('check', 21, 2.6) + ' Spesa fatta</a>';
-  h += scadenzeServizio(sv, 'Spesa fissa (es. ogni settimana)') + storicoServizio(sv, 6);
+  h += daPrendere.length ? daPrendere.map(rigaLista).join('') + '<p class="hint" style="margin:0 2px">Tocca ' + ic('warn', 15) + ' su una cosa urgente: diventa «Serve subito» e va in cima.</p>'
+    : '<p class="empty">Niente. Scrivi qui sopra quello che manca: lo vedono tutti.</p>';
+  if (presi.length || mio) {
+    h += sezione('Nel carrello', presi.length, 'green') + presi.map(rigaLista).join('');
+    h += '<a class="btn btn-ok btn-grande" href="#/spesa-fatta?servizio=' + sv.id + '">' + ic('check', 22, 2.6) + ' Spesa fatta</a>';
+  }
+  if (mio) h += '<button class="btn btn-sm" data-action="spesa-non-vado" data-id="' + sv.id + '">Non ci vado più</button>';
+  const fatte = S.eventi.filter(e => e.tipo === 'spesa' && sid(e.servizio) === sv.id).sort(recenti);
+  h += sezione('Spese fatte', null, '', fatte.length > 5 ? '<a class="destra" href="#/fatto?servizio=' + sv.id + '">Tutte</a>' : '') +
+    (fatte.length ? fatte.slice(0, 5).map(rigaSpesaFatta).join('') : '<p class="empty">Ancora nessuna.</p>');
+  h += scadenzeServizio(sv, 'Spesa fissa (es. ogni settimana)');
   return h + '</main>' + barra('casa');
+}
+// Una riga della lista (spesa o farmacia): chi l'ha aggiunta, chi l'ha presa e quando.
+function rigaLista(x) {
+  const meta = x.preso ? 'preso da ' + (x.presoDa || '—') + (x.presoQuando ? ' ' + fmt(giornoDi(x.presoQuando)) + ' alle ' + fmtOra(oraDi(x.presoQuando)) : '')
+    : x.ordinatoIl ? 'ordinato ' + fmt(x.ordinatoIl) : 'aggiunto da ' + (x.chi || '—') + (x.creato ? ' ' + fmt(giornoDi(x.creato)) : '');
+  return '<div class="row ' + (x.preso ? 'row-ok' : x.urgente ? 'row-amber' : '') + '"><button class="check ' + (x.preso ? 'on' : '') + '" data-action="lista-toggle" data-id="' + x.id + '" aria-label="' + (x.preso ? 'Non ancora preso: ' : 'Preso: ') + esc(x.testo) + '">' + ic('check', 22, 2.6) + '</button>' +
+    '<span class="row-main"><span class="row-title">' + esc(x.testo) + '</span><span class="row-meta">' + (x.urgente && !x.preso ? '<b class="t-rust">Serve subito</b> · ' : '') + esc(meta) + '</span></span>' +
+    (x.preso ? '' : '<button class="icon-btn" data-action="lista-urgente" data-id="' + x.id + '" aria-label="' + (x.urgente ? 'Non è più urgente: ' : 'Serve subito: ') + esc(x.testo) + '"' + (x.urgente ? ' style="color:#fff;background:var(--rust);border-color:var(--rust)"' : '') + '>' + ic('warn', 18) + '</button>') +
+    '<button class="icon-btn" data-action="lista-del" data-id="' + x.id + '" aria-label="Togli ' + esc(x.testo) + '">' + ic('x', 18) + '</button></div>';
 }
 moduli['lista-add'] = async form => {
   const fd = new FormData(form);
@@ -3200,12 +3720,49 @@ azioni['lista-toggle'] = async el => {
   const x = trova('lista', el.dataset.id);
   if (!x) return;
   x.preso = !x.preso;
+  if (x.preso) { x.presoDa = utente(); x.presoQuando = adesso(); } else { x.presoDa = null; x.presoQuando = null; }
+  await salva('lista', x);
+  render();
+};
+azioni['lista-urgente'] = async el => {
+  const x = trova('lista', el.dataset.id);
+  if (!x) return;
+  x.urgente = !x.urgente;
   await salva('lista', x);
   render();
 };
 azioni['lista-del'] = async el => {
   const x = trova('lista', el.dataset.id);
   if (x) await eliminaConAnnulla([['lista', x]], 'Tolto: ' + x.testo, () => render());
+};
+// "Vado io": prima si guarda se qualcuno ci sta già andando (anche da un altro telefono).
+azioni['spesa-vado'] = async el => {
+  const id = el.dataset.id;
+  await aggiornaPrima(0);
+  const sv = servizio(id);
+  if (!sv) return;
+  const g = giroSpesa(sv);
+  if (g && g.chi !== utente() && !(await conferma(g.chi + ' sta già facendo la spesa', 'L\'ha detto ' + daQuando(g.dal) + '. Ci vai tu al suo posto? Avvisa ' + g.chi + '.', 'Sì, ci vado io'))) { render(); return; }
+  sv.giro = { chi: utente(), dal: adesso() };
+  await salva('servizi', sv);
+  avvisa('Ora tutti vedono che fai tu la spesa');
+  render();
+};
+azioni['spesa-non-vado'] = async el => {
+  const sv = servizio(el.dataset.id);
+  if (!sv) return;
+  sv.giro = null;
+  await salva('servizi', sv);
+  render();
+};
+azioni.rimborsato = async el => {
+  const e = evento(el.dataset.id);
+  if (!e || !e.rimborso) return;
+  const prima = JSON.parse(JSON.stringify(e));
+  e.rimborso = Object.assign({}, e.rimborso, { fatto: { chi: utente(), quando: adesso() } });
+  await salva('eventi', e);
+  render();
+  avvisa('Segnato: rimborsato', async () => { await salva('eventi', prima); render(); });
 };
 function vSpesaFatta() {
   const svId = new URLSearchParams(location.hash.split('?')[1] || '').get('servizio');
@@ -3214,37 +3771,60 @@ function vSpesaFatta() {
   const presi = S.lista.filter(x => x.servizio === sv.id && x.preso);
   return testata('Spesa fatta', { indietro: true, sub: presi.length ? presi.map(x => x.testo).join(', ') : '' }) +
     '<main class="pad"><form data-form="spesa-fatta" data-servizio="' + sv.id + '" novalidate>' +
-    campo('dove', 'Dove? (facoltativo)', testo('dove', 'dove', '', 'maxlength="60" placeholder="es. Conad"')) +
-    campo('importo', 'Quanto avete speso? (facoltativo)', testo('importo', 'importo', '', 'inputmode="decimal" placeholder="es. 86,40"')) +
-    campoFile('Scontrino (facoltativo)') +
-    campo('nota', 'Nota (facoltativa)', testo('nota', 'nota', '', 'maxlength="200"')) +
-    bottoniFine('Salva') + '</form></main>' + barra('casa');
+    '<div class="field"><span class="lab">Chi ha fatto la spesa?</span>' + chipsRadio('chi', UTENTI, utente()) + '</div>' +
+    campo('importo', 'Quanto avete speso?', testo('importo', 'importo', '', 'inputmode="decimal" placeholder="es. 86,40"'), 'Lo trovi in fondo allo scontrino.') +
+    '<div class="field"><span class="lab">Con quali soldi?</span>' + chipsRadio('soldi', SOLDI_SPESA, '') + '<span class="hint">Con «soldi miei» la spesa va tra quelle da rimborsare, finché qualcuno non tocca «Rimborsato».</span><p class="err" id="err-soldi"></p></div>' +
+    campoFile('Foto dello scontrino (consigliata)') +
+    altreOpzioni(campo('dove', 'Dove?', testo('dove', 'dove', '', 'maxlength="60" placeholder="es. Conad"')) +
+      campo('nota', 'Nota', testo('nota', 'nota', '', 'maxlength="200"')), 'Dove, nota') +
+    bottoniFine('Salva la spesa') + '</form></main>' + barra('casa');
 }
 moduli['spesa-fatta'] = async form => {
   const fd = new FormData(form);
   const svId = form.dataset.servizio;
-  const presi = S.lista.filter(x => x.servizio === svId && x.preso);
+  const soldi = String(fd.get('soldi') || '');
   const importo = numero(fd.get('importo'));
+  const chi = String(fd.get('chi') || utente());
+  if (!soldi) { errore('err-soldi', 'Tocca con quali soldi avete pagato.'); document.getElementById('err-soldi').scrollIntoView({ block: 'center' }); return; }
+  if (soldi === 'miei' && importo == null) { errore('err-importo', 'Scrivi quanto hai speso: serve per il rimborso.'); document.getElementById('f-importo').focus(); return; }
+  const presi = S.lista.filter(x => x.servizio === svId && x.preso);
   const dove = String(fd.get('dove') || '').trim();
-  const docId = await salvaFileDelModulo(form, { nome: 'Scontrino spesa ' + fmt(oggi()), tipo: 'Ricevuta', data: oggi() });
-  await salva('eventi', { id: uid(), tipo: 'spesa', servizio: svId, data: oggi(), ora: oraAdesso(), chi: utente(), articoli: presi.map(x => x.testo), importo,
+  const docId = await salvaFileDelModulo(form, { nome: 'Scontrino spesa ' + fmtD(oggi()), tipo: 'Ricevuta', data: oggi() });
+  await salva('eventi', { id: uid(), tipo: 'spesa', servizio: svId, data: oggi(), ora: oraAdesso(), chi, articoli: presi.map(x => x.testo), importo, soldi,
+    rimborso: soldi === 'miei' ? { chi, importo, fatto: null } : null,
     nota: [dove, String(fd.get('nota') || '').trim()].filter(Boolean).join(' — ') || null, docId, creato: adesso() });
   for (const x of presi) await togli('lista', x.id);
+  const sv = servizio(svId);
+  if (sv && sv.giro) { sv.giro = null; await salva('servizi', sv); }
   dopoModifica();
-  avvisa('Spesa registrata');
+  avvisa(soldi === 'miei' ? 'Spesa salvata: è tra quelle da rimborsare' : 'Spesa salvata');
   vai('#/servizio/' + svId, true);
 };
 
-/* ---------- lavanderia */
+/* ---------- lavanderia: ogni bucato resta aperto finché qualcuno non tocca "Fatto!" */
+const lavanderiaInCorso = () => S.eventi.filter(e => e.tipo === 'lavanderia' && !e.rientrato).sort(recenti);
 function vLavanderia(sv) {
-  const fuori = lavanderiaFuori().filter(e => sid(e.servizio) === sv.id);
-  let h = testaServizio(sv, fuori.length ? plur(fuori.length, 'consegna ancora fuori', 'consegne ancora fuori') : 'Niente fuori casa') + '<main class="pad">';
-  h += '<a class="btn btn-primary" href="#/lavanderia?servizio=' + sv.id + '">' + ic('shirt', 21) + ' Consegna o lavaggio</a>';
-  h += sezione('Ancora in lavanderia', fuori.length) + (fuori.length ? fuori.map(e => '<div class="row ' + (giorniTra(e.data, oggi()) > 7 ? 'row-amber' : '') + '"><span class="dicon">' + ic('shirt', 21) + '</span><span class="row-main"><span class="row-title">' + esc(descCapi(e)) + '</span>' +
-    '<span class="row-meta">' + esc([ospite(e.ospiteId) ? ospite(e.ospiteId).nome : 'della casa', 'consegnato ' + fmt(e.data) + (e.chi ? ' da ' + e.chi : '')].join(' · ')) + '</span></span>' +
-    '<button class="btn btn-sm" style="width:auto" data-action="lav-rientrato" data-id="' + e.id + '">Rientrato</button></div>').join('') : '<p class="empty">Tutto rientrato.</p>');
+  const inCorso = lavanderiaInCorso().filter(e => sid(e.servizio) === sv.id);
+  const casa = inCorso.filter(e => !e.fuori);
+  const fuori = inCorso.filter(e => e.fuori);
+  const fatti = S.eventi.filter(e => e.tipo === 'lavanderia' && sid(e.servizio) === sv.id && e.rientrato && giorniTra(e.rientrato, oggi()) <= 14)
+    .sort((a, b) => (b.rientrato || '').localeCompare(a.rientrato || '') || recenti(a, b));
+  let h = testaServizio(sv, inCorso.length ? plur(inCorso.length, 'bucato da finire', 'bucati da finire') : 'Niente in corso') + '<main class="pad">';
+  h += '<div class="due-grandi"><a href="#/lavanderia?servizio=' + sv.id + '&dove=casa"><span class="dicon">' + ic('lavatrice', 26) + '</span><b>Lavatrice di casa</b><small>Metto a lavare</small></a>' +
+    '<a href="#/lavanderia?servizio=' + sv.id + '&dove=fuori"><span class="dicon">' + ic('shirt', 26) + '</span><b>Lavanderia esterna</b><small>Consegno i capi</small></a></div>';
+  const riga = e => {
+    const o = ospite(e.ospiteId);
+    const vecchio = giorniTra(e.data, oggi()) > (e.fuori ? 7 : 1);
+    return '<div class="row ' + (vecchio ? 'row-amber' : '') + '"><span class="dicon">' + ic(e.fuori ? 'shirt' : 'lavatrice', 21) + '</span><span class="row-main"><span class="row-title">' + esc(descCapi(e)) + '</span>' +
+      '<span class="row-meta">' + esc([o ? o.nome : 'della casa', (e.fuori ? 'consegnato ' : 'messo a lavare ') + fmt(e.data) + (e.chi ? ' da ' + e.chi : '')].join(' · ')) + '</span></span>' +
+      '<button class="cosa-az ok" data-action="lav-fatto" data-id="' + e.id + '">Fatto!</button></div>';
+  };
+  h += sezione('In lavatrice', casa.length) + (casa.length ? casa.map(riga).join('') + '<p class="hint" style="margin:0 2px">Tocca «Fatto!» quando è lavato, asciutto e messo a posto.</p>' : '<p class="empty">Niente in lavatrice.</p>');
+  h += sezione('In lavanderia esterna', fuori.length) + (fuori.length ? fuori.map(riga).join('') + '<p class="hint" style="margin:0 2px">Tocca «Fatto!» quando lo ritirate.</p>' : '<p class="empty">Niente fuori casa.</p>');
+  if (fatti.length) h += sezione('Finiti di recente', fatti.length, 'green') + fatti.slice(0, 8).map(e => '<div class="row row-ok"><span class="dicon">' + ic('check', 21) + '</span><span class="row-main"><span class="row-title">' + esc(descCapi(e)) + '</span>' +
+    '<span class="row-meta">' + esc([ospite(e.ospiteId) ? ospite(e.ospiteId).nome : null, e.fuori ? 'lavanderia esterna' : 'lavatrice di casa', 'finito ' + fmt(e.rientrato) + (e.rientratoChi ? ' da ' + e.rientratoChi : '')].filter(Boolean).join(' · ')) + '</span></span></div>').join('');
   h += '<a class="btn btn-sm" href="#/elenco/' + sv.id + '/capi">' + ic('edit', 20) + ' Modifica l\'elenco dei capi</a>';
-  h += scadenzeServizio(sv, 'Ritiro fisso (es. ogni martedì)') + storicoServizio(sv);
+  h += scadenzeServizio(sv, 'Ritiro fisso (es. ogni martedì)');
   return h + '</main>' + barra('casa');
 }
 function descCapi(e) {
@@ -3255,14 +3835,18 @@ function vLavanderiaConsegna(q) {
   const sv = servizio(q.get('servizio')) || servizioDiTipo('lavanderia');
   if (!sv) return nonTrovato();
   const capi = (sv.conf && sv.conf.capi) || CAPI_LAVANDERIA;
-  return testata('Consegna o lavaggio', { indietro: true, sub: sv.nome }) + '<main class="pad"><form data-form="lavanderia" data-servizio="' + sv.id + '" novalidate>' +
+  const dove = q.get('dove') === 'fuori' ? 'fuori' : q.get('dove') === 'casa' ? 'casa' : '';
+  const titolo = dove === 'fuori' ? 'Lavanderia esterna' : dove === 'casa' ? 'Lavatrice di casa' : 'Consegna o lavaggio';
+  return testata(titolo, { indietro: true, sub: dove === 'fuori' ? 'Cosa consegni?' : dove === 'casa' ? 'Cosa metti a lavare?' : sv.nome }) + '<main class="pad"><form data-form="lavanderia" data-servizio="' + sv.id + '" novalidate>' +
     '<div class="field"><span class="lab">Cosa? Quanti pezzi?</span>' + capi.map((c, i) => '<div class="stepper"><span class="nome">' + esc(c) + '</span>' +
       '<button type="button" data-action="meno" data-per="f-capo' + i + '" aria-label="Meno ' + esc(c) + '">−</button><input type="number" id="f-capo' + i + '" name="capo' + i + '" min="0" value="0" inputmode="numeric" aria-label="' + esc(c) + '"><button type="button" data-action="piu" data-per="f-capo' + i + '" aria-label="Più ' + esc(c) + '">+</button></div>').join('') +
     '<input type="hidden" name="ncapi" value="' + capi.length + '">' + capi.map((c, i) => '<input type="hidden" name="nome' + i + '" value="' + esc(c) + '">').join('') +
     testo('altro', 'altro', '', 'maxlength="80" placeholder="Altro? es. 1 piumone" aria-label="Altro"') + '<p class="err" id="err-capi"></p></div>' +
     '<div class="field"><label for="f-ospite">Di chi?</label><select name="ospite" id="f-ospite">' + opzioniOspiti('', 'Della casa') + '</select></div>' +
-    '<div class="field"><span class="lab">Dove?</span>' + chipsRadio('dove', [['fuori', 'Lavanderia esterna'], ['casa', 'Lavatrice di casa']], 'fuori') + '<span class="hint">Se va in lavanderia esterna, resta "fuori" finché non segni che è rientrato.</span></div>' +
-    campo('nota', 'Nota (facoltativa)', testo('nota', 'nota', '', 'maxlength="200"')) +
+    (dove ? '<input type="hidden" name="dove" value="' + dove + '">' : '<div class="field"><span class="lab">Dove?</span>' + chipsRadio('dove', [['casa', 'Lavatrice di casa'], ['fuori', 'Lavanderia esterna']], 'casa') + '</div>') +
+    '<div class="field"><div class="chips"><label><input type="checkbox" name="giafatto"><span>È già tutto finito (lo segno per memoria)</span></label></div>' +
+    '<span class="hint">Altrimenti resta tra le cose da finire finché qualcuno non tocca «Fatto!».</span></div>' +
+    altreOpzioni(campo('nota', 'Nota', testo('nota', 'nota', '', 'maxlength="200"')), 'Aggiungi una nota') +
     bottoniFine('Salva') + '</form></main>' + barra('casa');
 }
 moduli.lavanderia = async form => {
@@ -3271,16 +3855,17 @@ moduli.lavanderia = async form => {
   const capi = [];
   for (let i = 0; i < n; i++) { const q = parseInt(fd.get('capo' + i), 10) || 0; if (q > 0) capi.push({ c: String(fd.get('nome' + i)), n: q }); }
   const altro = String(fd.get('altro') || '').trim();
-  if (!capi.length && !altro) { errore('err-capi', 'Indica almeno un capo, o scrivilo in "Altro".'); return; }
+  if (!capi.length && !altro) { errore('err-capi', 'Indica almeno un capo con il +, o scrivilo in "Altro".'); return; }
   if (altro) capi.push({ c: altro, n: 1 });
-  const fuori = fd.get('dove') !== 'casa';
+  const fuori = fd.get('dove') === 'fuori';
+  const finito = fd.get('giafatto') === 'on';
   await salva('eventi', { id: uid(), tipo: 'lavanderia', servizio: form.dataset.servizio, ospiteId: String(fd.get('ospite') || '') || null, data: oggi(), ora: oraAdesso(), chi: utente(),
-    capi, fuori, rientrato: fuori ? null : oggi(), nota: String(fd.get('nota') || '').trim() || null, creato: adesso() });
+    capi, fuori, rientrato: finito ? oggi() : null, rientratoChi: finito ? utente() : null, nota: String(fd.get('nota') || '').trim() || null, creato: adesso() });
   dopoModifica();
-  avvisa(fuori ? 'Segnato: in lavanderia' : 'Segnato: lavato in casa');
+  avvisa(finito ? 'Segnato: già finito' : fuori ? 'Segnato: in lavanderia esterna' : 'Segnato: in lavatrice');
   vai('#/servizio/' + form.dataset.servizio, true);
 };
-azioni['lav-rientrato'] = async el => {
+azioni['lav-fatto'] = async el => {
   const e = evento(el.dataset.id);
   if (!e) return;
   const prima = Object.assign({}, e);
@@ -3289,8 +3874,9 @@ azioni['lav-rientrato'] = async el => {
   await salva('eventi', e);
   dopoModifica();
   render();
-  avvisa('Rientrato: ' + descCapi(e), async () => { await salva('eventi', prima); render(); });
+  avvisa('Fatto: ' + descCapi(e), async () => { await salva('eventi', prima); render(); });
 };
+azioni['lav-rientrato'] = azioni['lav-fatto'];
 
 /* ---------- pulizie */
 function vPulizie(sv) {
@@ -3490,15 +4076,21 @@ function vFarmacia(sv) {
   const daOrdinare = ctrl.filter(x => (x.s.daRiordinare || x.s.finito) && !x.f.ordinatoIl);
   const ordinati = S.farmaci.filter(f => f.ordinatoIl && farmacoAttivo(f, oggi()));
   const scadono = ctrl.filter(x => x.s.scad);
+  const altro = S.lista.filter(x => x.servizio === sv.id);
+  const altroDa = altro.filter(x => !x.preso);
   let h = testaServizio(sv, daOrdinare.length ? plur(daOrdinare.length, 'farmaco da ordinare', 'farmaci da ordinare') : 'Scorte a posto') + '<main class="pad">';
   if (!conf.telefono) h += banner('amber', 'Per ordinare su WhatsApp serve il numero della farmacia. <a href="#/farmacia-conf">Inseriscilo</a>');
-  h += '<a class="btn btn-primary" href="#/ordina">' + ic('chat', 21) + ' Ordina su WhatsApp</a>';
+  h += '<div class="due-grandi"><a href="#/per-ospite?poi=farmaco"><span class="dicon">' + ic('plus', 26) + '</span><b>Aggiungi un farmaco</b><small>Per un ospite, dalla prescrizione</small></a>' +
+    '<a href="#/ordina"><span class="dicon">' + ic('chat', 26) + '</span><b>Ordina su WhatsApp</b><small>' + esc(daOrdinare.length + altroDa.length ? plur(daOrdinare.length + altroDa.length, 'cosa da ordinare', 'cose da ordinare') : 'Scegli cosa ordinare') + '</small></a></div>';
   h += sezione('Da ordinare', daOrdinare.length, daOrdinare.length ? 'amber' : '') + (daOrdinare.length ? daOrdinare.map(x => rigaFarmaco(x.f)).join('') : '<p class="empty">Niente: le scorte bastano.</p>');
+  h += sezione('Altro dalla farmacia', altroDa.length) + '<p class="hint" style="margin:0 2px">Cerotti, garze, disinfettante: quello che non è una terapia. Finisce anche nell\'ordine su WhatsApp.</p>' +
+    '<form data-form="lista-add" data-servizio="' + sv.id + '" novalidate class="two"><input type="text" name="testo" id="f-testo" placeholder="Cosa serve? es. cerotti" maxlength="80" autocomplete="off" aria-label="Cosa serve dalla farmacia"><button class="btn btn-primary" type="submit" style="flex:none;width:auto" aria-label="Aggiungi">' + ic('plus', 22) + '</button></form>' +
+    altro.sort((a, b) => (a.preso ? 1 : 0) - (b.preso ? 1 : 0)).map(rigaLista).join('');
   if (ordinati.length) h += sezione('Ordinati, in arrivo', ordinati.length) + '<p class="hint" style="margin:0 2px">Quando arrivano, apri il farmaco e segna "Arrivato dalla farmacia".</p>' + ordinati.map(f => rigaFarmaco(f)).join('');
   if (scadono.length) h += sezione('Confezioni in scadenza', scadono.length, 'rust') + scadono.map(x => rigaFarmaco(x.f)).join('');
   const perOsp = ospitiAttivi().map(o => [o, S.farmaci.filter(f => f.ospiteId === o.id && farmacoAttivo(f, oggi())).sort(perNome)]).filter(x => x[1].length);
   h += sezione('Tutti i farmaci degli ospiti');
-  h += perOsp.length ? perOsp.map(([o, fs]) => '<div class="giorno-testa" style="text-transform:none">' + esc(o.nome) + '</div>' + fs.map(f => rigaFarmaco(f, { ospite: false })).join('')).join('') : '<p class="empty">Nessun farmaco inserito: si aggiungono dalla cartella di ogni ospite.</p>';
+  h += perOsp.length ? perOsp.map(([o, fs]) => '<div class="giorno-testa" style="text-transform:none">' + esc(o.nome) + '</div>' + fs.map(f => rigaFarmaco(f, { ospite: false })).join('')).join('') : '<p class="empty">Nessun farmaco inserito: tocca «Aggiungi un farmaco» qui sopra.</p>';
   h += '<a class="btn btn-sm" style="margin-top:12px" href="#/farmacia-conf">' + ic('gear', 20) + ' Numero della farmacia</a>';
   h += storicoServizio(sv, 6);
   return h + '</main>' + barra('casa');
@@ -3538,11 +4130,13 @@ function vOrdina() {
   const tutti = S.farmaci.filter(f => farmacoAttivo(f, oggi())).sort((a, b) => (ctrl.has(b.id) - ctrl.has(a.id)) || perNome(a, b));
   let h = testata('Ordina su WhatsApp', { indietro: true, sub: (sv.conf && sv.conf.nome) || 'Farmacia' }) + '<main class="pad">';
   if (!(sv.conf && sv.conf.telefono)) return h + banner('amber', 'Prima inserisci il numero della farmacia.') + '<a class="btn btn-primary" href="#/farmacia-conf">Inserisci il numero</a></main>' + barra('casa');
+  const altre = S.lista.filter(x => x.servizio === sv.id && !x.preso);
   h += '<form data-form="ordina" novalidate><div class="field"><span class="lab">Cosa ordinare?</span><div class="group">' + tutti.map(f => {
     const o = ospite(f.ospiteId);
     return '<label class="gi"><input type="checkbox" name="f" value="' + f.id + '"' + (ctrl.has(f.id) ? ' checked' : '') + ' style="width:24px;height:24px;flex:none"><span class="row-main"><span class="row-title">' + esc(f.nome) + '</span><span class="row-meta">' + esc((o ? o.nome + ' · ' : '') + (ctrl.has(f.id) ? 'da ordinare' : descScorta(f) || 'scorta da contare')) + '</span></span>' +
       '<input type="number" name="q' + f.id + '" value="1" min="1" max="20" inputmode="numeric" aria-label="Confezioni di ' + esc(f.nome) + '" style="width:64px;min-height:46px;flex:none;text-align:center"></label>';
   }).join('') + '</div><span class="hint">Il numero a destra sono le confezioni.</span><p class="err" id="err-f"></p></div>' +
+    (altre.length ? '<div class="field"><span class="lab">Altro dalla farmacia</span><div class="group">' + altre.map(x => '<label class="gi"><input type="checkbox" name="a" value="' + x.id + '"' + (x.ordinatoIl ? '' : ' checked') + ' style="width:24px;height:24px;flex:none"><span class="row-main"><span class="row-title">' + esc(x.testo) + '</span>' + (x.ordinatoIl ? '<span class="row-meta">già ordinato ' + esc(fmt(x.ordinatoIl)) + '</span>' : '') + '</span></label>').join('') + '</div></div>' : '') +
     campo('nota', 'Altro da scrivere (facoltativo)', testo('nota', 'nota', '', 'maxlength="200" placeholder="es. passiamo a ritirare domani mattina"')) +
     '<div class="actions"><button class="btn btn-primary" type="submit">' + ic('chat', 21) + ' Apri WhatsApp con il messaggio</button><button class="btn" type="button" data-action="indietro">Annulla</button></div></form>';
   return h + '</main>' + barra('casa');
@@ -3551,17 +4145,20 @@ moduli.ordina = async form => {
   const sv = servizioDiTipo('farmacia');
   const fd = new FormData(form);
   const scelti = fd.getAll('f').map(id => farmaco(String(id))).filter(Boolean);
-  if (!scelti.length) { errore('err-f', 'Scegli almeno un farmaco.'); return; }
+  const altri = fd.getAll('a').map(id => trova('lista', String(id))).filter(Boolean);
+  if (!scelti.length && !altri.length) { errore('err-f', 'Scegli almeno una cosa da ordinare.'); return; }
   const modo = (sv.conf && sv.conf.nomi) || 'iniziali';
   const nomeO = f => { const o = ospite(f.ospiteId); if (!o || modo === 'nessuno') return ''; return ' — per ' + (modo === 'completi' ? o.nome : iniziali(o.nome).split('').join('.') + '.'); };
   const righe = scelti.map(f => '• ' + f.nome + ' (' + plur(parseInt(fd.get('q' + f.id), 10) || 1, 'confezione', 'confezioni') + ')' + nomeO(f));
   const nota = String(fd.get('nota') || '').trim();
-  const testoMsg = 'Buongiorno, sono ' + (utente() || 'della') + ' della Comunità Alloggio Kenosis. Vorremmo ordinare:\n' + righe.join('\n') + (nota ? '\n\n' + nota : '') + '\n\nGrazie!';
+  const righeAltro = altri.map(x => '• ' + x.testo);
+  const testoMsg = 'Buongiorno, sono ' + (utente() || 'della') + ' della Comunità Alloggio Kenosis. Vorremmo ordinare:\n' + righe.concat(righeAltro).join('\n') + (nota ? '\n\n' + nota : '') + '\n\nGrazie!';
   // si apre subito, finché il tocco è "fresco": i browser bloccano le finestre aperte dopo
   const url = 'https://wa.me/' + numeroWhatsApp(sv.conf.telefono) + '?text=' + encodeURIComponent(testoMsg);
   const w = window.open(url, '_blank');
   for (const f of scelti) { f.ordinatoIl = oggi(); await salva('farmaci', f); }
-  await salva('eventi', { id: uid(), tipo: 'farmacia', servizio: sv.id, data: oggi(), ora: oraAdesso(), chi: utente(), nota: 'Ordinato su WhatsApp: ' + scelti.map(f => f.nome).join(', '), creato: adesso() });
+  for (const x of altri) { x.ordinatoIl = oggi(); await salva('lista', x); }
+  await salva('eventi', { id: uid(), tipo: 'farmacia', servizio: sv.id, data: oggi(), ora: oraAdesso(), chi: utente(), nota: 'Ordinato su WhatsApp: ' + scelti.map(f => f.nome).concat(altri.map(x => x.testo)).join(', '), creato: adesso() });
   dopoModifica();
   if (!w) location.href = url;
   avvisa('Segnati come ordinati');
@@ -3580,8 +4177,8 @@ function testoEvento(e) {
     case 'consegna': return { icona: 'chat', cls: 'amber', titolo: 'Consegne: ' + (e.testo || 'solo il riepilogo'), meta: [chi, o ? o.nome : null].filter(Boolean).join(' · ') + descLetto(e), f: 'note', lungo: true, extra: e.riepilogo || '' };
     case 'terapia': return { registro: true, icona: 'pill', cls: 'amber', titolo: e.nota || 'Terapia cambiata', meta: [chi, o ? o.nome : null].filter(Boolean).join(' · '), f: 'terapia', href: e.farmacoId && farmaco(e.farmacoId) ? '#/farmaco/' + e.farmacoId : null };
     case 'correzione': return { registro: true, icona: 'edit', cls: 'amber', titolo: e.nota || 'Correzione', meta: [chi, o ? o.nome : null].filter(Boolean).join(' · '), f: 'terapia' };
-    case 'spesa': return { icona: 'cart', titolo: 'Spesa' + (e.articoli && e.articoli.length ? ': ' + e.articoli.join(', ') : ''), meta: [chi, e.importo != null ? euro(e.importo) : null, e.nota].filter(Boolean).join(' · '), f: 'servizi' };
-    case 'lavanderia': return { icona: 'shirt', titolo: 'Lavanderia: ' + descCapi(e), meta: [chi, o ? o.nome : 'della casa', e.fuori ? (e.rientrato ? 'rientrato ' + fmt(e.rientrato) : 'ancora fuori') : 'lavato in casa'].filter(Boolean).join(' · '), f: 'servizi' };
+    case 'spesa': return { icona: 'cart', titolo: 'Spesa' + (e.articoli && e.articoli.length ? ': ' + e.articoli.join(', ') : ''), meta: [chi, e.importo != null ? euro(e.importo) : null, e.soldi ? 'con ' + DESC_SOLDI[e.soldi] : null, e.rimborso ? (e.rimborso.fatto ? 'rimborsato' : 'da rimborsare') : null, e.nota].filter(Boolean).join(' · '), f: 'servizi' };
+    case 'lavanderia': return { icona: 'shirt', titolo: 'Lavanderia: ' + descCapi(e), meta: [chi, o ? o.nome : 'della casa', e.fuori ? (e.rientrato ? 'lavanderia esterna, ritirato ' + fmt(e.rientrato) : 'in lavanderia esterna') : (e.rientrato ? 'lavatrice di casa, finito ' + fmt(e.rientrato) : 'in lavatrice'), e.rientratoChi && e.rientratoChi !== e.chi ? 'finito da ' + e.rientratoChi : null].filter(Boolean).join(' · '), f: 'servizi' };
     case 'pulizia': return { icona: 'spark', titolo: 'Pulizie: ' + (e.zona || ''), meta: chi, f: 'servizi' };
     case 'rifiuti': return { icona: 'trash', titolo: 'Rifiuti fuori' + (e.nota ? ': ' + e.nota : ''), meta: chi, f: 'servizi' };
     case 'guasto': return { icona: 'tool', titolo: 'Guasto: ' + e.cosa, meta: [STATI_GUASTO[e.stato], e.dove, chi, e.importo != null ? euro(e.importo) : null].filter(Boolean).join(' · '), f: 'servizi', href: '#/guasto?id=' + e.id };
@@ -3589,8 +4186,9 @@ function testoEvento(e) {
     case 'farmacia': return { icona: 'pill', titolo: e.nota || 'Farmacia', meta: chi, f: 'terapia' };
   }
   const pag = e.tipo === 'pagato';
-  const titolo = v ? v.nome : e.nota && (!sv || pag) ? e.nota : (sv ? sv.nome : 'Attività') + (e.nota && sv ? ': ' + e.nota : '');
-  return { icona: pag ? 'bolt' : 'check', titolo, meta: [(pag ? 'Pagato' : 'Fatto') + (chi ? ' da ' + chi : ''), e.importo != null ? euro(e.importo) : null, v && e.nota ? e.nota : null, o ? o.nome : null].filter(Boolean).join(' · '),
+  const titolo = v ? v.nome : e.nome ? e.nome : e.nota && (!sv || pag) ? e.nota : (sv ? sv.nome : 'Attività') + (e.nota && sv ? ': ' + e.nota : '');
+  const comeT = e.come === 'Addebito in banca' ? 'addebito controllato' : e.come ? 'con ' + e.come.toLowerCase() : null;
+  return { icona: pag ? 'euro' : 'check', titolo, meta: [(pag ? (e.come === 'Addebito in banca' ? 'Controllato' : 'Pagato') : 'Fatto') + (chi ? ' da ' + chi : ''), e.importo != null ? euro(e.importo) : null, pag ? comeT : null, (v || e.nome) && e.nota ? e.nota : null, o ? o.nome : null].filter(Boolean).join(' · '),
     f: pag ? 'pagamenti' : 'servizi', href: v ? '#/voce/' + v.id : null };
 }
 function rigaDiario(it, gruppo) {
@@ -3861,7 +4459,8 @@ function vImpostazioni() {
   let h = testata('Impostazioni', { indietro: true }) + '<main class="pad">';
   h += '<div class="box"><h3>Chi usa questo telefono</h3><p class="hint" style="margin:0 0 10px">Serve a segnare chi ha fatto cosa.</p>' + chipsRadio('utente-set', UTENTI, utente()) + '</div>';
   h += '<div class="box"><h3>Lettura</h3><div class="chips"><label><input type="checkbox" name="grande-set"' + (S.kv.grande ? ' checked' : '') + '><span>Testo più grande</span></label></div></div>';
-  h += boxSync();
+  h += '<a class="box" href="#/collega" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit"><span class="dicon ' + (collegato() ? '' : 'rust') + '">' + ic('link', 24) + '</span>' +
+    '<span class="row-main"><span class="row-title">Collega i telefoni</span><span class="row-meta" data-stato-sync>' + esc(testoStatoSync()) + '</span></span>' + ic('chev', 20) + '</a>';
   h += '<div class="box"><h3>Notifiche</h3><p class="hint" style="margin:0 0 10px">Su questo dispositivo: <b>' + esc(statoNotifiche()) + '</b>. ' +
     (collegato() ? 'Arrivano agli orari della terapia, la mattina e la sera prima dei rifiuti.' : 'Senza sincronizzazione il riepilogo arriva quando decide il telefono; collegando il dispositivo arriva all\'orario giusto.') + '</p>' +
     (suIPhone() && !installata() ? '<p class="hint" style="margin:0 0 10px"><b>Su iPhone:</b> gli avvisi arrivano solo aprendo Kenosis dalla schermata Home (Condividi → «Aggiungi alla schermata Home»).</p>' : '') +
@@ -3928,7 +4527,8 @@ function datiDiEsempio() {
   const farmaciEs = new Set(S.farmaci.filter(f => f.esempio || ha(f) || ospitiEs.has(f.ospiteId)).map(f => f.id));
   const out = [];
   for (const st of STORES_CONDIVISI) {
-    if (st === 'servizi') continue;
+    // dei servizi si tolgono solo le "vostre voci" di esempio: i riquadri della Casa restano
+    if (st === 'servizi') { for (const x of S.servizi) if (x.tipo === 'modello' && (x.esempio || ha(x))) out.push([st, x]); continue; }
     for (const x of S[st]) {
       if (x.esempio || (st === 'ospiti' && ospitiEs.has(x.id)) || (st === 'farmaci' && farmaciEs.has(x.id)) ||
         (x.ospiteId && ospitiEs.has(x.ospiteId)) || (x.farmacoId && farmaciEs.has(x.farmacoId)) || ha(x)) out.push([st, x]);
@@ -4190,7 +4790,7 @@ async function mettiInCoda(store, id, cancellato) {
   await DB.put('coda', { id: store + ':' + id, s: store, rid: id, x: !!cancellato, t: adesso(), n: uid() });
   await contaCoda();
   aggiornaStatoSync();
-  programmaSync(800);
+  programmaSync(250);
 }
 
 async function accodaTutto() {
@@ -4253,9 +4853,27 @@ async function applicaRemoto(rec) {
   return true;
 }
 
-async function sincronizza() {
+// Un solo aggiornamento alla volta: chi lo chiede mentre è in corso aspetta quello, e dopo ne parte un altro.
+function sincronizza() {
+  if (!collegato()) return Promise.resolve();
+  if (SY.promessa) { SY.ancora = true; return SY.promessa; }
+  SY.ultimoTentativo = Date.now();
+  SY.promessa = sincronizzaOra().finally(() => { SY.promessa = null; });
+  return SY.promessa;
+}
+// Prima di un'azione da non fare due volte (pagare, dare una medicina, andare a fare la spesa) si chiede
+// al servizio cosa hanno segnato gli altri. Se l'ultimo aggiornamento è di pochi secondi fa, basta quello.
+async function aggiornaPrima(freschezza = 8000) {
+  if (!collegato()) return { stato: 'scollegato' };
+  if (!navigator.onLine) return { stato: 'rete' };
+  if (freschezza > 0 && Date.now() - (SY.ultimoOk || 0) < freschezza && !SY.inCoda) return { stato: 'ok' };
+  // se un aggiornamento è già in corso, potrebbe essere partito prima della modifica del collega: se ne fa un altro
+  const giro = async () => { if (SY.promessa) { try { await SY.promessa; } catch (e) { /* niente */ } } await sincronizza(); };
+  try { await Promise.race([giro(), new Promise(ok => setTimeout(ok, 6000))]); } catch (e) { /* conta lo stato */ }
+  return { stato: Date.now() - (SY.ultimoOk || 0) < 7000 ? 'ok' : (SY.stato === 'rete' ? 'rete' : 'errore') };
+}
+async function sincronizzaOra() {
   if (!collegato()) return;
-  if (SY.inCorso) { SY.ancora = true; return; }
   if (!navigator.onLine) { SY.stato = 'rete'; aggiornaStatoSync(); return; }
   SY.inCorso = true;
   SY.stato = 'in corso';
@@ -4294,7 +4912,10 @@ async function sincronizza() {
     await setKV('sync', c);
     SY.stato = 'ok';
     SY.errore = '';
-    aggiornaDispositivo().catch(() => {});
+    SY.ultimoOk = Date.now();
+    // gli orari dei promemoria si ricalcolano quando arriva qualcosa (dopoModifica) o ogni 10 minuti:
+    // con un controllo ogni 5 secondi, farlo ogni volta sarebbe lavoro inutile per il telefono
+    if (Date.now() - (SY.dispQuando || 0) > 10 * 60 * 1000) { SY.dispQuando = Date.now(); aggiornaDispositivo().catch(() => {}); }
     await caricaFileMancanti();
     if (SY.fileInAttesa) SY.errore = plur(SY.fileInAttesa, 'file non ancora inviato', 'file non ancora inviati') + ': riprovo più tardi';
   } catch (e) {
@@ -4321,7 +4942,7 @@ async function scollegaDispositivo() {
     try { await api('DELETE', '/api/dispositivo/' + c.dispositivo, undefined, { attesa: 8000 }); } catch (e) { /* il servizio lo dimenticherà da solo */ }
   }
   if (c) await setKV('syncUrl', c.url);
-  for (const k of ['sync', 'syncChiave', 'syncToken', 'syncDisp', 'syncDispQuando']) { await DB.del('kv', k); delete S.kv[k]; }
+  for (const k of ['sync', 'syncChiave', 'syncToken', 'syncCodice', 'syncDisp', 'syncDispQuando']) { await DB.del('kv', k); delete S.kv[k]; }
   await DB.clear('coda');
   SY.stato = ''; SY.inCoda = 0; SY.push = null;
 }
@@ -4346,19 +4967,34 @@ function tempoFa(quando) {
   if (s < 86400) return Math.floor(s / 3600) + ' h fa';
   return 'il ' + fmt(quando.slice(0, 10));
 }
+// Lo stato del collegamento in parole semplici. "Sincronizzo…" non compare a ogni controllo
+// (sarebbe un lampeggiare continuo): solo quando ci sono modifiche da mandare.
 function testoStatoSync() {
-  if (!collegato()) return '';
+  if (!collegato()) return 'Non collegato agli altri telefoni';
   const coda = SY.inCoda ? plur(SY.inCoda, 'modifica', 'modifiche') + ' da inviare' : '';
-  if (SY.stato === 'in corso') return 'Sincronizzo…';
-  if (SY.stato === 'password') return 'La password non è più valida: ricollega il dispositivo';
-  if (!navigator.onLine || SY.stato === 'rete') return 'Senza rete' + (coda ? ': ' + coda : '');
-  if (SY.stato === 'errore') return 'Sincronizzazione non riuscita, riprovo' + (coda ? ' · ' + coda : '');
-  if (coda) return coda;
+  if (SY.stato === 'password') return 'Il codice non è più valido: ricollega il telefono';
+  if (!navigator.onLine || SY.stato === 'rete') return 'Senza internet' + (coda ? ': ' + coda + ' appena torna' : ': le novità arrivano quando torna');
+  if (SY.stato === 'errore') return 'Aggiornamento non riuscito, riprovo' + (coda ? ' · ' + coda : '');
+  if (coda) return SY.stato === 'in corso' ? 'Invio le modifiche…' : coda;
   const u = conn().ultimaSync;
-  return u ? 'Sincronizzato ' + tempoFa(u) : 'In attesa della prima sincronizzazione';
+  if (!u) return SY.stato === 'in corso' ? 'Primo aggiornamento…' : 'In attesa del primo aggiornamento';
+  return 'Collegato · aggiornato ' + tempoFa(u);
+}
+function classeStatoSync() {
+  if (!collegato() || SY.stato === 'password' || SY.stato === 'errore') return 'errore';
+  if (!navigator.onLine || SY.stato === 'rete') return 'rete';
+  return '';
 }
 function aggiornaStatoSync() {
-  document.querySelectorAll('[data-stato-sync]').forEach(el => { el.textContent = testoStatoSync(); });
+  document.querySelectorAll('[data-stato-sync]').forEach(el => {
+    el.textContent = testoStatoSync();
+    if (el.classList.contains('sync-pill')) el.className = 'sync-pill ' + classeStatoSync();
+  });
+}
+function bannerNonCollegato() {
+  if (collegato()) return '';
+  return '<div class="non-collegato"><b>Questo telefono non è collegato agli altri</b>Quello che segni qui non arriva a ' + esc(nomiAltri()) + ', e tu non vedi quello che segnano loro.' +
+    '<a class="btn btn-primary" href="#/collega">' + ic('link', 21) + ' Collega i telefoni</a></div>';
 }
 
 async function aggiornaDispositivo(forza) {
@@ -4422,115 +5058,240 @@ function scaricaFile(id) {
   }, 0);
 }
 
-function boxSync() {
-  if (!(window.crypto && crypto.subtle)) {
-    return '<div class="box"><h3>Sincronizzazione</h3><p class="hint" style="margin:0">Funziona solo quando l\'app è aperta dal suo indirizzo sicuro (https).</p></div>';
-  }
-  if (!collegato()) {
-    return '<div class="box"><h3>Sincronizzazione</h3><p class="hint" style="margin:0 0 4px">Collega questo dispositivo allo spazio condiviso con gli altri. I dati partono già cifrati con la password: il servizio online non può leggerli.</p>' +
-      '<form data-form="collega" novalidate>' +
-      '<div class="field" style="margin-top:8px"><label for="f-url">Indirizzo del servizio</label><input type="text" id="f-url" name="url" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="kenosis-sync.nome.workers.dev" value="' + esc(S.kv.syncUrl || INDIRIZZO_SERVIZIO) + '"><p class="err" id="err-url"></p></div>' +
-      '<div class="field"><label for="f-pw">Password dello spazio condiviso</label><input type="password" id="f-pw" name="password" autocomplete="new-password"><span class="hint">Almeno 10 caratteri, la stessa su tutti i dispositivi. Se la perdete non si può recuperare: scrivetela e conservatela in cooperativa.</span><p class="err" id="err-password"></p></div>' +
-      '<div class="field"><label for="f-pw2">Ripeti la password (solo per il primo dispositivo)</label><input type="password" id="f-pw2" name="conferma" autocomplete="new-password"><p class="err" id="err-conferma"></p></div>' +
-      '<div class="actions" style="margin-top:12px"><button class="btn btn-sm btn-primary" type="submit">Collega</button></div></form></div>';
-  }
-  const c = conn();
-  let host = c.url;
-  try { host = new URL(c.url).host; } catch (e) { /* lascia com'è */ }
-  const statoPush = SY.push === true ? 'Promemoria attivi su questo dispositivo.'
-    : 'Promemoria non ancora attivi: premi "Salva gli avvisi" e consenti le notifiche.';
-  return '<div class="box"><h3>Sincronizzazione</h3>' +
-    '<p class="hint" style="margin:0 0 6px">Collegato a <b>' + esc(host) + '</b></p>' +
-    '<p style="margin:0 0 4px;font-weight:600;font-size:15px" data-stato-sync>' + esc(testoStatoSync()) + '</p>' +
-    '<p class="hint" style="margin:0 0 10px">Ricevuti finora: ' + (c.ultimo || 0) + ' aggiornamenti' + (SY.errore ? ' · ultimo problema: ' + esc(SY.errore) : '') + '</p>' +
-    '<div class="two"><button class="btn btn-sm" data-action="sync-ora">Sincronizza ora</button><button class="btn btn-sm btn-danger" data-action="scollega">Scollega</button></div>' +
-    '<form data-form="sync-avvisi" novalidate style="margin-top:6px">' +
-    '<div class="field"><label for="f-ora">Riepilogo del mattino alle</label><input type="time" id="f-ora" name="ora" value="' + esc(c.ora || '08:30') + '"></div>' +
-    '<div class="field"><div class="chips"><label><input type="checkbox" name="novita"' + (c.novita ? ' checked' : '') + '><span>Avvisami anche quando gli altri segnano qualcosa</span></label></div></div>' +
-    '<p class="hint" style="margin:10px 0 0">' + esc(statoPush) + ' Gli avvisi non contengono nomi: si possono leggere anche a schermo bloccato.</p>' +
-    '<div class="actions" style="margin-top:12px"><button class="btn btn-sm btn-primary" type="submit">Salva gli avvisi</button></div></form></div>';
+/* ============================ collegare i telefoni: il codice della comunità */
+
+// Quattro parole facili e un numero, per esempio «ulivo-mare-pane-sole-47»: si legge a voce,
+// si scrive su un foglio e si digita senza errori. Maiuscole, spazi e trattini non contano.
+const PAROLE_CODICE = ('acqua alba albero alce alloro amaca ambra amico ancora anello angolo anguria anice antenna ape aquila arancia arco argento aria armadio arpa asino astro atlante autunno avena azalea abete acero agnello aiuola alga aliante alpaca ananas anatra arachide aratro argilla armonica arnia asparago avorio ' +
+  'baco baffo baia balcone balena banana banca banco barca basilico bastone baule becco biglia binario biscotto bosco botte bottone brezza brodo bruco budino bufalo burro bussola bacca bambola bandiera barattolo barile batuffolo betulla bicchiere biglietto bilancia bisonte borsa bottega braccio brocca ' +
+  'cacao calza camino campana campo canale candela cane canestro canna canoa cantina capanna cappello capra carota carta casa castagna castello cavallo cedro cena cervo cesto chiave chicco cielo ciliegia cigno cinema cipolla cipresso circo collina colomba colore conchiglia coniglio coperta corda corallo corno corona cortile cotone cozza crema criceto cuoco cuore cupola cuscino cactus calamaro calice cammello camicia carciofo carretto carrozza casetta catena cavolo cetriolo chitarra ciotola civetta cocco cometa compasso coperchio corvo cristallo cucchiaio cucina ' +
+  'dado daino dalia delfino dente diamante diario disco dito divano dolce dono drago duna dattero dipinto domino edera elefante elica erba estate eco ' +
+  'faggio falco farfalla farina faro fata fava felce fenice ferro festa fico fiume finestra fiocco fiore foca foglia fontana forbice formica fornaio forno fragola frutto fumo fungo fuoco fagiolo fanale fattoria fieno filo fiaba fionda fiordo flauto focaccia fossile frassino freccia frittata ' +
+  'gabbiano gallo gamba gatto gelato gelso gemma geranio gesso giacca giardino giglio ginepro giostra giraffa gnomo goccia gomitolo gondola gonna granchio grano grillo grotta gufo gazza ghianda gioiello girasole gnocco gomma guanto guscio icona inverno isola istrice iris ' +
+  'lago lampada lana lanterna lapis latte lavanda legno lente leone lepre letto libro lima limone lince lino lira lucciola luce lumaca luna lupo lampone lattuga lavagna leccio lenticchia lievito lupino ' +
+  'madia maglia mais mandarino mandorla mango mantello mare margherita marmo martello maschera matita mattone medaglia mela melone menta mercato merlo miele mirtillo molla mondo montagna mora mulino muro musica magnolia mappa marmotta mazzo melagrana merluzzo mestolo mimosa minestra mirto moneta mosaico mostarda ' +
+  'nastro nave nebbia neve nido noce nocciola nodo nota nube nuvola narciso nespola ninfea oasi oca occhio oliva olmo ombra ombrello onda orata orchidea orologio orso orto ortica ostrica ovile olio origano orzo ottone ' +
+  'pacco padella paese pagina paglia palla palma palo pane panda panino pantera papavero parco pasta pastello patata pavone pecora penna pepe pera perla pesca pesce petalo piano pianta piatto piazza pietra pigna pino pioggia piuma poesia polenta pollo pomodoro ponte porta porto posta pozzo prato prugna pulcino pagliaio panchina pannocchia pantofola parete passero pennello peperone pergola pettine piccione pinguino pinolo pizza platano polpo pompelmo portone puledro quadro quercia ' +
+  'radice ragno rame ramo rana rapa razzo regalo remo rete riccio riso roccia rondine rosa rospo rubino ruota radio ramarro ravanello ribes ricotta rombo rosmarino rugiada ' +
+  'sabbia sale salice salvia sandalo sapone sasso scala scarpa scatola scoglio scopa secchio sedano sedia seme sentiero sirena slitta sole sorriso spiaggia spiga stella stivale strada stufa sughero susina salmone salsa sardina sciarpa scoiattolo serra sigillo smeraldo sorbetto spago specchio spugna squalo stagno stoffa struzzo ' +
+  'tamburo tappeto tartaruga tavolo tazza teatro tenda terra tetto tigre timo tonno topo torre torta treno trifoglio tromba trota tulipano tunnel tacchino tasca tavolozza telaio tegola tessuto timone tiglio topazio torrone tovaglia tramonto tuono tartufo ' +
+  'uccello ulivo uovo uva vaso vela velluto ventaglio vento viola violino vite volpe vulcano valigia vaniglia vassoio verbena vetro vigna villa vongola zaino zafferano zampa zebra zenzero zucca zucchero zolla zoccolo').split(' ');
+function nuovoCodice() {
+  const parole = [...new Set(PAROLE_CODICE)];
+  const r = new Uint32Array(5);
+  crypto.getRandomValues(r);
+  return [0, 1, 2, 3].map(i => parole[r[i] % parole.length]).join('-') + '-' + (10 + (r[4] % 90));
+}
+function normCodice(t) {
+  return String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+const urlServizio = () => (conn() && conn().url) || S.kv.syncUrl || INDIRIZZO_SERVIZIO;
+// Chi sono "gli altri": per Rita è Michele, per Michele è Rita, per Vincenzo tutti e due.
+function nomiAltri() {
+  const a = UTENTI.filter(u => u !== utente() && u !== 'Vincenzo');
+  return a.length ? a.join(' e ') : 'gli altri';
 }
 
+// Cosa dice il servizio: c'è già lo spazio della comunità? (si chiede una volta aprendo la pagina)
+const COLLEGA = { stato: null, codice: null, inCorso: false };
+async function controllaServizio() {
+  if (COLLEGA.inCorso) return;
+  COLLEGA.inCorso = true;
+  try {
+    const st = await api('GET', '/api/stato', undefined, { url: urlServizio(), senzaToken: true, attesa: 12000 });
+    COLLEGA.stato = !st || typeof st.pronto !== 'boolean' ? 'altro' : st.pronto ? 'esiste' : 'nuovo';
+  } catch (e) { COLLEGA.stato = 'rete'; }
+  finally { COLLEGA.inCorso = false; }
+  const el = document.getElementById('collega-corpo');
+  if (el) el.innerHTML = corpoCollega();
+}
+function corpoCollega() {
+  const s = COLLEGA.stato;
+  if (!s) return '<div class="box"><p style="margin:0;font-weight:700">Controllo il servizio…</p><p class="hint" style="margin:4px 0 0">Serve internet.</p></div>';
+  if (s === 'rete') return banner('rust', '<b>Non riesco a raggiungere il servizio.</b> Serve internet: controlla il Wi-Fi o i dati del telefono, poi riprova.', 'warn') +
+    '<button class="btn btn-primary" type="button" data-action="collega-riprova">Riprova</button>';
+  if (s === 'altro') return banner('rust', 'A questo indirizzo non c\'è il servizio di Kenosis. Controlla l\'indirizzo in «Opzioni avanzate».', 'warn');
+  if (s === 'nuovo') {
+    if (!COLLEGA.codice) COLLEGA.codice = nuovoCodice();
+    return '<div class="box"><h3>È il primo telefono della comunità</h3><p class="hint" style="margin:0 0 10px">Creo lo spazio condiviso. Per entrarci, gli altri telefoni useranno questo <b>codice della comunità</b>:</p>' +
+      '<div class="codice" id="codice-mostrato">' + esc(COLLEGA.codice) + '</div>' +
+      '<div style="text-align:center;margin-top:8px"><button class="txt-btn" type="button" data-action="codice-nuovo">Dammene un altro</button></div>' +
+      '<form data-form="collega" data-modo="crea" novalidate><input type="hidden" name="codice" value="' + esc(COLLEGA.codice) + '">' +
+      '<div class="field"><div class="chips"><label><input type="checkbox" name="scritto"><span>L\'ho scritto su un foglio da tenere in comunità</span></label></div>' +
+      '<span class="hint">Senza codice gli altri telefoni non si possono collegare, e non si può recuperare.</span><p class="err" id="err-scritto"></p></div>' +
+      '<div class="actions"><button class="btn btn-primary btn-grande" type="submit">' + ic('link', 22) + ' Crea lo spazio e collega</button></div></form></div>' +
+      altreOpzioni('<form data-form="collega" data-modo="crea-mio" novalidate>' +
+        campo('codice-mio', 'Il codice che vuoi usare', '<input type="text" id="f-codice-mio" name="codice" class="codice-in" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="es. tre o quattro parole">', 'Almeno 12 lettere o numeri. Meglio parole facili da dire a voce.') +
+        campo('conferma-mio', 'Riscrivilo', '<input type="text" id="f-conferma-mio" name="conferma" class="codice-in" autocomplete="off" autocapitalize="off" spellcheck="false">') +
+        '<div class="actions"><button class="btn btn-primary" type="submit">Usa il mio codice</button></div></form>', 'Preferisco scegliere io il codice');
+  }
+  return '<div class="box"><h3>Scrivi il codice della comunità</h3><ol class="passi">' +
+    '<li><span>Prendi un telefono già collegato (o il foglio con il codice).</span></li>' +
+    '<li><span>Lì apri <b>Impostazioni → Collega i telefoni → Mostra il codice</b>.</span></li>' +
+    '<li><span>Scrivilo qui sotto: maiuscole e spazi non contano.</span></li></ol>' +
+    '<form data-form="collega" data-modo="entra" novalidate>' +
+    '<div class="field"><label for="f-codice">Codice della comunità</label><input type="text" id="f-codice" name="codice" class="codice-in" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="es. ulivo-mare-pane-sole-47"><p class="err" id="err-codice"></p></div>' +
+    '<div class="actions"><button class="btn btn-primary btn-grande" type="submit">' + ic('link', 22) + ' Collega questo telefono</button></div></form></div>';
+}
+function vCollega(q) {
+  if (collegato()) return vCollegato(q);
+  if (!COLLEGA.stato && !COLLEGA.inCorso) setTimeout(controllaServizio, 0);
+  return testata('Collega i telefoni', { indietro: true, sub: 'Si fa una volta sola per ogni telefono' }) +
+    effie('Collegando i telefoni, quello che segni qui lo vede subito anche <b>' + esc(nomiAltri()) + '</b>, e viceversa. Così nessuno dà due volte una medicina o paga due volte una bolletta.') +
+    '<main class="pad"><div id="collega-corpo" style="display:flex;flex-direction:column;gap:9px">' + corpoCollega() + '</div>' +
+    altreOpzioni(campo('url', 'Indirizzo del servizio', '<input type="text" id="f-url" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" value="' + esc(urlServizio()) + '">', 'Di solito non va cambiato.') +
+      '<button class="btn btn-sm" type="button" data-action="collega-url">Usa questo indirizzo</button>', 'Opzioni avanzate') +
+    '</main>' + barra('oggi');
+}
+function vCollegato(q) {
+  const c = conn();
+  let h = testata('Collega i telefoni', { indietro: true, sub: 'Questo telefono è collegato' }) +
+    '<a class="sync-pill ' + classeStatoSync() + '" href="#/collega" data-stato-sync>' + esc(testoStatoSync()) + '</a><main class="pad">';
+  if (q && q.get('fatto')) h += banner('green', '<b>Fatto: questo telefono è collegato.</b> Ora collega anche gli altri: manda loro il codice qui sotto.', 'check');
+  h += '<div class="box"><h3>Collegare un altro telefono</h3><ol class="passi">' +
+    '<li><span>Sull\'altro telefono apri Kenosis.</span></li><li><span>Tocca <b>Collega i telefoni</b> (lo trovi in cima a Oggi).</span></li><li><span>Scrivi il codice della comunità.</span></li></ol>' +
+    '<div id="codice-qui"></div><div class="two" style="margin-top:10px"><button class="btn btn-sm" type="button" data-action="mostra-codice">Mostra il codice</button>' +
+    '<button class="btn btn-sm" type="button" data-action="manda-codice">' + ic('share', 20) + ' Mandalo</button></div></div>';
+  h += '<div class="box"><h3>Aggiornamenti</h3><p class="hint" style="margin:0 0 10px">Mentre usi l\'app, le novità degli altri arrivano da sole in pochi secondi. Quando la riapri, si aggiorna subito.' +
+    (SY.errore ? '<br>Ultimo problema: ' + esc(SY.errore) : '') + '</p><button class="btn btn-sm" data-action="sync-ora">' + ic('clock', 20) + ' Aggiorna adesso</button></div>';
+  h += '<form class="box" data-form="sync-avvisi" novalidate><h3>Avvisi su questo telefono</h3>' +
+    '<div class="field" style="margin-top:4px"><label for="f-ora">Riepilogo del mattino alle</label><input type="time" id="f-ora" name="ora" value="' + esc(c.ora || '08:30') + '"></div>' +
+    '<div class="field"><div class="chips"><label><input type="checkbox" name="novita"' + (c.novita ? ' checked' : '') + '><span>Avvisami quando gli altri segnano qualcosa</span></label></div></div>' +
+    '<p class="hint" style="margin:10px 0 0">' + esc(SY.push === true ? 'Promemoria attivi su questo telefono.' : 'Promemoria non ancora attivi: tocca «Salva gli avvisi» e consenti le notifiche.') + ' Gli avvisi non contengono nomi.</p>' +
+    '<div class="actions" style="margin-top:12px"><button class="btn btn-sm btn-primary" type="submit">Salva gli avvisi</button></div></form>';
+  h += altreOpzioni('<p class="hint" style="margin:0 0 10px">Collegato a <b>' + esc((() => { try { return new URL(c.url).host; } catch (e) { return c.url; } })()) + '</b>. Ricevuti finora: ' + (c.ultimo || 0) + ' aggiornamenti.</p>' +
+    '<button class="btn btn-sm btn-danger" data-action="scollega">Scollega questo telefono</button>', 'Altre opzioni');
+  return h + '</main>' + barra('oggi');
+}
+azioni['collega-riprova'] = () => { COLLEGA.stato = null; const el = document.getElementById('collega-corpo'); if (el) el.innerHTML = corpoCollega(); controllaServizio(); };
+azioni['collega-url'] = async () => {
+  const i = document.getElementById('f-url');
+  let u = String(i ? i.value : '').trim().replace(/\/+$/, '');
+  if (!u) return;
+  if (!/^https?:\/\//i.test(u)) u = 'https://' + u;
+  if (!/^https:\/\//i.test(u) && !/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(u)) { errore('err-url', 'L\'indirizzo deve iniziare con https://'); return; }
+  await setKV('syncUrl', u);
+  azioni['collega-riprova']();
+};
+azioni['codice-nuovo'] = () => { COLLEGA.codice = nuovoCodice(); const el = document.getElementById('collega-corpo'); if (el) el.innerHTML = corpoCollega(); };
 
-/* ================================ collegare il dispositivo */
+// Il codice si mostra solo a chi conosce il PIN dell'app (se c'è): apre i dati di tutta la comunità.
+async function codiceConPin() {
+  const codice = S.kv.syncCodice;
+  if (!codice) {
+    await chiedi({ titolo: 'Codice non salvato qui', icona: 'info', testo: '<p>Questo telefono è stato collegato con una versione precedente e il codice non è rimasto salvato. Lo trovi sul foglio conservato in comunità, o su un altro telefono collegato.</p>', scelte: [], annulla: 'Ho capito' });
+    return null;
+  }
+  if (S.kv.pin) {
+    const r = await chiedi({ titolo: 'Scrivi il PIN dell\'app', icona: 'lock', testo: '<p>Il codice apre i dati di tutta la comunità: lo mostro solo a chi conosce il PIN.</p>',
+      campo: { etichetta: 'PIN', tipo: 'pin', obbligatorio: true, errore: 'Scrivi il PIN.' }, scelte: [{ valore: true, testo: 'Mostra', tipo: 'primary' }] });
+    if (!r) return null;
+    if ((await hashPin(r.nota, S.kv.pin.sale)) !== S.kv.pin.hash) { avvisa('PIN sbagliato'); return null; }
+  }
+  return codice;
+}
+azioni['mostra-codice'] = async () => {
+  const codice = await codiceConPin();
+  if (!codice) return;
+  const el = document.getElementById('codice-qui');
+  if (el) el.innerHTML = '<div class="codice">' + esc(codice) + '</div><p class="hint" style="margin:6px 2px 0">Scrivilo sull\'altro telefono. Non metterlo in posti pubblici: apre i dati di tutta la comunità.</p>';
+};
+azioni['manda-codice'] = async () => {
+  const codice = await codiceConPin();
+  if (!codice) return;
+  const t = 'Codice per collegare Kenosis: ' + codice + '\nApri l\'app, tocca «Collega i telefoni» e scrivi il codice. Non inoltrarlo ad altri.';
+  try { if (navigator.share) { await navigator.share({ text: t }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+  const w = window.open('https://wa.me/?text=' + encodeURIComponent(t), '_blank');
+  if (!w) location.href = 'https://wa.me/?text=' + encodeURIComponent(t);
+};
 
-moduli.collega = async function (form) {
-    const fd = new FormData(form);
-    let url = String(fd.get('url') || '').trim().replace(/\/+$/, '');
-    const pw = String(fd.get('password') || '');
-    const conferma = String(fd.get('conferma') || '');
-    const errore = (campo, t) => { const el = document.getElementById('err-' + campo); if (el) el.textContent = t; };
-    if (!url) { errore('url', 'Scrivi l\'indirizzo del servizio.'); return; }
-    if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-    if (!/^https:\/\//i.test(url) && !/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(url)) { errore('url', 'L\'indirizzo deve iniziare con https://'); return; }
-    if (pw.length < 10) { errore('password', 'Almeno 10 caratteri.'); return; }
-    const pulsante = form.querySelector('button[type=submit]');
-    pulsante.disabled = true;
-    pulsante.textContent = 'Collegamento…';
-    try {
-      let st;
-      try { st = await api('GET', '/api/stato', undefined, { url, senzaToken: true, attesa: 15000 }); }
-      catch (e) { errore('url', 'Non riesco a raggiungere questo indirizzo. Controlla che sia scritto giusto e che ci sia rete.'); return; }
-      if (!st || typeof st.pronto !== 'boolean') { errore('url', 'A questo indirizzo non c\'è il servizio di Kenosis.'); return; }
-      const ciSonoDati = STORES_CONDIVISI.some(s => S[s].some(x => x.agg !== ANTICO));
-      let sale = st.sale, primo = false;
-      if (!st.pronto) {
-        if (conferma !== pw) { errore('conferma', 'Le due password non coincidono. Questo è il primo dispositivo: ripetila per sicurezza.'); return; }
-        sale = CIFRA.hex(crypto.getRandomValues(new Uint8Array(16)));
-        primo = true;
-      }
-      pulsante.textContent = 'Preparo la chiave…';
-      const { chiave, token } = await CIFRA.deriva(pw, sale);
-      if (primo) {
-        try { await api('POST', '/api/crea', { sale, token }, { url, senzaToken: true }); }
-        catch (e) {
-          if (e.status === 409) errore('password', 'Nel frattempo un altro dispositivo ha creato lo spazio: premi di nuovo Collega con la stessa password.');
-          else errore('url', 'Il servizio non ha accettato la richiesta. Riprova tra poco.');
-          return;
-        }
-      } else {
-        try { await api('POST', '/api/verifica', {}, { url, token }); }
-        catch (e) {
-          if (e.status === 401) errore('password', 'Password sbagliata: deve essere la stessa usata sugli altri dispositivi.');
-          else errore('url', 'Il servizio non risponde. Riprova tra poco.');
-          return;
-        }
-      }
-      let invia = true;
-      if (ciSonoDati) {
-        // Una domanda con le risposte scritte per esteso: con OK/Annulla era facile mandare
-        // a tutti i dati di prova premendo "Annulla" per tornare indietro.
-        const esempi = datiDiEsempio().length;
-        const scelta = await chiedi({ titolo: 'Su questo telefono ci sono già dei dati', icona: 'info',
-          testo: '<p>Cosa sono?' + (esempi ? ' (Tra questi ci sono ' + plur(esempi, 'cosa di esempio', 'cose di esempio') + '.)' : '') + '</p>',
-          scelte: primo
-            ? [{ valore: 'veri', testo: 'Sono dati veri: mettili nello spazio condiviso', tipo: 'primary' }, { valore: 'prova', testo: 'Sono di prova: cancellali da questo telefono', tipo: 'danger' }]
-            : [{ valore: 'prova', testo: 'Sono di prova: tieni solo quelli condivisi', tipo: 'primary' }, { valore: 'veri', testo: 'Sono dati veri: aggiungili a quelli condivisi' }],
-          annulla: 'Non collegare adesso' });
-        if (!scelta) { errore('password', 'Collegamento annullato: non è cambiato niente.'); return; }
-        invia = scelta === 'veri';
-      }
-      await setKV('syncChiave', chiave);
-      await setKV('syncToken', token);
-      await setKV('sync', { url, ultimo: 0, dispositivo: uid(), ora: '08:30', novita: false, ultimaSync: null });
-      await DB.clear('coda');
-      if (ciSonoDati && !invia) {
-        for (const s of STORES_CONDIVISI) await DB.clear(s);
-        await DB.del('kv', 'seminato');
-        await carica();
-      } else if (ciSonoDati) {
-        for (const d of S.documenti) { delete d.fileSu; delete d.fileGrande; await DB.put('documenti', d); }
-        await accodaTutto();
-      }
-      await contaCoda();
-      avvisa(primo ? 'Spazio condiviso creato: ora collega gli altri dispositivi' : 'Dispositivo collegato');
-      render();
-      await sincronizza();
-      render();
-    } finally {
-      if (pulsante.isConnected) { pulsante.disabled = false; pulsante.textContent = 'Collega'; }
+async function collegaDispositivo(url, codice, crea, grezzo) {
+  let st;
+  try { st = await api('GET', '/api/stato', undefined, { url, senzaToken: true, attesa: 15000 }); }
+  catch (e) { return { errore: 'Non riesco a raggiungere il servizio. Controlla che ci sia internet e riprova.' }; }
+  if (!st || typeof st.pronto !== 'boolean') return { errore: 'A questo indirizzo non c\'è il servizio di Kenosis.' };
+  if (crea && st.pronto) { COLLEGA.stato = 'esiste'; return { errore: 'Nel frattempo un altro telefono ha già creato lo spazio: scrivi il suo codice.', ridisegna: true }; }
+  if (!crea && !st.pronto) { COLLEGA.stato = 'nuovo'; return { errore: 'Lo spazio della comunità non c\'è ancora: questo è il primo telefono.', ridisegna: true }; }
+  const sale = crea ? CIFRA.hex(crypto.getRandomValues(new Uint8Array(16))) : st.sale;
+  let { chiave, token } = await CIFRA.deriva(codice, sale);
+  if (crea) {
+    try { await api('POST', '/api/crea', { sale, token }, { url, senzaToken: true }); }
+    catch (e) { return { errore: e.status === 409 ? 'Nel frattempo un altro telefono ha creato lo spazio: chiedi il suo codice.' : 'Il servizio non ha accettato la richiesta. Riprova tra poco.' }; }
+  } else {
+    let ok = false;
+    try { await api('POST', '/api/verifica', {}, { url, token }); ok = true; }
+    catch (e) { if (e.status !== 401) return { errore: 'Il servizio non risponde. Riprova tra poco.' }; }
+    // spazi creati con la 0.5, quando la password si scriveva così com'era
+    if (!ok && grezzo && grezzo !== codice) {
+      const alt = await CIFRA.deriva(grezzo, sale);
+      try { await api('POST', '/api/verifica', {}, { url, token: alt.token }); ok = true; chiave = alt.chiave; token = alt.token; codice = grezzo; } catch (e) { /* no */ }
     }
-  };
+    if (!ok) return { errore: 'Codice sbagliato: controlla le parole e il numero. Deve essere lo stesso degli altri telefoni.' };
+  }
+  const ciSonoDati = STORES_CONDIVISI.some(s => S[s].some(x => x.agg !== ANTICO));
+  let invia = true;
+  if (ciSonoDati) {
+    // Risposte scritte per esteso: con OK/Annulla era facile mandare a tutti i dati di prova.
+    const esempi = datiDiEsempio().length;
+    const scelta = await chiedi({ titolo: 'Su questo telefono ci sono già dei dati', icona: 'info',
+      testo: '<p>' + (esempi ? 'Tra questi ci sono ' + plur(esempi, 'cosa di esempio', 'cose di esempio') + '. ' : '') + (crea ? 'Cosa ne faccio?' : 'Gli altri telefoni hanno già i loro: cosa faccio con questi?') + '</p>',
+      scelte: crea
+        ? [{ valore: 'veri', testo: 'Mettili nello spazio condiviso', tipo: 'primary' }, { valore: 'prova', testo: 'Cancellali e parti da zero', tipo: 'danger' }]
+        : [{ valore: 'prova', testo: 'Tieni solo quelli degli altri telefoni', tipo: 'primary' }, { valore: 'veri', testo: 'Aggiungi anche questi' }],
+      annulla: 'Non collegare adesso' });
+    if (!scelta) return { errore: 'Collegamento annullato: non è cambiato niente.' };
+    invia = scelta === 'veri';
+  }
+  await setKV('syncChiave', chiave);
+  await setKV('syncToken', token);
+  await setKV('syncCodice', codice);
+  await setKV('sync', { url, ultimo: 0, dispositivo: uid(), ora: '08:30', novita: false, ultimaSync: null });
+  await DB.clear('coda');
+  if (ciSonoDati && !invia) {
+    for (const s of STORES_CONDIVISI) await DB.clear(s);
+    await DB.del('kv', 'seminato');
+    await carica();
+  } else if (ciSonoDati) {
+    for (const d of S.documenti) { delete d.fileSu; delete d.fileGrande; await DB.put('documenti', d); }
+    await accodaTutto();
+  }
+  await contaCoda();
+  COLLEGA.stato = null;
+  COLLEGA.codice = null;
+  return { ok: true, primo: crea };
+}
+moduli.collega = async form => {
+  const modo = form.dataset.modo;
+  const fd = new FormData(form);
+  const grezzo = String(fd.get('codice') || '').trim();
+  const codice = normCodice(grezzo);
+  const campoErr = modo === 'entra' ? 'err-codice' : modo === 'crea-mio' ? 'err-codice-mio' : 'err-scritto';
+  if (modo === 'crea' && fd.get('scritto') !== 'on') { errore('err-scritto', 'Prima scrivilo su un foglio: senza codice gli altri telefoni non si possono collegare.'); return; }
+  if (modo === 'crea-mio') {
+    if (codice.replace(/-/g, '').length < 12) { errore('err-codice-mio', 'Servono almeno 12 lettere o numeri: meglio tre o quattro parole.'); return; }
+    if (normCodice(fd.get('conferma')) !== codice) { errore('err-conferma-mio', 'I due codici non sono uguali.'); return; }
+  }
+  if (modo === 'entra' && codice.replace(/-/g, '').length < 6) { errore('err-codice', 'Scrivi il codice della comunità.'); return; }
+  const pulsante = form.querySelector('button[type=submit]');
+  const testoP = pulsante.innerHTML;
+  pulsante.disabled = true;
+  pulsante.textContent = 'Collego…';
+  try {
+    const r = await collegaDispositivo(urlServizio(), codice, modo !== 'entra', grezzo);
+    if (!r.ok) {
+      if (r.ridisegna) { const el = document.getElementById('collega-corpo'); if (el) el.innerHTML = corpoCollega(); }
+      errore(r.ridisegna ? (COLLEGA.stato === 'esiste' ? 'err-codice' : 'err-scritto') : campoErr, r.errore);
+      if (r.ridisegna) avvisa(r.errore);
+      return;
+    }
+    avvisa(r.primo ? 'Spazio della comunità creato' : 'Telefono collegato');
+    vai('#/collega?fatto=1', true);
+    await sincronizza();
+    render();
+  } finally {
+    if (pulsante.isConnected) { pulsante.disabled = false; pulsante.innerHTML = testoP; }
+  }
+};
 
 moduli['sync-avvisi'] = async function (form) {
     const fd = new FormData(form);
@@ -4565,7 +5326,8 @@ azioni.scollega = async function () {
       'I dati restano su questo telefono ma non si aggiornano più. Per ricollegarlo servirà la password.';
     if (!(await conferma('Scollegare questo telefono?', msg, 'Sì, scollega', { pericolo: !!n }))) return;
     await scollegaDispositivo();
-    avvisa('Dispositivo scollegato');
+    COLLEGA.stato = null;
+    avvisa('Telefono scollegato');
     render();
   };
 
@@ -4580,7 +5342,9 @@ function rotta() {
 const VISTE = {
   oggi: () => vOggi(),
   impostazioni: () => vImpostazioni(),
+  collega: (p, q) => vCollega(q),
   aggiungi: () => vAggiungi(),
+  'aggiungi-elenco': () => vAggiungiElenco(),
   ospiti: (p, q) => vOspiti(q),
   ospite: (p, q) => vOspite(p[1], p[2], q),
   consegne: () => vConsegne(),
@@ -4604,6 +5368,7 @@ const VISTE = {
   'servizio-imp': (p, q) => vServizioImp(q),
   elenco: p => vElenco(p[1], p[2]),
   'avviso-pagamento': (p, q) => vAvvisoPagamento(q),
+  pagamenti: (p, q) => vPagamentiPagina(q),
   'spesa-fatta': () => vSpesaFatta(),
   lavanderia: (p, q) => vLavanderiaConsegna(q),
   guasto: (p, q) => vGuasto(q),
@@ -4772,6 +5537,7 @@ document.addEventListener('input', e => {
 document.addEventListener('change', async e => {
   const t = e.target;
   const mostra = (id, si) => { const box = document.getElementById(id); if (box) box.classList.toggle('hidden', !si); };
+  if (t.dataset && t.dataset.mostra) t.dataset.mostra.split(' ').forEach(id => mostra(id, t.checked));
   if (t.name === 'pag') mostra('box-altro-pag', t.value === 'Altro');
   if (t.name === 'ric') mostra('ric-altro', t.value === 'altro');
   if (t.name === 'pagato') mostra('box-importo', t.checked);
@@ -4899,7 +5665,7 @@ async function caricaEsempio() {
   const base = { attiva: true, note: null, ospiteId: null, servizio: null, chiusura: 'fatto', avviso: 3, responsabile: 'Entrambi' };
   const voci = [
     { nome: 'Luce — Enel (esempio)', pag: 'Luce', categoria: 'Pagamenti', servizio: pag, prossima: piuGiorni(t, -3), ric: null, importo: 184.5, responsabile: 'Michele', chiusura: 'pagato' },
-    { nome: 'Gas (esempio)', pag: 'Gas', categoria: 'Pagamenti', servizio: pag, prossima: piuGiorni(t, 9), ric: null, importo: 96.2, responsabile: 'Michele', chiusura: 'pagato' },
+    { nome: 'Gas (esempio)', pag: 'Gas', categoria: 'Pagamenti', servizio: pag, prossima: piuGiorni(t, 9), ric: null, importo: 96.2, responsabile: 'Michele', chiusura: 'pagato', incarico: { chi: 'Michele', quando: piuGiorni(t, -1) + 'T17:20:00.000Z' } },
     { nome: 'Acqua (esempio)', pag: 'Acqua', categoria: 'Pagamenti', servizio: pag, prossima: piuGiorni(t, 20), ric: null, importo: 41.8, responsabile: 'Michele', chiusura: 'pagato' },
     { nome: 'Telefono e internet (esempio)', pag: 'Telefono e internet', categoria: 'Pagamenti', servizio: pag, prossima: piuGiorni(t, 7), ric: { ogni: 1, unita: 'mesi' }, importo: 29.9, domiciliato: true, chiusura: 'pagato' },
     { nome: 'Polizza RC struttura (esempio)', pag: 'Assicurazione', categoria: 'Pagamenti', servizio: pag, prossima: piuGiorni(t, 5), ric: { ogni: 1, unita: 'anni' }, importo: 1250, responsabile: 'Michele', avviso: 30, chiusura: 'pagato' },
@@ -4912,17 +5678,27 @@ async function caricaEsempio() {
     { nome: 'Pressione — Giovanni P.', tipo: 'misura', parametro: 'pressione', categoria: 'Salute ospiti', ospiteId: g, prossima: t, ric: { ogni: 1, unita: 'mesi' }, avviso: 0 }
   ];
   for (const v of voci) await nuovo('voci', Object.assign({}, base, v));
-  const luce = S.voci.find(v => v.pag === 'Luce');
-  await nuovo('eventi', { tipo: 'pagato', voceId: null, servizio: pag, data: piuGiorni(t, -62), chi: 'Michele', importo: 172.3, nota: 'Luce (bimestre precedente)' });
-  void luce;
+  // pagamenti già fatti: chi, come, quanto (si vedono in Pagati e nelle sezioni)
+  await nuovo('eventi', { tipo: 'pagato', voceId: null, servizio: pag, data: piuGiorni(t, -62), ora: '10:05', chi: 'Michele', importo: 172.3, come: 'Bonifico', nome: 'Luce — Enel, bimestre precedente (esempio)', pag: 'Luce' });
+  await nuovo('eventi', { tipo: 'pagato', voceId: null, servizio: pag, data: piuGiorni(t, -35), ora: '11:30', chi: 'Rita', importo: 39.6, come: 'Bollettino o PagoPA', nome: 'Acqua, trimestre precedente (esempio)', pag: 'Acqua' });
+  await nuovo('eventi', { tipo: 'pagato', voceId: null, servizio: pag, data: piuGiorni(t, -20), ora: '09:45', chi: 'Michele', importo: 480, come: 'Carta', nome: 'Assicurazione pulmino (esempio)', pag: 'Assicurazione pulmino' });
+  await nuovo('servizi', { tipo: 'modello', nome: 'Revisione del pulmino (esempio)', cosa: 'scadenza', ric: { ogni: 1, unita: 'anni' }, icona: 'car', categoria: 'Servizi della casa', ordine: 1 });
 
   const spesa = (servizioDiTipo('spesa') || {}).id;
   if (spesa) {
-    for (const [testoL, preso] of [['Latte', false], ['Pane', false], ['Mele', false], ['Detersivo piatti', true]]) await nuovo('lista', { servizio: spesa, testo: testoL, preso, chi: 'Rita' });
-    await nuovo('eventi', { tipo: 'spesa', servizio: spesa, data: piuGiorni(t, -5), ora: '10:15', chi: 'Michele', articoli: ['Latte', 'Pane', 'Pasta', 'Frutta', 'Carta igienica'], importo: 86.4, nota: 'Supermercato (esempio)' });
+    for (const [testoL, chi, urgente] of [['Latte', 'Rita', false], ['Pane', 'Rita', true], ['Mele', 'Michele', false]]) await nuovo('lista', { servizio: spesa, testo: testoL, preso: false, chi, urgente });
+    await nuovo('lista', { servizio: spesa, testo: 'Detersivo piatti', preso: true, chi: 'Rita', presoDa: 'Michele', presoQuando: adesso() });
+    await nuovo('eventi', { tipo: 'spesa', servizio: spesa, data: piuGiorni(t, -5), ora: '10:15', chi: 'Michele', articoli: ['Latte', 'Pane', 'Pasta', 'Frutta', 'Carta igienica'], importo: 86.4, soldi: 'carta', nota: 'Supermercato (esempio)' });
+    await nuovo('eventi', { tipo: 'spesa', servizio: spesa, data: piuGiorni(t, -2), ora: '17:40', chi: 'Rita', articoli: ['Yogurt', 'Uova', 'Biscotti'], importo: 23.4, soldi: 'miei', rimborso: { chi: 'Rita', importo: 23.4, fatto: null }, nota: 'Alimentari sotto casa (esempio)' });
   }
   const lav = (servizioDiTipo('lavanderia') || {}).id;
-  if (lav) await nuovo('eventi', { tipo: 'lavanderia', servizio: lav, data: piuGiorni(t, -2), ora: '09:00', chi: 'Rita', capi: [{ c: 'Lenzuola', n: 6 }, { c: 'Federe', n: 4 }], fuori: true, rientrato: null, ospiteId: null });
+  if (lav) {
+    await nuovo('eventi', { tipo: 'lavanderia', servizio: lav, data: piuGiorni(t, -2), ora: '09:00', chi: 'Rita', capi: [{ c: 'Lenzuola', n: 6 }, { c: 'Federe', n: 4 }], fuori: true, rientrato: null, ospiteId: null });
+    await nuovo('eventi', { tipo: 'lavanderia', servizio: lav, data: t, ora: '08:40', chi: 'Michele', capi: [{ c: 'Asciugamani', n: 5 }], fuori: false, rientrato: null, ospiteId: null });
+    await nuovo('eventi', { tipo: 'lavanderia', servizio: lav, data: ieri, ora: '15:00', chi: 'Rita', capi: [{ c: 'Indumenti', n: 4 }], fuori: false, rientrato: ieri, rientratoChi: 'Michele', ospiteId: m });
+  }
+  const far = (servizioDiTipo('farmacia') || {}).id;
+  if (far) await nuovo('lista', { servizio: far, testo: 'Cerotti (esempio)', preso: false, chi: 'Michele' });
   const pul = (servizioDiTipo('pulizie') || {}).id;
   if (pul) { await nuovo('eventi', { tipo: 'pulizia', servizio: pul, zona: 'Cucina', data: t, ora: '09:30', chi: 'Rita' }); await nuovo('eventi', { tipo: 'pulizia', servizio: pul, zona: 'Bagni', data: piuGiorni(t, -3), ora: '10:00', chi: 'Michele' }); }
   const man = (servizioDiTipo('manutenzioni') || {}).id;
@@ -4951,7 +5727,13 @@ async function caricaEsempio() {
   }
   dopoModifica();
   if (collegato()) { await contaCoda(); sincronizza(); }
-  setInterval(() => { if (!document.hidden && collegato()) sincronizza(); }, 30 * 1000);
+  // Mentre qualcuno usa l'app, le novità degli altri telefoni arrivano ogni 5 secondi;
+  // con lo schermo acceso ma senza tocchi, ogni 30. A telefono bloccato non si controlla.
+  setInterval(() => {
+    if (document.hidden || !collegato() || SY.promessa) return;
+    const attivo = Date.now() - ultimoTocco < 3 * 60 * 1000;
+    if (Date.now() - (SY.ultimoTentativo || 0) >= (attivo ? 5000 : 30000)) sincronizza();
+  }, 2500);
   // a mezzanotte e ogni tanto, Oggi si aggiorna da sola
   let giornoVisto = oggi();
   setInterval(() => {
@@ -4960,11 +5742,14 @@ async function caricaEsempio() {
     if (!document.querySelector('form[data-form]') && ['', 'oggi'].includes(rotta().parti[0] || '')) ridisegnaSePossibile();
   }, 60 * 1000);
 })();
-window.addEventListener('online', () => programmaSync(500));
+window.addEventListener('online', () => programmaSync(300));
 window.addEventListener('offline', aggiornaStatoSync);
+// Tornando all'app (da WhatsApp, dalla fotocamera, dallo schermo bloccato) si aggiorna subito.
+window.addEventListener('focus', () => { if (collegato()) programmaSync(150); });
+window.addEventListener('pageshow', () => { if (collegato()) programmaSync(150); });
 document.addEventListener('visibilitychange', () => {
   if (!collegato()) return;
-  if (!document.hidden) programmaSync(300);
+  if (!document.hidden) programmaSync(100);
   else if (SY.inCoda) sincronizza();   // si chiude l'app: prima invia quello che manca
 });
 </script>
